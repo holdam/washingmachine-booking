@@ -3,6 +3,21 @@ import logo from './logo.svg';
 import * as bootstrap from 'react-bootstrap'
 import './App.css';
 
+class DateRepresentation {
+    constructor(year, month, day) {
+        this.year = year;
+        this.month = month;
+        this.day = day;
+    }
+}
+
+class WeekRepresentation {
+    constructor(days, weekOfCalendar) {
+        this.days = days;
+        this.weekOfCalendar = weekOfCalendar;
+    }
+}
+
 class App extends Component {
     render() {
         let today = new Date();
@@ -27,74 +42,88 @@ class Calendar extends React.Component {
 
         // Handling first week
         let firstDayOfWeekOfMonth = new Date(this.props.year, this.props.month, 1).getUTCDay();
-        let firstWeek = [];
+        let firstWeek = new WeekRepresentation([], 1);
 
-        // Day is of previous month
+        // Days of previous month we want in the beginning of our week
         for (var weekday = 1; weekday <= firstDayOfWeekOfMonth; weekday++) {
             let theDate = lastMonth.getDate() - (firstDayOfWeekOfMonth - weekday);
-            firstWeek.push(new DateRepresentation(lastMonth.getFullYear(), lastMonth.getMonth(), theDate));
+            firstWeek.days.push(new DateRepresentation(lastMonth.getFullYear(), lastMonth.getMonth(), theDate));
         }
 
-        // Day is of current month, fill out the week with current days of the month
+        // Days of current month, fill out the week with current days of the month
         for (let i = 1; weekday <= 7; weekday++) {
-            firstWeek.push(new DateRepresentation(thisMonth.getFullYear(), thisMonth.getMonth(), i++));
+            firstWeek.days.push(new DateRepresentation(thisMonth.getFullYear(), thisMonth.getMonth(), i++));
         }
 
         weeks.push(firstWeek);
 
         // Get next day of month after the first week and iterate until the end of the month
         let currentWeek = 0;
-        for (let currentDay = firstWeek[6].day + 1; currentDay <= thisMonth.getDate(); currentDay++) {
-            if ((currentDay - (firstWeek[6].day + 1)) % 7 == 0) {
-                weeks.push([new DateRepresentation(thisMonth.getFullYear(), thisMonth.getMonth(), currentDay)]);
+        for (let currentDay = firstWeek.days[6].day + 1; currentDay <= thisMonth.getDate(); currentDay++) {
+            if ((currentDay - (firstWeek.days[6].day + 1)) % 7 === 0) {
                 currentWeek++;
+                weeks.push(new WeekRepresentation([new DateRepresentation(thisMonth.getFullYear(), thisMonth.getMonth(), currentDay)], currentWeek + 1));
                 continue;
             }
-            weeks[currentWeek].push(new DateRepresentation(thisMonth.getFullYear(), thisMonth.getMonth(), currentDay));
+            weeks[currentWeek].days.push(new DateRepresentation(thisMonth.getFullYear(), thisMonth.getMonth(), currentDay));
         }
 
+        // TODO doesnt work for december and january
         // Pad last week
-        let lastWeekdayOfMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), weeks[currentWeek][weeks[currentWeek].length - 1].day).getUTCDay();
+        let lastDayInsertedIntoCurrentWeek = weeks[currentWeek].days[weeks[currentWeek].days.length - 1].day;
+        let lastWeekdayOfMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), lastDayInsertedIntoCurrentWeek).getUTCDay();
         let nextMonth = (thisMonth.getMonth() + 1 % 12);
-        let nextYear = (nextMonth == 0) ? thisMonth.getFullYear() + 1 : thisMonth.getFullYear();
+        let nextYear = (nextMonth === 0) ? thisMonth.getFullYear() + 1 : thisMonth.getFullYear();
         for (var currentDayOfMonth = 1; lastWeekdayOfMonth + 1 < 7; lastWeekdayOfMonth++) {
-            weeks[currentWeek].push(new DateRepresentation(nextYear, nextMonth, currentDayOfMonth++));
+            weeks[currentWeek].days.push(new DateRepresentation(nextYear, nextMonth, currentDayOfMonth++));
         }
 
         // Make sure we have 6 weeks
         if (weeks.length < 6) {
-            weeks.push([]);
+            weeks.push(new WeekRepresentation([], 6));
             for (let lastDayOfWeek = currentDayOfMonth + 7; currentDayOfMonth < lastDayOfWeek; currentDayOfMonth++) {
-                weeks[5].push(new DateRepresentation(nextYear, nextMonth, currentDayOfMonth));
+                weeks[5].days.push(new DateRepresentation(nextYear, nextMonth, currentDayOfMonth));
             }
         }
 
 
 
-        // TODO doesnt work for december and january
+        let weeksAsElements = weeks.map((week) => {
+                return (
+                    <Week key={week.weekOfCalendar} week={week} />
+                )
+            }
+        );
 
 
         return (
-            <div>
+            <div className="calendar">
+                {weeksAsElements}
             </div>
         )
     }
 }
 
-class DateRepresentation {
-    constructor(year, month, day) {
-        this.year = year;
-        this.month = month;
-        this.day = day;
-    }
-}
+
 
 // get current month
 // afgør hvor mange dage første uge skal have
 // træk fra antal dage i måneden
 
 class Week extends React.Component {
+    render() {
+        let daysOfWeek = this.props.week.days.map((date) => {
+            return (
+                <Day day={date.day} month={date.month} year={date.year} />
+            )
+        });
 
+        console.log(daysOfWeek)
+
+        return (
+            <div>{daysOfWeek}</div>
+        )
+    }
 }
 
 function Day(props) {
