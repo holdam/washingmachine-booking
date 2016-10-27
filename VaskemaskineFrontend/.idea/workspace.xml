@@ -2,13 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5d3766a7-5caa-469c-9674-0ab3ee34ec5d" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/vaskemaskine-app/src/Commons/util.js" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/vaskemaskine-app/src/Usage/Usage.css" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/vaskemaskine-app/src/Usage/Usage.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vaskemaskine-app/src/App.css" afterPath="$PROJECT_DIR$/vaskemaskine-app/src/App.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vaskemaskine-app/src/App.js" afterPath="$PROJECT_DIR$/vaskemaskine-app/src/App.js" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.css" afterPath="$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.css" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.js" afterPath="$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.js" />
     </list>
     <ignored path="VaskemaskineFrontend.iws" />
@@ -47,8 +42,8 @@
       <file leaf-file-name="App.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/App.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="493">
-              <caret line="29" column="10" selection-start-line="29" selection-start-column="10" selection-end-line="29" selection-end-column="10" />
+            <state relative-caret-position="391">
+              <caret line="23" column="40" selection-start-line="23" selection-start-column="40" selection-end-line="23" selection-end-column="40" />
               <folding>
                 <element signature="e#0#41#0" expanded="true" />
               </folding>
@@ -68,7 +63,7 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Usage.css" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Usage.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/Usage/Usage.css">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="34">
@@ -78,12 +73,14 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Calendar.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Calendar.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="13" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-              <folding />
+            <state relative-caret-position="17">
+              <caret line="102" column="38" selection-start-line="102" selection-start-column="38" selection-end-line="103" selection-end-column="32" />
+              <folding>
+                <element signature="e#0#24#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -132,12 +129,12 @@
         <option value="$PROJECT_DIR$/vaskemaskine-app/src/Calendar.css" />
         <option value="$PROJECT_DIR$/vaskemaskine-app/src/calendar/Calendar.js" />
         <option value="$PROJECT_DIR$/vaskemaskine-app/src/Commons/util.js" />
-        <option value="$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.js" />
         <option value="$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.css" />
         <option value="$PROJECT_DIR$/vaskemaskine-app/src/App.css" />
         <option value="$PROJECT_DIR$/vaskemaskine-app/src/Usage/Usage.js" />
-        <option value="$PROJECT_DIR$/vaskemaskine-app/src/App.js" />
         <option value="$PROJECT_DIR$/vaskemaskine-app/src/Usage/Usage.css" />
+        <option value="$PROJECT_DIR$/vaskemaskine-app/src/App.js" />
+        <option value="$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.js" />
       </list>
     </option>
   </component>
@@ -479,7 +476,7 @@
       <workItem from="1477524117982" duration="409000" />
       <workItem from="1477524547094" duration="5280000" />
       <workItem from="1477529885337" duration="183000" />
-      <workItem from="1477573601699" duration="15630000" />
+      <workItem from="1477573601699" duration="16297000" />
     </task>
     <task id="LOCAL-00001" summary="progress">
       <created>1477586293595</created>
@@ -488,11 +485,18 @@
       <option name="project" value="LOCAL" />
       <updated>1477586293595</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="bait">
+      <created>1477589337845</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1477589337845</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="50670000" />
+    <option name="totallyTimeSpent" value="51337000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -542,7 +546,8 @@
     <MESSAGE value="test" />
     <MESSAGE value="seems good" />
     <MESSAGE value="progress" />
-    <option name="LAST_COMMIT_MESSAGE" value="progress" />
+    <MESSAGE value="bait" />
+    <option name="LAST_COMMIT_MESSAGE" value="bait" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -833,26 +838,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/App.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="374">
           <caret line="22" column="23" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="23" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="13" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -867,21 +856,39 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/Usage/Usage.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="34">
+          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="3" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="51">
+          <caret line="3" column="23" selection-start-line="3" selection-start-column="23" selection-end-line="3" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/App.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="493">
-          <caret line="29" column="10" selection-start-line="29" selection-start-column="10" selection-end-line="29" selection-end-column="10" />
+        <state relative-caret-position="391">
+          <caret line="23" column="40" selection-start-line="23" selection-start-column="40" selection-end-line="23" selection-end-column="40" />
           <folding>
             <element signature="e#0#41#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/Usage/Usage.css">
+    <entry file="file://$PROJECT_DIR$/vaskemaskine-app/src/Calendar/Calendar.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="34">
-          <caret line="2" column="22" selection-start-line="2" selection-start-column="22" selection-end-line="3" selection-end-column="23" />
-          <folding />
+        <state relative-caret-position="17">
+          <caret line="102" column="38" selection-start-line="102" selection-start-column="38" selection-end-line="103" selection-end-column="32" />
+          <folding>
+            <element signature="e#0#24#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

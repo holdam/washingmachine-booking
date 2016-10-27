@@ -23,7 +23,7 @@ class CalendarMaster extends React.Component {
         return (
             <div className="calendar-master">
                 <Calendar month={11} year={2016} />
-            </div>
+             </div>
         )
     }
 }

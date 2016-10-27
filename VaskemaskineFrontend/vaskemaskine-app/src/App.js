@@ -21,7 +21,7 @@ class App extends Component {
                         <Usage />
                     </div>
                     <div className="col-md-6">
-                        <CalendarMaster/>
+                        <CalendarMaster />
                     </div>
                     <div className="col-md-3">
                     </div>
