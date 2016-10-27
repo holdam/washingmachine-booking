@@ -1,7 +1,15 @@
+/* Todo show usage in bottom */
+
+@media (max-width: 1000px) {
+    .usage {
+        display: none;
+    }
+}
+
 .usage {
     background: #eaeaea;
-    min-height: 500px;
-    margin-right: 20px;
-    margin-top: -20px;
-    padding: 25px 5px 5px;
+    width: 450px;
+    float: left;
+    height: calc(100vh - 180px);
+    padding: -20px 5px 5px;
 }

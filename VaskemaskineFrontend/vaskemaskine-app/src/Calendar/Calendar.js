@@ -1,7 +1,6 @@
 import './Calendar.css';
 import React from 'react';
-import * as bootstrap from 'react-bootstrap';
-import {monthNames} from '../Commons/util';
+import {monthNames, weekdayNames} from '../Commons/util';
 
 class DateRepresentation {
     constructor(year, month, day) {
@@ -15,16 +14,6 @@ class WeekRepresentation {
     constructor(days, weekOfCalendar) {
         this.days = days;
         this.weekOfCalendar = weekOfCalendar;
-    }
-}
-
-class CalendarMaster extends React.Component {
-    render() {
-        return (
-            <div className="calendar-master">
-                <Calendar month={11} year={2016} />
-             </div>
-        )
     }
 }
 
@@ -101,24 +90,7 @@ class Calendar extends React.Component {
 
         return (
             <div className="calendar">
-                <WeekdayNames />
                 {weeks}
-            </div>
-        )
-    }
-}
-
-class WeekdayNames extends React.Component {
-    render() {
-        return (
-            <div className="row seven-cols weekday-names">
-                <div className="col-md-1">Mandag</div>
-                <div className="col-md-1">Tirsdag</div>
-                <div className="col-md-1">Onsdag</div>
-                <div className="col-md-1">Torsdag</div>
-                <div className="col-md-1">Fredag</div>
-                <div className="col-md-1">Lørdag</div>
-                <div className="col-md-1">Søndag</div>
             </div>
         )
     }
@@ -127,18 +99,36 @@ class WeekdayNames extends React.Component {
 class Week extends React.Component {
     render() {
         let daysOfWeek = this.props.week.days.map((date) => {
-            if (this.props.currentlySelectedMonth !== date.month) {
-                // We're in an off-month
-                if (date.day === 1) {
-                    return <FirstDayOfOffMonth key={`${date.year}-${date.month}-${date.day}`} month={date.month} day={date.day} />
+            // Check if we're in the first week, since we will add weekday names
+            if (this.props.week.weekOfCalendar === 1) {
+                let dayOfTheWeek = weekdayNames[new Date(date.year, date.month, date.day).getUTCDay()];
+
+                // First week offmonth-days
+                if (this.props.currentlySelectedMonth !== date.month) {
+                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${dayOfTheWeek} ${date.day}`} />
                 }
-                return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} day={date.day} />
+
+                // First week, regular days
+                // Check if the first day of month, since we will add month rather than weekday
+                if (date.day === 1) {
+                    return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${monthNames[date.month]} ${date.day}`} />
+                }
+
+                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${dayOfTheWeek} ${date.day}`} />;
             }
-            // Else regular month
+
+            // Check if we're in an off-month
+            if (this.props.currentlySelectedMonth !== date.month) {
+                if (date.day === 1) {
+                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${monthNames[date.month]} ${date.day}`} />
+                }
+                return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={date.day} />
+            }
+            // Else we're in a regular month
             if (date.day === 1) {
-                return <FirstDayOfMonth key={`${date.year}-${date.month}-${date.day}`} month={date.month} day={date.day} />
+                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${monthNames[date.month]} ${date.day}`} />
             }
-            return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} day={date.day} />
+            return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={date.day} />
         });
 
         return (
@@ -147,27 +137,15 @@ class Week extends React.Component {
     }
 }
 
-function FirstDayOfOffMonth(props) {
-    return (
-        <div className="col-md-1 off-month-day day">{monthNames[props.month] + " " + props.day}</div>
-    )
-}
-
 function OffMonthDay(props) {
     return (
-        <div className="col-md-1 off-month-day day">{props.day}</div>
-    )
-}
-
-function FirstDayOfMonth(props) {
-    return (
-        <div className="col-md-1 day">{monthNames[props.month] + " " + props.day}</div>
+        <div className="col-md-1 off-month-day day">{props.dayValue}</div>
     )
 }
 
 function InMonthDay(props) {
     return (
-        <div className="col-md-1 day">{props.day}</div>
+        <div className="col-md-1 day">{props.dayValue}</div>
     )
 }
 
@@ -177,4 +155,4 @@ function InMonthDay(props) {
 // push events live :D ? lav en lytter der sidder og kigger hele tiden
 // evt. nye år
 
-export default CalendarMaster;
+export default Calendar;

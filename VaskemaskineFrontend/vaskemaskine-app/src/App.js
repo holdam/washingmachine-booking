@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import CalendarMaster from './Calendar/Calendar'
-import Usage from './Usage/Usage'
-import {monthNames} from './Commons/util';
+import Calendar from './Calendar/Calendar';
+import Usage from './Usage/Usage';
+import MonthPicker from './Monthpicker/Monthpicker';
 
 class App extends Component {
     render() {
@@ -13,37 +13,32 @@ class App extends Component {
                     <img src={logo} className="App-logo" alt="logo" />
                     <h2>Nordre Ringgade 108 vaskerumbooking</h2>
                 </div>
-                <div className="row">
-                    <MonthPicker />
-                </div>
-                <div className="row">
-                    <div className="col-md-3">
-                        <Usage />
-                    </div>
-                    <div className="col-md-6">
-                        <CalendarMaster />
-                    </div>
-                    <div className="col-md-3">
-                    </div>
-                </div>
+                <CalendarAndUsage />
             </div>
         );
     }
 }
 
-class MonthPicker extends React.Component {
+class CalendarAndUsage extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {date: new Date()}
+    }
+
     render() {
         return (
-            <div className="month-picker">
-                <span>TILBAGE</span>
-                <span>{monthNames[this.props.month]}</span>
-                <span>FREMAD</span>
+            <div className="calendarAndUsage">
+                <MonthPicker month={this.state.date.getMonth()} />
+                <div className="row">
+                    <Usage />
+                    <div className="col-md-6">
+                        <Calendar month={this.state.getMonth()} year={this.state.getFullYear()} />
+                    </div>
+                </div>
             </div>
         )
     }
 }
-
-
 
 
 
