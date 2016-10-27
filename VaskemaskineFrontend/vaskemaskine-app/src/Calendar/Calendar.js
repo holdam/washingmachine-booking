@@ -1,6 +1,7 @@
 import './Calendar.css';
 import React from 'react';
-import * as bootstrap from 'react-bootstrap'
+import * as bootstrap from 'react-bootstrap';
+import {monthNames} from '../Commons/util';
 
 class DateRepresentation {
     constructor(year, month, day) {
@@ -17,29 +18,11 @@ class WeekRepresentation {
     }
 }
 
-var monthNames = ["Januar", "Februar", "Marts", "April", "Maj", "Juni",
-    "Juli", "August", "September", "Oktober", "November", "December"
-];
-
 class CalendarMaster extends React.Component {
     render() {
-        let today = new Date();
         return (
             <div className="calendar-master">
-                <CalendarMonthPicker month={8} />
                 <Calendar month={11} year={2016} />
-            </div>
-        )
-    }
-}
-
-class CalendarMonthPicker extends React.Component {
-    render() {
-        return (
-            <div>
-                <span>TILBAGE</span>
-                <span>{monthNames[this.props.month]}</span>
-                <span>FREMAD</span>
             </div>
         )
     }
@@ -189,7 +172,9 @@ function InMonthDay(props) {
 }
 
 
-// TODO ugedagenavne, årsttal, månedvælger i toppen januar fucker i 2016
+// TODO årsttal, månedvælger i toppen januar fucker i 2016
+// Forbrug stå til venstre for kalender?
+// push events live :D ? lav en lytter der sidder og kigger hele tiden
 // evt. nye år
 
 export default CalendarMaster;
