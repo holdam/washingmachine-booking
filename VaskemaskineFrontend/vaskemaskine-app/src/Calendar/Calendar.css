@@ -1,0 +1,54 @@
+.calendar {
+    max-width: 1000px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+}
+
+.weekday-names {
+    padding-bottom: 15px;
+}
+
+@media (max-width: 1000px) {
+    .weekday-names {
+        display: none;
+    }
+}
+
+.day {
+    height: 100px;
+    text-align: right;
+    vertical-align: top;
+    border: 1px solid lightgrey;
+    margin-left: -1px;
+    margin-bottom: -1px;
+}
+
+
+.day:hover {
+    background: #ececec;
+    cursor: pointer;
+}
+
+.off-month-day {
+    color: darkgrey;
+}
+
+
+@media (min-width: 768px){
+    .seven-cols .col-md-1,
+    .seven-cols .col-sm-1,
+    .seven-cols .col-lg-1  {
+        width: 100%;
+        *width: 100%;
+    }
+}
+
+@media (min-width: 992px) {
+    .seven-cols .col-md-1,
+    .seven-cols .col-sm-1,
+    .seven-cols .col-lg-1 {
+        width: 14.285714285714285714285714285714%;
+        *width: 14.285714285714285714285714285714%;
+    }
+}
