@@ -28,30 +28,30 @@ class Week extends React.Component {
 
                 // First week offmonth-days
                 if (this.props.currentlySelectedMonth !== date.month) {
-                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${dayOfTheWeek} ${date.day}`} />
+                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`}>{`${dayOfTheWeek} ${date.day}`}</OffMonthDay>
                 }
 
                 // First week, regular days
                 // Check if the first day of month, since we will add month rather than weekday
                 if (date.day === 1) {
-                    return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${monthNamesShort[date.month]} ${date.day}`} />
+                    return <InMonthDay key={`${date.year}-${date.month}-${date.day}`}>{`${monthNamesShort[date.month]} ${date.day}`}</InMonthDay>
                 }
 
-                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${dayOfTheWeek} ${date.day}`} />;
+                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`}>{`${dayOfTheWeek} ${date.day}`}</InMonthDay>
             }
 
             // Check if we're in an off-month
             if (this.props.currentlySelectedMonth !== date.month) {
                 if (date.day === 1) {
-                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${monthNamesShort[date.month]} ${date.day}`} />
+                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`}>{`${monthNamesShort[date.month]} ${date.day}`}</OffMonthDay>
                 }
-                return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={date.day} />
+                return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`}>{date.day}</OffMonthDay>
             }
             // Else we're in a regular month
             if (date.day === 1) {
-                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={`${monthNamesShort[date.month]} ${date.day}`} />
+                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`}>{`${monthNamesShort[date.month]} ${date.day}`}</InMonthDay>
             }
-            return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} dayValue={date.day} />
+            return <InMonthDay key={`${date.year}-${date.month}-${date.day}`}>{date.day}</InMonthDay>
         });
 
         return (
@@ -65,7 +65,7 @@ class Week extends React.Component {
 function OffMonthDay(props) {
     return (
         <div className="col-md-1 off-month-day day">
-            {props.dayValue}
+            {props.children}
         </div>
     )
 }
@@ -73,7 +73,7 @@ function OffMonthDay(props) {
 function InMonthDay(props) {
     return (
         <div className="col-md-1 day">
-            {props.dayValue}
+            {props.children}
         </div>
     )
 }
