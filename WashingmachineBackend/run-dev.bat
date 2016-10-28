@@ -1,0 +1,1 @@
+java -jar ./target/vaskemaskine-1.0-SNAPSHOT.jar server configuration-dev.yaml
