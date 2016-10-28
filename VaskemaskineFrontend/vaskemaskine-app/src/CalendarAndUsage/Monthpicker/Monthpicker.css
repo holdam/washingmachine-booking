@@ -1,0 +1,20 @@
+.topbar {
+    background: #eaeaea;
+    text-align: left !important;
+    padding: 5px 5px 5px 335px;
+    height: 45px;
+}
+
+.month-picker {
+    float: left;
+    margin-right: 17px;
+}
+
+.date-range {
+    float: left;
+    line-height: 34px;
+}
+
+.month-name {
+    width: 90px;
+}

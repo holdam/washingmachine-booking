@@ -1,9 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import Calendar from './Calendar/Calendar';
-import Usage from './Usage/Usage';
-import MonthPicker from './Monthpicker/Monthpicker';
+import CalendarAndUsage from './CalendarAndUsage/CalendarAndUsage';
 
 class App extends Component {
     render() {
@@ -19,28 +17,7 @@ class App extends Component {
     }
 }
 
-class CalendarAndUsage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {date: new Date()}
-    }
-
-    render() {
-        return (
-            <div className="calendarAndUsage">
-                <MonthPicker month={this.state.date.getMonth()} />
-                <div className="row">
-                    <Usage />
-                    <div className="col-md-6">
-                        <Calendar month={this.state.getMonth()} year={this.state.getFullYear()} />
-                    </div>
-                </div>
-            </div>
-        )
-    }
-}
-
-
+// TODO use router with months
 
 
 export default App;
