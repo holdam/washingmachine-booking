@@ -24,12 +24,12 @@ class CalendarAndUsage extends React.Component {
 
         this.handleClickOnDay = this.handleClickOnDay.bind(this);
 
-        let actualCurrentMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+        let actualCurrentMonth = new Date();
         let selectedMonth = actualCurrentMonth;
 
         // We were passed params initially
         if (props.params.year && props.params.month) {
-            selectedMonth = new Date(props.params.year, props.params.month, 0);
+            selectedMonth = new Date(props.params.year, props.params.month);
         }
 
         this.state = {
@@ -41,7 +41,7 @@ class CalendarAndUsage extends React.Component {
     componentWillReceiveProps(nextProps) {
         let selectedMonth = new Date(nextProps.params.year, nextProps.params.month);
         this.setState({
-            selectedMonth: new Date(selectedMonth.getFullYear(), selectedMonth.getMonth(), 0)
+            selectedMonth: new Date(selectedMonth.getFullYear(), selectedMonth.getMonth())
         });
     }
 
@@ -49,14 +49,14 @@ class CalendarAndUsage extends React.Component {
 
     }
 
-    handleClickOnDay() {
-
+    handleClickOnDay(date) {
+        alert("test")
     }
 
     getWeeksOfMonth() {
         let weeks = [];
-        let thisMonth = this.state.selectedMonth;
-        let lastMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 0)
+        let thisMonth = new Date(this.state.selectedMonth.getFullYear(), this.state.selectedMonth.getMonth() + 1, 0);
+        let lastMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() - 1, 0);
 
         // Handling first week
         let firstDayOfWeekOfMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 1).getUTCDay();

@@ -8,10 +8,10 @@ import {LinkContainer} from 'react-router-bootstrap'
 
 class MonthPicker extends React.Component {
     render() {
-        let previousMonth =  new Date(this.props.year, this.props.month);
-        let nextMonth =  new Date(this.props.year, this.props.month + 2);
+        let previousMonth =  new Date(this.props.year, this.props.month - 1);
+        let nextMonth =  new Date(this.props.year, this.props.month + 1);
         let previousMonthLink = `/booking/${previousMonth.getFullYear()}/${previousMonth.getMonth()}`;
-        let homeLink = `/booking/${this.props.actualCurrentMonth.getFullYear()}/${this.props.actualCurrentMonth.getMonth() + 1}`;
+        let homeLink = `/booking/${this.props.actualCurrentMonth.getFullYear()}/${this.props.actualCurrentMonth.getMonth()}`;
         let nextMonthLink = `/booking/${nextMonth.getFullYear()}/${nextMonth.getMonth()}`;
 
         return (
@@ -24,7 +24,7 @@ class MonthPicker extends React.Component {
                     </LinkContainer>
                     <LinkContainer to={{pathname: homeLink}}>
                         <Button>
-                            <Glyphicon glyph="glyphicon glyphicon-home" activeClassName="bogus"/>
+                            <Glyphicon glyph="glyphicon glyphicon-home" />
                         </Button>
                     </LinkContainer>
                     <Button className="month-name">{monthNames[this.props.month]}</Button>
