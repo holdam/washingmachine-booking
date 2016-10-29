@@ -22,14 +22,25 @@ class CalendarAndUsage extends React.Component {
     constructor(props) {
         super(props);
 
-        this.handlePreviousMonthClick = this.handlePreviousMonthClick.bind(this);
-        this.handleNextMonthClick = this.handleNextMonthClick.bind(this);
-        this.handleHomeClick = this.handleHomeClick.bind(this);
+        let originalMonth = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 0);
+        let currentMonth = originalMonth;
 
-        let today = new Date();
+        // We were passed params initially
+        if (props.params.year && props.params.month) {
+            currentMonth = new Date(props.params.year, props.params.month, 0);
+        }
+
         this.state = {
-            thisMonth: new Date(today.getFullYear(), today.getMonth() + 1, 0)
+            thisMonth: currentMonth,
+            originalMonth: originalMonth
         };
+    }
+
+    componentWillReceiveProps(nextProps) {
+        let currentDate = new Date(nextProps.params.year, nextProps.params.month);
+        this.setState({
+            thisMonth: new Date(currentDate.getFullYear(), currentDate.getMonth(), 0)
+        });
     }
 
     getWeeksOfMonth() {
@@ -86,34 +97,13 @@ class CalendarAndUsage extends React.Component {
         return weeks;
     }
 
-    handlePreviousMonthClick() {
-        const currentMonth = this.state.thisMonth;
-        this.setState({
-            thisMonth: new Date(currentMonth.getFullYear(), currentMonth.getMonth(), 0)
-        });
-    }
-
-    handleNextMonthClick() {
-        const currentMonth = this.state.thisMonth;
-        this.setState({
-            thisMonth: new Date(currentMonth.getFullYear(), currentMonth.getMonth() + 2, 0)
-        });
-    }
-
-    handleHomeClick() {
-        let today = new Date();
-        this.setState({
-            thisMonth: new Date(today.getFullYear(), today.getMonth() + 1, 0)
-        });
-    }
-
     render() {
         let weeks = this.getWeeksOfMonth();
         return (
             <div className="calendarAndUsage">
-                <MonthPicker month={this.state.thisMonth.getMonth()} dayRangeStart={weeks[0].days[0]}
-                             dayRangeEnd={weeks[5].days[6]} onPreviousMonthClick={this.handlePreviousMonthClick}
-                             onNextMonthClick={this.handleNextMonthClick} onHomeClick={this.handleHomeClick} />
+                <MonthPicker month={this.state.thisMonth.getMonth()} year={this.state.thisMonth.getFullYear()}
+                             dayRangeStart={weeks[0].days[0]} dayRangeEnd={weeks[5].days[6]}
+                             originalMonth={this.state.originalMonth} />
                 <div className="row">
                     <Usage />
                     <div className="col-md-6">

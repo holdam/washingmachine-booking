@@ -3,22 +3,41 @@ import './Monthpicker.css';
 import {ButtonGroup, Button, Glyphicon} from 'react-bootstrap'
 import * as React from "react";
 import {monthNamesShort} from "../../Commons/util";
+import {Link} from 'react-router';
+import {LinkContainer} from 'react-router-bootstrap'
 
 class MonthPicker extends React.Component {
     render() {
+        let previousMonth =  new Date(this.props.year, this.props.month);
+        let nextMonth =  new Date(this.props.year, this.props.month + 2);
+        let previousMonthLink = `/booking/${previousMonth.getFullYear()}/${previousMonth.getMonth()}`;
+        let homeLink = `/booking/${this.props.originalMonth.getFullYear()}/${this.props.originalMonth.getMonth() + 1}`;
+        let nextMonthLink = `/booking/${nextMonth.getFullYear()}/${nextMonth.getMonth()}`;
+
         return (
             <div className="topbar">
                 <ButtonGroup className="month-picker">
-                    <Button onClick={() => this.props.onPreviousMonthClick()}>
-                        <Glyphicon glyph="glyphicon glyphicon-chevron-left" />
-                    </Button>
-                    <Button onClick={() => this.props.onHomeClick()}>
-                        <Glyphicon glyph="glyphicon glyphicon-home" />
-                    </Button>
+                    <LinkContainer to={{pathname: previousMonthLink}}>
+                        <Button>
+                            <Glyphicon glyph="glyphicon glyphicon-chevron-left"/>
+                        </Button>
+                    </LinkContainer>
+                    <LinkContainer to={{pathname: homeLink}}>
+                        <Button>
+                            <Glyphicon glyph="glyphicon glyphicon-home"/>
+                        </Button>
+                    </LinkContainer>
                     <Button className="month-name">{monthNames[this.props.month]}</Button>
-                    <Button onClick={() => this.props.onNextMonthClick()}>
-                        <Glyphicon glyph="glyphicon glyphicon-chevron-right" />
-                    </Button>
+                    <LinkContainer to={{pathname: nextMonthLink}}>
+                        <Button>
+                            <Glyphicon glyph="glyphicon glyphicon-chevron-right"/>
+                        </Button>
+                    </LinkContainer>
+                    {/*                    <Button>
+                        <Link to={nextMonthLink} >
+                            <Glyphicon glyph="glyphicon glyphicon-chevron-right"/>
+                        </Link>
+                    </Button>*/}
                 </ButtonGroup>
                 <div className="date-range">
                     <FormatDateForRange day={this.props.dayRangeStart.day} month={this.props.dayRangeStart.month} year={this.props.dayRangeStart.year} />
