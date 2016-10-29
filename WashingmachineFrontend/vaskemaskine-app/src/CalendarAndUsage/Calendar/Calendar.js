@@ -6,7 +6,7 @@ class Calendar extends React.Component {
     render() {
         let weeks = this.props.weeks.map((week) => {
                 return (
-                    <Week key={week.weekOfCalendar} week={week} currentlySelectedMonth={this.props.month} />
+                    <Week key={week.weekOfCalendar} week={week} currentlySelectedMonth={this.props.month} onDayClick={this.props.onDayClick} />
                 )
             }
         );

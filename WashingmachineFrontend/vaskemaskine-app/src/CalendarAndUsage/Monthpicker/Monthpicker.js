@@ -11,20 +11,20 @@ class MonthPicker extends React.Component {
         let previousMonth =  new Date(this.props.year, this.props.month);
         let nextMonth =  new Date(this.props.year, this.props.month + 2);
         let previousMonthLink = `/booking/${previousMonth.getFullYear()}/${previousMonth.getMonth()}`;
-        let homeLink = `/booking/${this.props.originalMonth.getFullYear()}/${this.props.originalMonth.getMonth() + 1}`;
+        let homeLink = `/booking/${this.props.actualCurrentMonth.getFullYear()}/${this.props.actualCurrentMonth.getMonth() + 1}`;
         let nextMonthLink = `/booking/${nextMonth.getFullYear()}/${nextMonth.getMonth()}`;
 
         return (
             <div className="topbar">
                 <ButtonGroup className="month-picker">
-                    <LinkContainer to={{pathname: previousMonthLink}}>
+                    <LinkContainer to={{pathname: previousMonthLink}} >
                         <Button>
                             <Glyphicon glyph="glyphicon glyphicon-chevron-left"/>
                         </Button>
                     </LinkContainer>
                     <LinkContainer to={{pathname: homeLink}}>
                         <Button>
-                            <Glyphicon glyph="glyphicon glyphicon-home"/>
+                            <Glyphicon glyph="glyphicon glyphicon-home" activeClassName="bogus"/>
                         </Button>
                     </LinkContainer>
                     <Button className="month-name">{monthNames[this.props.month]}</Button>
@@ -33,11 +33,6 @@ class MonthPicker extends React.Component {
                             <Glyphicon glyph="glyphicon glyphicon-chevron-right"/>
                         </Button>
                     </LinkContainer>
-                    {/*                    <Button>
-                        <Link to={nextMonthLink} >
-                            <Glyphicon glyph="glyphicon glyphicon-chevron-right"/>
-                        </Link>
-                    </Button>*/}
                 </ButtonGroup>
                 <div className="date-range">
                     <FormatDateForRange day={this.props.dayRangeStart.day} month={this.props.dayRangeStart.month} year={this.props.dayRangeStart.year} />
