@@ -50,7 +50,8 @@ class CalendarAndUsage extends React.Component {
 
     }
 
-    handleClickOnDay() {
+    handleClickOnDay(date) {
+        console.log(date)
         console.log("wtf");
     }
 

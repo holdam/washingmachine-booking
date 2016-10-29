@@ -39,6 +39,7 @@
     "promise": "7.1.1",
     "react-dev-utils": "^0.2.1",
     "recursive-readdir": "2.1.0",
+    "redux-devtools": "^3.3.1",
     "rimraf": "2.5.4",
     "strip-ansi": "3.0.1",
     "style-loader": "0.13.1",
@@ -52,8 +53,11 @@
     "react": "^15.3.2",
     "react-bootstrap": "^0.30.5",
     "react-dom": "^15.3.2",
+    "react-modal": "^1.5.2",
+    "react-redux": "^4.4.5",
     "react-router": "^2.8.1",
-    "react-router-bootstrap": "^0.23.1"
+    "react-router-bootstrap": "^0.23.1",
+    "redux": "^3.6.0"
   },
   "scripts": {
     "start": "node scripts/start.js",

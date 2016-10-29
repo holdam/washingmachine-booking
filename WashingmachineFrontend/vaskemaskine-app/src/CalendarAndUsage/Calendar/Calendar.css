@@ -31,7 +31,7 @@
     }
 }
 
-@media (min-width: 992px) {
+@media (min-width: 1000px) {
     .seven-cols .col-md-1,
     .seven-cols .col-sm-1,
     .seven-cols .col-lg-1 {
