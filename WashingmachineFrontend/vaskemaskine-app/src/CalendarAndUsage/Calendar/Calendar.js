@@ -4,6 +4,7 @@ import {monthNamesShort, weekdayNames} from '../../Commons/util';
 
 class Calendar extends React.Component {
     render() {
+
         let weeks = this.props.weeks.map((week) => {
                 return (
                     <Week key={week.weekOfCalendar} week={week} currentlySelectedMonth={this.props.month} onDayClick={this.props.onDayClick} />
@@ -29,31 +30,31 @@ class Week extends React.Component {
 
                 // First week offmonth-days
                 if (this.props.currentlySelectedMonth !== date.month) {
-                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} onDayClick={this.props.onDayClick}>{`${dayOfTheWeek} ${date.day}`}</OffMonthDay>
+                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} onClick={() => this.props.onDayClick()}>{`${dayOfTheWeek} ${date.day}`}</OffMonthDay>
                 }
 
                 // First week, regular days
                 // Check if the first day of month, since we will add month rather than weekday
                 if (date.day === 1) {
-                    return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} onDayClick={this.props.onDayClick}>{`${monthNamesShort[date.month]} ${date.day}`}</InMonthDay>
+                    return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} onClick={() => this.props.onDayClick()}>{`${monthNamesShort[date.month]} ${date.day}`}</InMonthDay>
                 }
 
-                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} onDayClick={this.props.onDayClick}>{`${dayOfTheWeek} ${date.day}`}</InMonthDay>
+                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} onClick={() => this.props.onDayClick()}>{`${dayOfTheWeek} ${date.day}`}</InMonthDay>
             }
 
             // Not in first week
             // Check if we're in an off-month
             if (this.props.currentlySelectedMonth !== date.month) {
                 if (date.day === 1) {
-                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} onDayClick={this.props.onDayClick}>{`${monthNamesShort[date.month]} ${date.day}`}</OffMonthDay>
+                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} onClick={() => this.props.onDayClick()}>{`${monthNamesShort[date.month]} ${date.day}`}</OffMonthDay>
                 }
-                return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} onDayClick={this.props.onDayClick}>{date.day}</OffMonthDay>
+                return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} onClick={() => this.props.onDayClick()}>{date.day}</OffMonthDay>
             }
             // Else we're in a regular month
             if (date.day === 1) {
-                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} onDayClick={this.props.onDayClick}>{`${monthNamesShort[date.month]} ${date.day}`}</InMonthDay>
+                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} onClick={() => this.props.onDayClick()}>{`${monthNamesShort[date.month]} ${date.day}`}</InMonthDay>
             }
-            return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} onDayClick={this.props.onDayClick}>{date.day}</InMonthDay>
+            return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} onClick={() => this.props.onDayClick()}>{date.day}</InMonthDay>
         });
 
         return (
@@ -64,11 +65,9 @@ class Week extends React.Component {
     }
 }
 
-// TODO pass day / month as parameters instead of children
-
 function OffMonthDay(props) {
     return (
-        <div onClick={props.onDayClick()} className="col-md-1 off-month-day day">
+        <div onClick={props.onClick} className="col-md-1 off-month-day day">
             {props.children}
         </div>
     )
@@ -76,7 +75,7 @@ function OffMonthDay(props) {
 
 function InMonthDay(props) {
     return (
-        <div className="col-md-1 day">
+        <div onClick={props.onClick} className="col-md-1 day">
             {props.children}
         </div>
     )

@@ -5,6 +5,12 @@
     height: 45px;
 }
 
+@media (max-width: 1000px) {
+    .topbar {
+        padding: 5px;
+    }
+}
+
 .month-picker {
     float: left;
     margin-right: 17px;
@@ -18,3 +24,4 @@
 .month-name {
     width: 90px;
 }
+

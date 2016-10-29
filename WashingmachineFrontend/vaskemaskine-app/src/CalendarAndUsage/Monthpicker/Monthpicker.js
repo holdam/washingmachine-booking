@@ -3,7 +3,6 @@ import './Monthpicker.css';
 import {ButtonGroup, Button, Glyphicon} from 'react-bootstrap'
 import * as React from "react";
 import {monthNamesShort} from "../../Commons/util";
-import {Link} from 'react-router';
 import {LinkContainer} from 'react-router-bootstrap'
 
 class MonthPicker extends React.Component {

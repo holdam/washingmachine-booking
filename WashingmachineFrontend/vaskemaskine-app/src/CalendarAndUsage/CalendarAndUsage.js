@@ -2,6 +2,7 @@ import React from 'react';
 import Calendar from './Calendar/Calendar';
 import Usage from './Usage/Usage';
 import MonthPicker from './Monthpicker/Monthpicker';
+import './CalendarAndUsage.css';
 
 class DateRepresentation {
     constructor(year, month, day) {
@@ -49,8 +50,8 @@ class CalendarAndUsage extends React.Component {
 
     }
 
-    handleClickOnDay(date) {
-        alert("test")
+    handleClickOnDay() {
+        console.log("wtf");
     }
 
     getWeeksOfMonth() {
@@ -118,7 +119,7 @@ class CalendarAndUsage extends React.Component {
                     <Usage />
                     <div className="col-md-6">
                         <Calendar month={this.state.selectedMonth.getMonth()} weeks={weeks} year={this.state.selectedMonth.getFullYear()}
-                                  onDayClick={(date) => this.handleClickOnDay()} />
+                                  onDayClick={this.handleClickOnDay} />
                     </div>
                 </div>
             </div>
