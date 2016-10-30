@@ -3,9 +3,8 @@ import {connect} from 'react-redux';
 import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
 
 const mapStateToProps = (state, ownProps) => {
-    console.log(state);
     return {
-        selectedMonth: state.periodChooser,
+        selectedMonth: new Date(ownProps.params.year, ownProps.params.month),
         currentMonth: new Date()
     }
 };

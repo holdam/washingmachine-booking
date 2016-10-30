@@ -25,13 +25,12 @@ class Header extends React.Component {
 class App extends React.Component {
     render() {
         let store = createStore(washingMachineApp);
-
+        console.log(this.params)
         return (
             <Provider store={store}>
                 <Router history={browserHistory}>
                     <Route path="/" component={Header}>
-                        <IndexRoute component={CalendarAndUsageContainer} />
-                        <Route path="/booking/:year/:month" component={CalendarAndUsageContainer} />
+                        <Route path="/booking/(:year)/(:month)" component={CalendarAndUsageContainer} />
                     </Route>
                 </Router>
             </Provider>
