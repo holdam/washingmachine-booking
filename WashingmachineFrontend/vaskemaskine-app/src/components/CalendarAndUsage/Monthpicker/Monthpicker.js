@@ -1,8 +1,7 @@
-import {monthNames} from "../../Commons/util";
 import './Monthpicker.css';
 import {ButtonGroup, Button, Glyphicon} from 'react-bootstrap'
 import * as React from "react";
-import {monthNamesShort} from "../../Commons/util";
+import {monthNamesShort, monthNames} from "../../../commons/util";
 import {LinkContainer} from 'react-router-bootstrap'
 
 class MonthPicker extends React.Component {
@@ -10,7 +9,7 @@ class MonthPicker extends React.Component {
         let previousMonth =  new Date(this.props.year, this.props.month - 1);
         let nextMonth =  new Date(this.props.year, this.props.month + 1);
         let previousMonthLink = `/booking/${previousMonth.getFullYear()}/${previousMonth.getMonth()}`;
-        let homeLink = `/booking/${this.props.actualCurrentMonth.getFullYear()}/${this.props.actualCurrentMonth.getMonth()}`;
+        let homeLink = `/booking/${this.props.currentMonth.getFullYear()}/${this.props.currentMonth.getMonth()}`;
         let nextMonthLink = `/booking/${nextMonth.getFullYear()}/${nextMonth.getMonth()}`;
 
         return (

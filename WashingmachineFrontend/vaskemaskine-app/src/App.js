@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
-import CalendarAndUsage from './CalendarAndUsage/CalendarAndUsage';
+import CalendarAndUsageContainer from './containers/CalendarAndUsageContainer';
 import strings from './strings'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router'
 import {createStore} from 'redux';
@@ -30,8 +30,8 @@ class App extends React.Component {
             <Provider store={store}>
                 <Router history={browserHistory}>
                     <Route path="/" component={Header}>
-                        <IndexRoute component={CalendarAndUsage} />
-                        <Route path="/booking/:year/:month" component={CalendarAndUsage} />
+                        <IndexRoute component={CalendarAndUsageContainer} />
+                        <Route path="/booking/:year/:month" component={CalendarAndUsageContainer} />
                     </Route>
                 </Router>
             </Provider>
@@ -41,6 +41,12 @@ class App extends React.Component {
 
 
 export default App;
+
+// TODO redux
+// TODO routing
+// TODO marker dagen i dag
+
+// TODO route /booking/:year/:month kan eventuelt gøres optionelt
 
 // TODO når der klikkes på dag skal der åbnes mulighed for booking
 // mulighed for at vælge hvor mange vask

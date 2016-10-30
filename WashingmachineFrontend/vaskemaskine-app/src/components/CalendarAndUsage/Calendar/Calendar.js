@@ -1,6 +1,6 @@
 import './Calendar.css';
 import React from 'react';
-import {monthNamesShort, weekdayNames} from '../../Commons/util';
+import {monthNamesShort, weekdayNames} from '../../../commons/util';
 
 class Calendar extends React.Component {
     render() {

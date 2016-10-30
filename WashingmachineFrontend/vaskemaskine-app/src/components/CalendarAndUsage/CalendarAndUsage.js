@@ -20,44 +20,11 @@ class WeekRepresentation {
 }
 
 class CalendarAndUsage extends React.Component {
-    constructor(props) {
-        super(props);
-
-        this.handleClickOnDay = this.handleClickOnDay.bind(this);
-
-        let actualCurrentMonth = new Date();
-        let selectedMonth = actualCurrentMonth;
-
-        // We were passed params initially
-        if (props.params.year && props.params.month) {
-            selectedMonth = new Date(props.params.year, props.params.month);
-        }
-
-        this.state = {
-            selectedMonth: selectedMonth,
-            actualCurrentMonth: actualCurrentMonth
-        };
-    }
-
-    componentWillReceiveProps(nextProps) {
-        let selectedMonth = new Date(nextProps.params.year, nextProps.params.month);
-        this.setState({
-            selectedMonth: new Date(selectedMonth.getFullYear(), selectedMonth.getMonth())
-        });
-    }
-
-    getBookingInformation(year, month) {
-        // TODO fetch
-    }
-
-    handleClickOnDay(date) {
-        console.log(date);
-        console.log("wtf");
-    }
-
     getWeeksOfMonth() {
+        console.log(this.props.selectedMonth)
+
         let weeks = [];
-        let thisMonth = new Date(this.state.selectedMonth.getFullYear(), this.state.selectedMonth.getMonth() + 1, 0);
+        let thisMonth = new Date(this.props.selectedMonth.year, this.props.selectedMonth.month + 1, 0);
         let lastMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() - 1, 0);
 
         // Handling first week
@@ -113,14 +80,14 @@ class CalendarAndUsage extends React.Component {
         let weeks = this.getWeeksOfMonth();
         return (
             <div className="calendarAndUsage">
-                <MonthPicker month={this.state.selectedMonth.getMonth()} year={this.state.selectedMonth.getFullYear()}
+                <MonthPicker month={this.props.selectedMonth.month} year={this.props.selectedMonth.year}
                              dayRangeStart={weeks[0].days[0]} dayRangeEnd={weeks[5].days[6]}
-                             actualCurrentMonth={this.state.actualCurrentMonth} />
+                             currentMonth={this.props.currentMonth} />
                 <div className="row">
                     <Usage />
                     <div className="col-md-6">
-                        <Calendar month={this.state.selectedMonth.getMonth()} weeks={weeks} year={this.state.selectedMonth.getFullYear()}
-                                  onDayClick={this.handleClickOnDay} />
+                        <Calendar month={this.props.selectedMonth.month} weeks={weeks} year={this.props.selectedMonth.year}
+                                  onDayClick={this.props.onDayClick} />
                     </div>
                 </div>
             </div>
