@@ -21,7 +21,6 @@ class WeekRepresentation {
 
 class CalendarAndUsage extends React.Component {
     getWeeksOfMonth() {
-
         let weeks = [];
         let thisMonth = new Date(this.props.selectedMonth.getFullYear(), this.props.selectedMonth.getMonth() + 1, 0);
         let lastMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth() - 1, 0);

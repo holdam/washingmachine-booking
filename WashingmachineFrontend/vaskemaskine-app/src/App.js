@@ -25,12 +25,12 @@ class Header extends React.Component {
 class App extends React.Component {
     render() {
         let store = createStore(washingMachineApp);
-        console.log(this.params)
         return (
             <Provider store={store}>
                 <Router history={browserHistory}>
                     <Route path="/" component={Header}>
-                        <Route path="/booking/(:year)/(:month)" component={CalendarAndUsageContainer} />
+                        <IndexRoute component={CalendarAndUsageContainer}/>
+                        <Route path="/booking(/:year/:month)" component={CalendarAndUsageContainer} />
                     </Route>
                 </Router>
             </Provider>
@@ -41,8 +41,6 @@ class App extends React.Component {
 
 export default App;
 
-// TODO redux
-// TODO routing
 // TODO marker dagen i dag
 
 // TODO route /booking/:year/:month kan eventuelt gøres optionelt
