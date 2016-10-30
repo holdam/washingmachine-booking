@@ -1,11 +1,14 @@
-import React, { Component } from 'react';
+import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CalendarAndUsage from './CalendarAndUsage/CalendarAndUsage';
 import strings from './strings'
-import { Router, Route, browserHistory, IndexRoute} from 'react-router'
+import {Router, Route, browserHistory, IndexRoute} from 'react-router'
+import {createStore} from 'redux';
+import washingMachineApp from './reducers';
+import {createBooking} from './actions';
 
-class Header extends Component {
+class Header extends React.Component {
     render() {
         return (
             <div className="App">
@@ -19,8 +22,22 @@ class Header extends Component {
     }
 }
 
-class App extends Component {
+class App extends React.Component {
     render() {
+        let store = createStore(washingMachineApp);
+        console.log(store.getState());
+
+        let unsub = store.subscribe(() =>
+            console.log(store.getState())
+        );
+
+        store.dispatch(createBooking(0, 100, 'me'));
+        store.dispatch(createBooking(0, 105, 'me'));
+        store.dispatch(createBooking(0, 105, 'me'));
+        store.dispatch(createBooking(32, 123, 'mre'));
+
+        unsub();
+
         return (
             <Router history={browserHistory}>
                 <Route path="/" component={Header}>

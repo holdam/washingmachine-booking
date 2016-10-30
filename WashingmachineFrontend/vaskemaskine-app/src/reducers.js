@@ -1,21 +1,26 @@
-import {CREATE_BOOKING} from 'actions';
+import {CREATE_BOOKING} from './actions';
+import {combineReducers} from 'redux';
 
-const initialState = {
-    bookings: []
-};
-
-function booking(state = initialState, action) {
+function bookings(state = [], action) {
     switch (action.type) {
         case CREATE_BOOKING:
-            return Object.assign({}, state, {
-                bookings: [
-                    ...state.bookings,
-                    {
-
-                    }
-                ]
-            });
+            return [
+                ...state,
+                {
+                    startTime: action.startTime,
+                    endTime: action.endTime,
+                    owner: action.owner
+                }
+            ];
         default:
             return state;
     }
 }
+
+const washingMachineApp = combineReducers({
+    bookings
+});
+
+export default washingMachineApp;
+
+// TODO split reducers, use combineReducers()
