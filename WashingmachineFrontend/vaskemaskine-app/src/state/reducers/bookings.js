@@ -1,5 +1,4 @@
-import {CREATE_BOOKING} from './actions';
-import {combineReducers} from 'redux';
+import {CREATE_BOOKING} from '../actions/bookings';
 
 function bookings(state = [], action) {
     switch (action.type) {
@@ -7,6 +6,7 @@ function bookings(state = [], action) {
             return [
                 ...state,
                 {
+                    id: action.id,
                     startTime: action.startTime,
                     endTime: action.endTime,
                     owner: action.owner
@@ -17,10 +17,4 @@ function bookings(state = [], action) {
     }
 }
 
-const washingMachineApp = combineReducers({
-    bookings
-});
-
-export default washingMachineApp;
-
-// TODO split reducers, use combineReducers()
+export default bookings;

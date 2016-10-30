@@ -47,11 +47,11 @@ class CalendarAndUsage extends React.Component {
     }
 
     getBookingInformation(year, month) {
-
+        // TODO fetch
     }
 
     handleClickOnDay(date) {
-        console.log(date)
+        console.log(date);
         console.log("wtf");
     }
 

@@ -5,8 +5,8 @@ import CalendarAndUsage from './CalendarAndUsage/CalendarAndUsage';
 import strings from './strings'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router'
 import {createStore} from 'redux';
-import washingMachineApp from './reducers';
-import {createBooking} from './actions';
+import washingMachineApp from './state/reducers/reducers';
+import {Provider} from 'react-redux';
 
 class Header extends React.Component {
     render() {
@@ -25,26 +25,16 @@ class Header extends React.Component {
 class App extends React.Component {
     render() {
         let store = createStore(washingMachineApp);
-        console.log(store.getState());
-
-        let unsub = store.subscribe(() =>
-            console.log(store.getState())
-        );
-
-        store.dispatch(createBooking(0, 100, 'me'));
-        store.dispatch(createBooking(0, 105, 'me'));
-        store.dispatch(createBooking(0, 105, 'me'));
-        store.dispatch(createBooking(32, 123, 'mre'));
-
-        unsub();
 
         return (
-            <Router history={browserHistory}>
-                <Route path="/" component={Header}>
-                    <IndexRoute component={CalendarAndUsage} />
-                    <Route path="/booking/:year/:month" component={CalendarAndUsage} />
-                </Route>
-            </Router>
+            <Provider store={store}>
+                <Router history={browserHistory}>
+                    <Route path="/" component={Header}>
+                        <IndexRoute component={CalendarAndUsage} />
+                        <Route path="/booking/:year/:month" component={CalendarAndUsage} />
+                    </Route>
+                </Router>
+            </Provider>
         )
     }
 }
