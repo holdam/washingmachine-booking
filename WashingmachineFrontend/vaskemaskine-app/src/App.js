@@ -43,11 +43,9 @@ export default App;
 
 // TODO marker dagen i dag
 
-// TODO route /booking/:year/:month kan eventuelt gøres optionelt
-
 // TODO når der klikkes på dag skal der åbnes mulighed for booking
-// mulighed for at vælge hvor mange vask
-// slet booking / rediger
+    // mulighed for at vælge hvor mange vask
+    // slet booking / rediger
 
 // TODO hent bookings evt. fake med json array til at starte med
 // TODO evt. farv lørdag/søndag i en anden farve

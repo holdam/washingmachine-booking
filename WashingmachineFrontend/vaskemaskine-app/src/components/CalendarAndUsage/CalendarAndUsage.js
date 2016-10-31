@@ -75,13 +75,12 @@ class CalendarAndUsage extends React.Component {
     }
 
     render() {
-        console.log(this.props)
         let weeks = this.getWeeksOfMonth();
         return (
             <div className="calendarAndUsage">
                 <MonthPicker month={this.props.selectedMonth.getMonth()} year={this.props.selectedMonth.getFullYear()}
                              dayRangeStart={weeks[0].days[0]} dayRangeEnd={weeks[5].days[6]}
-                             currentMonth={this.props.currentMonth} onMonthChangeClicked={this.props.onMonthChangedClick} />
+                             currentMonth={this.props.currentMonth} />
                 <div className="row">
                     <Usage />
                     <div className="col-md-6">

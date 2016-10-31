@@ -21,6 +21,10 @@
     color: darkgrey;
 }
 
+.today {
+    border-top: 3px solid blueviolet;
+}
+
 
 @media (min-width: 768px){
     .seven-cols .col-md-1,

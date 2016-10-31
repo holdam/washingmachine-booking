@@ -23,37 +23,40 @@ class Week extends React.Component {
     render() {
         // Someone more smart than me should rewrite this shit, to avoid creating the same almost identical element 3 x 2 times.
         let daysOfWeek = this.props.week.days.map((date) => {
+            let keyForDate = `${date.year}-${date.month}-${date.day}`;
+
             // Check if we're in the first week, since we will add weekday names
             if (this.props.week.weekOfCalendar === 1) {
                 let dayOfTheWeek = weekdayNames[new Date(date.year, date.month, date.day).getUTCDay()];
 
                 // First week offmonth-days
                 if (this.props.currentlySelectedMonth !== date.month) {
-                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} date={date} onClick={this.props.onDayClick}>{`${dayOfTheWeek} ${date.day}`}</OffMonthDay>
+                    return <Day key={keyForDate} date={date} offMonthDay={true} onClick={this.props.onDayClick}>{`${dayOfTheWeek} ${date.day}`}</Day>
                 }
 
                 // First week, regular days
                 // Check if the first day of month, since we will add month rather than weekday
                 if (date.day === 1) {
-                    return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} date={date} onClick={this.props.onDayClick}>{`${monthNamesShort[date.month]} ${date.day}`}</InMonthDay>
+                    return <Day key={keyForDate} date={date} onClick={this.props.onDayClick}>{`${monthNamesShort[date.month]} ${date.day}`}</Day>
                 }
 
-                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} date={date} onClick={this.props.onDayClick}>{`${dayOfTheWeek} ${date.day}`}</InMonthDay>
+                return <Day key={keyForDate} date={date} onClick={this.props.onDayClick}>{`${dayOfTheWeek} ${date.day}`}</Day>
             }
 
             // Not in first week
             // Check if we're in an off-month
             if (this.props.currentlySelectedMonth !== date.month) {
                 if (date.day === 1) {
-                    return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} date={date} onClick={this.props.onDayClick}>{`${monthNamesShort[date.month]} ${date.day}`}</OffMonthDay>
+                    return <Day key={keyForDate} date={date} offMonthDay={true} onClick={this.props.onDayClick}>{`${monthNamesShort[date.month]} ${date.day}`}</Day>
                 }
-                return <OffMonthDay key={`${date.year}-${date.month}-${date.day}`} date={date} onClick={this.props.onDayClick}>{date.day}</OffMonthDay>
+                return <Day key={keyForDate} date={date} offMonthDay={true} onClick={this.props.onDayClick}>{date.day}</Day>
             }
+
             // Else we're in a regular month
             if (date.day === 1) {
-                return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} date={date} onClick={this.props.onDayClick}>{`${monthNamesShort[date.month]} ${date.day}`}</InMonthDay>
+                return <Day key={keyForDate} date={date} onClick={this.props.onDayClick}>{`${monthNamesShort[date.month]} ${date.day}`}</Day>
             }
-            return <InMonthDay key={`${date.year}-${date.month}-${date.day}`} date={date} onClick={this.props.onDayClick}>{date.day}</InMonthDay>
+            return <Day key={keyForDate} date={date} onClick={this.props.onDayClick}>{date.day}</Day>
         });
 
         return (
@@ -64,17 +67,18 @@ class Week extends React.Component {
     }
 }
 
-function OffMonthDay(props) {
-    return (
-        <div onClick={() => props.onClick(props.date)} className="col-md-1 off-month-day day">
-            {props.children}
-        </div>
-    )
-}
+function Day(props) {
+    let classes = "col-md-1 day ";
+    let today = new Date();
+    if (props.offMonthDay === true) {
+        classes += "off-month-day "
+    }
+    if (props.date.year === today.getFullYear() && props.date.month === today.getMonth() && props.date.day === today.getDate()) {
+        classes += "today "
+    }
 
-function InMonthDay(props) {
     return (
-        <div onClick={() => props.onClick(props.date)} className="col-md-1 day">
+        <div onClick={() => props.onClick(props.date)} className={classes}>
             {props.children}
         </div>
     )

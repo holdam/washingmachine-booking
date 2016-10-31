@@ -1,4 +1,3 @@
-import {changePeriod} from '../state/actions/periodChooser';
 import {connect} from 'react-redux';
 import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
 
@@ -12,10 +11,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onDayClick: (date) => {
-            dispatch(changePeriod(date.year, date.month));
-        },
-        onMonthChangedClick: (date) => {
-            dispatch(changePeriod(date.year, date.month));
+            window.alert("hej");
         }
     }
 };
