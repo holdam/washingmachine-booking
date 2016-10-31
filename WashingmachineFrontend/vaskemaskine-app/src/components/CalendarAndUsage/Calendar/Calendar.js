@@ -1,6 +1,8 @@
 import './Calendar.css';
 import React from 'react';
 import {monthNamesShort, weekdayNames} from '../../../commons/util';
+import {Modal} from 'react-bootstrap';
+import strings from '../../../strings';
 
 class Calendar extends React.Component {
     render() {
@@ -66,13 +68,31 @@ class Week extends React.Component {
     }
 }
 
+class CreateBookingModal extends React.Component {
+    constructor(props) {
+        super(props);
+        this.setState({showModal: false});
+    }
+
+    render() {
+        return (
+            <Modal.Dialog>
+                <Modal.Header>
+                    <Modal.Title>{strings.createBookingModal.title}</Modal.Title>
+                </Modal.Header>
+            </Modal.Dialog>
+        )
+    }
+}
+
 function Day(props) {
     let classes = "col-md-1 day ";
     let today = new Date();
     if (props.offMonthDay === true) {
         classes += "off-month-day "
     }
-    if (props.date.getDate() === today.getFullYear() && props.date.getMonth() === today.getMonth() && props.date.getDate() === today.getDate()) {
+
+    if (props.date.getFullYear() === today.getFullYear() && props.date.getMonth() === today.getMonth() && props.date.getDate() === today.getDate()) {
         classes += "today "
     }
 

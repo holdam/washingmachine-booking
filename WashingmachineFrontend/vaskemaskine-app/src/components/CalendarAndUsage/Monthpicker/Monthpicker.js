@@ -6,6 +6,7 @@ import {LinkContainer} from 'react-router-bootstrap'
 
 class MonthPicker extends React.Component {
     render() {
+        console.log(this.props)
         let previousMonth =  new Date(this.props.year, this.props.month - 1);
         let nextMonth =  new Date(this.props.year, this.props.month + 1);
         let previousMonthLink = `/booking/${previousMonth.getFullYear()}/${previousMonth.getMonth()}`;
@@ -33,9 +34,9 @@ class MonthPicker extends React.Component {
                     </LinkContainer>
                 </ButtonGroup>
                 <div className="date-range">
-                    <FormatDateForRange day={this.props.dayRangeStart.day} month={this.props.dayRangeStart.month} year={this.props.dayRangeStart.year} />
+                    <FormatDateForRange day={this.props.dayRangeStart.getDate()} month={this.props.dayRangeStart.getMonth()} year={this.props.dayRangeStart.getFullYear()} />
                     <span> - </span>
-                    <FormatDateForRange day={this.props.dayRangeEnd.day} month={this.props.dayRangeEnd.month} year={this.props.dayRangeEnd.year} />
+                    <FormatDateForRange day={this.props.dayRangeEnd.getDate()} month={this.props.dayRangeEnd.getMonth()} year={this.props.dayRangeEnd.getFullYear()} />
                 </div>
             </div>
         )

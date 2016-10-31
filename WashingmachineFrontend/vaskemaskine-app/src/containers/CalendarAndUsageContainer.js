@@ -11,7 +11,7 @@ const mapStateToProps = (state, ownProps) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         onDayClick: (date) => {
-            window.alert(date.day);
+            window.alert(date.getDate());
         }
     }
 };

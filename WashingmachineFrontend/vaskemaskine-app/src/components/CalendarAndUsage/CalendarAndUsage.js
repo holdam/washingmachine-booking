@@ -63,8 +63,6 @@ class CalendarAndUsage extends React.Component {
             }
         }
 
-        console.log(weeks);
-
         return weeks;
     }
 
