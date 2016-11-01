@@ -70,14 +70,23 @@ class CalendarAndUsage extends React.Component {
         let weeks = this.getWeeksOfMonth();
         return (
             <div className="calendarAndUsage">
-                <MonthPicker month={this.props.selectedMonth.getMonth()} year={this.props.selectedMonth.getFullYear()}
-                             dayRangeStart={weeks[0].days[0]} dayRangeEnd={weeks[5].days[6]}
+                <MonthPicker month={this.props.selectedMonth.getMonth()}
+                             year={this.props.selectedMonth.getFullYear()}
+                             dayRangeStart={weeks[0].days[0]}
+                             dayRangeEnd={weeks[5].days[6]}
                              currentMonth={this.props.currentMonth} />
                 <div className="row">
                     <Usage />
                     <div className="col-md-6">
-                        <Calendar month={this.props.selectedMonth.getMonth()} weeks={weeks} year={this.props.selectedMonth.getFullYear()}
-                                  onDayClick={this.props.onDayClick} />
+                        <Calendar month={this.props.selectedMonth.getMonth()}
+                                  year={this.props.selectedMonth.getFullYear()}
+                                  weeks={weeks}
+                                  bookingDate={this.props.bookingDate}
+                                  showBookingModal={this.props.showBookingModal}
+                                  onDayClick={this.props.onDayClick}
+                                  onCreateBooking={this.props.onCreateBooking}
+                                  onCancelBookingCreation={this.props.onCancelBookingCreation}
+                        />
                     </div>
                 </div>
             </div>

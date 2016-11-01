@@ -1,20 +1,28 @@
 import './Calendar.css';
 import React from 'react';
 import {monthNamesShort, weekdayNames} from '../../../commons/util';
-import {Modal} from 'react-bootstrap';
-import strings from '../../../strings';
+import CreateBookingModal from './CreateBookingModal/CreateBookingModal';
 
 class Calendar extends React.Component {
     render() {
         let weeks = this.props.weeks.map((week) => {
                 return (
-                    <Week key={week.weekOfCalendar} week={week} currentlySelectedMonth={this.props.month} onDayClick={this.props.onDayClick} />
+                    <Week key={week.weekOfCalendar}
+                          week={week}
+                          currentlySelectedMonth={this.props.month}
+                          onDayClick={this.props.onDayClick}
+                    />
                 )
             }
         );
 
         return (
             <div className="calendar">
+                <CreateBookingModal showModal={this.props.showBookingModal}
+                                    onCreateBooking={this.props.onCreateBooking}
+                                    onCancelBookingCreation={this.props.onCancelBookingCreation}
+                                    bookingDate={this.props.bookingDate}
+                />
                 {weeks}
             </div>
         )
@@ -68,22 +76,7 @@ class Week extends React.Component {
     }
 }
 
-class CreateBookingModal extends React.Component {
-    constructor(props) {
-        super(props);
-        this.setState({showModal: false});
-    }
 
-    render() {
-        return (
-            <Modal.Dialog>
-                <Modal.Header>
-                    <Modal.Title>{strings.createBookingModal.title}</Modal.Title>
-                </Modal.Header>
-            </Modal.Dialog>
-        )
-    }
-}
 
 function Day(props) {
     let classes = "col-md-1 day ";
