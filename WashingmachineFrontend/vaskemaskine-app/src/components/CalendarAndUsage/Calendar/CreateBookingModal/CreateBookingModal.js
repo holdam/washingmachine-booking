@@ -43,7 +43,7 @@ class CreateBookingModal extends React.Component {
                 <Modal.Body>
                     <Form>
                         <FormGroup controlId="formStartTime">
-                            <Col componentClass={ControlLabel} sm={4}>
+                            <Col componentClass={ControlLabel} sm={3}>
                                 {strings.createBookingModal.startTime}
                             </Col>
                             <Col sm={8}>
@@ -54,7 +54,7 @@ class CreateBookingModal extends React.Component {
                             </Col>
                         </FormGroup>
                         <FormGroup controlId="formEndTime">
-                            <Col componentClass={ControlLabel} sm={4}>
+                            <Col componentClass={ControlLabel} sm={3}>
                                 {strings.createBookingModal.endTime}
                             </Col>
                             <Col sm={8}>
