@@ -41,30 +41,30 @@ class CreateBookingModal extends React.Component {
                     <Modal.Title>{`${strings.createBookingModal.title} ${this.convertDateToString((this.props.bookingDate || new Date()))}`}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                        <Form>
-                            <FormGroup controlId="formStartTime">
-                                <Col componentClass={ControlLabel} sm={4}>
-                                    {strings.createBookingModal.startTime}
-                                </Col>
-                                <Col sm={8}>
-                                    <div>
-                                        <HourTimePicker handleChange={this.handleHourStartChange} />
-                                        <MinuteTimePicker handleChange={this.handleMinuteStartChange} />
-                                    </div>
-                                </Col>
-                            </FormGroup>
-                            <FormGroup controlId="formEndTime">
-                                <Col componentClass={ControlLabel} sm={4}>
-                                    {strings.createBookingModal.endTime}
-                                </Col>
-                                <Col sm={8}>
-                                    <div>
-                                        <HourTimePicker handleChange={this.handleHourEndChange} />
-                                        <MinuteTimePicker handleChange={this.handleMinuteStartChange} />
-                                    </div>
-                                </Col>
-                            </FormGroup>
-                        </Form>
+                    <Form>
+                        <FormGroup controlId="formStartTime">
+                            <Col componentClass={ControlLabel} sm={4}>
+                                {strings.createBookingModal.startTime}
+                            </Col>
+                            <Col sm={8}>
+                                <div>
+                                    <HourTimePicker handleChange={this.handleHourStartChange} />
+                                    <MinuteTimePicker handleChange={this.handleMinuteStartChange} />
+                                </div>
+                            </Col>
+                        </FormGroup>
+                        <FormGroup controlId="formEndTime">
+                            <Col componentClass={ControlLabel} sm={4}>
+                                {strings.createBookingModal.endTime}
+                            </Col>
+                            <Col sm={8}>
+                                <div>
+                                    <HourTimePicker handleChange={this.handleHourEndChange} />
+                                    <MinuteTimePicker handleChange={this.handleMinuteStartChange} />
+                                </div>
+                            </Col>
+                        </FormGroup>
+                    </Form>
                 </Modal.Body>
                 <Modal.Footer>
                     {/* TODO */}
