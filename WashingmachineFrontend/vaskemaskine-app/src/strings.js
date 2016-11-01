@@ -4,7 +4,9 @@ var strings = {
         title: 'Opret reservation',
         body: 'todo',
         save: 'Opret',
-        cancel: 'Annuller'
+        cancel: 'Annuller',
+        startTime: 'Starttidspunkt',
+        endTime: 'Sluttidspunkt'
     }
 };
 
