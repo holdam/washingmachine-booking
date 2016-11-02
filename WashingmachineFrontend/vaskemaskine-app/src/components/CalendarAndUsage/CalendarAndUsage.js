@@ -12,6 +12,11 @@ class WeekRepresentation {
 }
 
 class CalendarAndUsage extends React.Component {
+    componentWillReceiveProps(nextProps) {
+        // TODO fetch
+
+    }
+
     getWeeksOfMonth() {
         let weeks = [];
         let thisMonth = new Date(this.props.selectedMonth.getFullYear(), this.props.selectedMonth.getMonth() + 1, 0);
@@ -74,7 +79,8 @@ class CalendarAndUsage extends React.Component {
                              year={this.props.selectedMonth.getFullYear()}
                              dayRangeStart={weeks[0].days[0]}
                              dayRangeEnd={weeks[5].days[6]}
-                             currentMonth={this.props.currentMonth} />
+                             currentMonth={this.props.currentMonth}
+                />
                 <div className="row">
                     <Usage />
                     <div className="col-md-6">
@@ -82,10 +88,12 @@ class CalendarAndUsage extends React.Component {
                                   year={this.props.selectedMonth.getFullYear()}
                                   weeks={weeks}
                                   bookingDate={this.props.bookingDate}
+                                  bookings={this.props.bookings}
                                   showBookingModal={this.props.showBookingModal}
                                   onDayClick={this.props.onDayClick}
                                   onCreateBooking={this.props.onCreateBooking}
                                   onCancelBookingCreation={this.props.onCancelBookingCreation}
+
                         />
                     </div>
                 </div>

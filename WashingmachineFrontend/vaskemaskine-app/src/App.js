@@ -1,10 +1,13 @@
+
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 import CalendarAndUsageContainer from './containers/CalendarAndUsageContainer';
 import strings from './strings'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router'
-import {createStore} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
+import thunkMiddleware from 'redux-thunk'
+import createLogger from 'redux-logger'
 import washingMachineApp from './state/reducers/reducers';
 import {Provider} from 'react-redux';
 
@@ -24,7 +27,8 @@ class Header extends React.Component {
 
 class App extends React.Component {
     render() {
-        let store = createStore(washingMachineApp);
+        const loggerMiddleware = createLogger()
+        let store = createStore(washingMachineApp, applyMiddleware(thunkMiddleware, loggerMiddleware));
         return (
             <Provider store={store}>
                 <Router history={browserHistory}>

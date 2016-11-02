@@ -1,0 +1,9 @@
+.hourPicker, .minutePicker {
+    padding: 3px;
+    margin: 5px;
+}
+
+.numberOfWashingsPicker, .numberOfTumbleDriesPicker {
+    padding: 3px;
+    margin: 3px;
+}

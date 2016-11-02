@@ -9,8 +9,7 @@ function misc(state = {showBookingModal: false, date: undefined}, action) {
             });
         case END_BOOKING_FLOW:
             return Object.assign({}, state, {
-                showBookingModal: false,
-                date: undefined
+                showBookingModal: false
             });
         default:
             return state;

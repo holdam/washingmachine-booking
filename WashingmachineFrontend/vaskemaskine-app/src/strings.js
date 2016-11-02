@@ -6,7 +6,15 @@ var strings = {
         save: 'Opret',
         cancel: 'Annuller',
         startTime: 'Starttidspunkt',
-        endTime: 'Sluttidspunkt'
+        endTime: 'Sluttidspunkt',
+        numberOfWashes: 'Antal vaskninger',
+        numberOfTumbleDries: 'Antal tørretumblinger',
+        errorsMessages: {
+            mustEndBefore22: 'Reservationen skal slutte senest kl. 22.00',
+            mustReserveAtLeast30Minutes: 'Du skal mindst reservere en halv time',
+            mustReserveEitherTumbleDrierOrWashingMachine: 'Du skal bestille mindst ét brug af vaskemaskine eller tørretumbler',
+            dayIsBeforeToday: 'Du kan ikke reservere bagud i tiden'
+        }
     }
 };
 

@@ -22,6 +22,7 @@ class Calendar extends React.Component {
                                     onCreateBooking={this.props.onCreateBooking}
                                     onCancelBookingCreation={this.props.onCancelBookingCreation}
                                     bookingDate={this.props.bookingDate}
+                                    bookings={this.props.bookings}
                 />
                 {weeks}
             </div>
