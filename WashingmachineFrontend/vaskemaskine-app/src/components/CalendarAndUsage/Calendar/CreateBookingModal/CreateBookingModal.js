@@ -3,10 +3,9 @@ import {Modal, Button} from 'react-bootstrap';
 import strings from '../../../../strings';
 import {monthNames} from '../../../../commons/util';
 import './CreateBookingModal.css';
-import {ControlLabel, Form, FormGroup, Col} from "react-bootstrap";
+import {ControlLabel, Form, FormGroup, Col, Alert} from "react-bootstrap";
 
 class CreateBookingModal extends React.Component {
-
     constructor(props) {
         super(props);
         this.handleHourStartChange = this.handleHourStartChange.bind(this);
@@ -16,14 +15,16 @@ class CreateBookingModal extends React.Component {
         this.handleNumberOfWashingsChange = this.handleNumberOfWashingsChange.bind(this);
         this.handleNumberOfTumbleDriesChange = this.handleNumberOfTumbleDriesChange.bind(this);
         this.handleCreateBooking = this.handleCreateBooking.bind(this);
+        this.cancelBookingCreation = this.cancelBookingCreation.bind(this);
 
         this.state = {
             startHour: 8,
-            startMinute: 0,
-            endHour: 8,
-            endMinute: 0,
+            startMinutes: 0,
+            endHours: 8,
+            endMinutes: 0,
             numberOfWashings: 0,
-            numberOfTumbleDries: 0
+            numberOfTumbleDries: 0,
+            errorMessages: []
         }
     }
 
@@ -32,15 +33,15 @@ class CreateBookingModal extends React.Component {
     }
 
     handleMinuteStartChange(event) {
-        this.setState({startMinute: event.target.value});
+        this.setState({startMinutes: event.target.value});
     }
 
     handleHourEndChange(event) {
-        this.setState({endHour: event.target.value});
+        this.setState({endHours: event.target.value});
     }
 
     handleMinuteEndChange(event) {
-        this.setState({endMinute: event.target.value});
+        this.setState({endMinutes: event.target.value});
     }
 
     handleNumberOfWashingsChange(event) {
@@ -59,13 +60,13 @@ class CreateBookingModal extends React.Component {
             errorMessages.push(strings.createBookingModal.errorsMessages.dayIsBeforeToday);
         }
 
-        if (this.state.endHour >= 22 && this.state.endMinute > 0) {
+        if (this.state.endHours >= 22 && this.state.endMinutes > 0) {
             errorMessages.push(strings.createBookingModal.errorsMessages.mustEndBefore22);
         }
 
-        let timeDifference = (this.state.endMinute - this.state.startMinute >= 0)
-            ? {hour: (this.state.endHour - this.state.startHour), minutes: (this.state.endMinute - this.state.startMinute)}
-            : {hour: (this.state.endHour - this.state.startHour - 1), minutes: (60 - (this.state.startMinute + this.state.endMinute))};
+        let timeDifference = (this.state.endMinutes - this.state.startMinutes >= 0)
+            ? {hour: (this.state.endHours - this.state.startHour), minutes: (this.state.endMinutes - this.state.startMinutes)}
+            : {hour: (this.state.endHours - this.state.startHour - 1), minutes: (60 - (this.state.startMinutes + this.state.endMinutes))};
 
         if (timeDifference.hour < 0 || (timeDifference.hour <= 0 && timeDifference.minutes < 30)) {
             errorMessages.push(strings.createBookingModal.errorsMessages.mustReserveAtLeast30Minutes);
@@ -75,22 +76,48 @@ class CreateBookingModal extends React.Component {
             errorMessages.push(strings.createBookingModal.errorsMessages.mustReserveEitherTumbleDrierOrWashingMachine);
         }
 
-        console.log(this.props.bookings);
-        console.log(this.state);
-        console.log(errorMessages);
+        let startTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+        startTimeOfNewBooking.setHours(this.state.startHour);
+        startTimeOfNewBooking.setMinutes(this.state.startMinutes);
 
-        // TODO validation -  ikke clasher
+        let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+        endTimeOfNewBooking.setHours(this.state.endHours);
+        endTimeOfNewBooking.setMinutes(this.state.endMinutes);
 
-        //this.props.onCreateBooking(123, 123, 123)
+        for (let booking of this.props.bookings) {
+            if (booking.startTime < endTimeOfNewBooking.getTime() && booking.endTime > startTimeOfNewBooking.getTime()) {
+                errorMessages.push(strings.createBookingModal.errorsMessages.bookingIsClashing);
+            }
+        }
+
+        this.setState({
+            errorMessages
+        });
+
+        if (errorMessages.length === 0) {
+            // TODO create bookings
+        }
+    }
+
+    cancelBookingCreation() {
+        // Clear error messages when closing modal
+        this.setState({
+            errorMessages: []
+        });
+
+        this.props.onCancelBookingCreation();
     }
 
     render() {
         return (
-            <Modal show={this.props.showModal} onHide={this.props.onCancelBookingCreation}>
+            <Modal show={this.props.showModal} onHide={this.cancelBookingCreation}>
                 <Modal.Header closeButton>
                     <Modal.Title>{`${strings.createBookingModal.title} ${this.convertDateToString((this.props.bookingDate || new Date()))}`}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
+                    <ErrorMessages alertVisible={this.state.errorMessages.length > 0}>
+                        {this.state.errorMessages}
+                    </ErrorMessages>
                     <Form horizontal>
                         <FormGroup controlId="formStartTime">
                             <Col componentClass={ControlLabel} sm={4}>
@@ -133,7 +160,7 @@ class CreateBookingModal extends React.Component {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.props.onCancelBookingCreation}>{strings.createBookingModal.cancel}</Button>
+                    <Button onClick={this.cancelBookingCreation}>{strings.createBookingModal.cancel}</Button>
                     <Button onClick={this.handleCreateBooking} bsStyle="primary">{strings.createBookingModal.save}</Button>
                 </Modal.Footer>
             </Modal>
@@ -180,6 +207,27 @@ class MinuteTimePicker extends React.Component {
     }
 }
 
+function ErrorMessages(props) {
+    if (!props.alertVisible) {
+        return (
+            <span></span>
+        )
+    }
+
+    let errorMessages = props.children.map((errorMessage) => {
+        return (
+            <li key={errorMessage}>{errorMessage}</li>
+        )
+    });
+
+    return (
+        <Alert bsStyle="danger">
+            <ul>
+                {errorMessages}
+            </ul>
+        </Alert>
+    )
+}
 
 // TODO
 // need to change backend to take number of washes

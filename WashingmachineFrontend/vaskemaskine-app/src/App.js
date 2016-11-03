@@ -1,4 +1,3 @@
-
 import React from 'react';
 import logo from './logo.svg';
 import './App.css';
@@ -45,7 +44,13 @@ class App extends React.Component {
 
 export default App;
 
-// TODO hent bookings evt. fake med json array til at starte med
+
+// TODO battleplan:
+    // lav events "pæne" i kalenderen - egne skal være farvet en anden farve
+    // gør så man kan oprette events færdig
+    // gør så man kan redigere events
+    //
+// TODO hent bookings
 // TODO evt. farv lørdag/søndag i en anden farve
 // TODO vis forbrug evt. for forskellige længder af perioder?
 
@@ -54,7 +59,6 @@ export default App;
 // login vil være at gemme noge ti local storage el lign som kan sendes
 // TODO reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
 // TODO https
-// TODO can prob remove my own representations of dates lol
 // TODO teting + proptypes
 
 // TODO may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...

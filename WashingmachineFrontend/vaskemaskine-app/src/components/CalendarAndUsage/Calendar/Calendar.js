@@ -1,6 +1,6 @@
 import './Calendar.css';
 import React from 'react';
-import {monthNamesShort, weekdayNames} from '../../../commons/util';
+import {monthNamesShort, weekdayNames, getStartAndEndDayMillisFromDate} from '../../../commons/util';
 import CreateBookingModal from './CreateBookingModal/CreateBookingModal';
 import DayContainer from '../../../containers/DayContainer';
 
@@ -70,7 +70,7 @@ class Week extends React.Component {
         });
 
         return (
-            <div className="week row seven-cols">
+            <div className="week row row-eq-height seven-cols">
                 {daysOfWeek}
             </div>
         )
@@ -89,8 +89,8 @@ export function Day(props) {
     }
 
     // Get events for the day
-    let startOfTodayInMillis = props.date.getTime();
-    let endOfTodayInMillis = new Date(props.date.getFullYear(), props.date.getMonth(), props.date.getDate(), 23, 59, 59, 999).getTime();
+    let startOfTodayInMillis, endOfTodayInMillis;
+    ({startOfTodayInMillis, endOfTodayInMillis} = getStartAndEndDayMillisFromDate(props.date));
     let bookingsAsNodes = props.bookings.map((booking) => {
         if (booking.startTime >= startOfTodayInMillis && booking.endTime <= endOfTodayInMillis) {
             return (

@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
-import {startBookingFlow, endBookingFlow} from '../state/actions/bookingFlow';
+import {endBookingFlow} from '../state/actions/bookingFlow';
 import {createBooking, fetchBookings} from '../state/actions/bookings';
 
 const mapStateToProps = (state, ownProps) => {
@@ -9,7 +9,7 @@ const mapStateToProps = (state, ownProps) => {
         currentMonth: new Date(),
         showBookingModal: state.misc.showBookingModal,
         bookingDate: state.misc.date,
-        bookings: state.bookings
+        bookings: state.bookings.bookings
     }
 };
 

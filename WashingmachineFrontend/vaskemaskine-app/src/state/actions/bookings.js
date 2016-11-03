@@ -42,6 +42,12 @@ export function fetchBookings(startDate, endDate) {
                 startTime: 1478045567050,
                 endTime: 1478045577050,
                 owner: 'Kasper'
+            },
+            {
+                id: 3,
+                startTime: 1477998000000,
+                endTime: 1478005200000,
+                owner: 'Jens'
             }
         ];
 

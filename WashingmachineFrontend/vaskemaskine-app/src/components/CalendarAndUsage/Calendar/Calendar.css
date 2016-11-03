@@ -1,12 +1,16 @@
+.row-eq-height {
+    display: flex;
+}
+
 .weekday-names {
     padding-bottom: 15px;
 }
 
 .day {
-    height: 95px;
+    min-height: 95px !important;
     text-align: right;
     vertical-align: top;
-    border: 1px solid lightgrey;
+    border: 1px solid #ddd;
     margin-left: -1px;
     margin-bottom: -1px;
 }
@@ -23,6 +27,14 @@
 
 .today {
     border-top: 3px solid blueviolet;
+}
+
+.booking {
+    background: cadetblue;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 3px;
+    margin-bottom: 3px;
 }
 
 
