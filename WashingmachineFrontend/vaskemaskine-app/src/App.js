@@ -27,7 +27,7 @@ class Header extends React.Component {
 
 class App extends React.Component {
     render() {
-        const loggerMiddleware = createLogger()
+        const loggerMiddleware = createLogger();
         let store = createStore(washingMachineApp, applyMiddleware(thunkMiddleware, loggerMiddleware));
         return (
             <Provider store={store}>
@@ -55,4 +55,6 @@ export default App;
 // TODO reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
 // TODO https
 // TODO can prob remove my own representations of dates lol
-// TODO teting0
+// TODO teting + proptypes
+
+// TODO may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...

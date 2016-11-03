@@ -2,6 +2,7 @@ import './Calendar.css';
 import React from 'react';
 import {monthNamesShort, weekdayNames} from '../../../commons/util';
 import CreateBookingModal from './CreateBookingModal/CreateBookingModal';
+import DayContainer from '../../../containers/DayContainer';
 
 class Calendar extends React.Component {
     render() {
@@ -10,7 +11,6 @@ class Calendar extends React.Component {
                     <Week key={week.weekOfCalendar}
                           week={week}
                           currentlySelectedMonth={this.props.month}
-                          onDayClick={this.props.onDayClick}
                     />
                 )
             }
@@ -41,32 +41,32 @@ class Week extends React.Component {
 
                 // First week offmonth-days
                 if (this.props.currentlySelectedMonth !== date.getMonth()) {
-                    return <Day key={keyForDate} date={date} offMonthDay={true} onClick={this.props.onDayClick}>{`${dayOfTheWeek} ${date.getDate()}`}</Day>
+                    return <DayContainer key={keyForDate} date={date} offMonthDay={true}>{`${dayOfTheWeek} ${date.getDate()}`}</DayContainer>
                 }
 
                 // First week, regular days
                 // Check if the first day of month, since we will add month rather than weekday
                 if (date.getDate() === 1) {
-                    return <Day key={keyForDate} date={date} onClick={this.props.onDayClick}>{`${monthNamesShort[date.getMonth()]} ${date.getDate()}`}</Day>
+                    return <DayContainer key={keyForDate} date={date}>{`${monthNamesShort[date.getMonth()]} ${date.getDate()}`}</DayContainer>
                 }
 
-                return <Day key={keyForDate} date={date} onClick={this.props.onDayClick}>{`${dayOfTheWeek} ${date.getDate()}`}</Day>
+                return <DayContainer key={keyForDate} date={date}>{`${dayOfTheWeek} ${date.getDate()}`}</DayContainer>
             }
 
             // Not in first week
             // Check if we're in an off-month
             if (this.props.currentlySelectedMonth !== date.getMonth()) {
                 if (date.getDate() === 1) {
-                    return <Day key={keyForDate} date={date} offMonthDay={true} onClick={this.props.onDayClick}>{`${monthNamesShort[date.getMonth()]} ${date.getDate()}`}</Day>
+                    return <DayContainer key={keyForDate} date={date} offMonthDay={true}>{`${monthNamesShort[date.getMonth()]} ${date.getDate()}`}</DayContainer>
                 }
-                return <Day key={keyForDate} date={date} offMonthDay={true} onClick={this.props.onDayClick}>{date.getDate()}</Day>
+                return <DayContainer key={keyForDate} date={date} offMonthDay={true}>{date.getDate()}</DayContainer>
             }
 
             // Else we're in a regular month
             if (date.getDate() === 1) {
-                return <Day key={keyForDate} date={date} onClick={this.props.onDayClick}>{`${monthNamesShort[date.getMonth()]} ${date.getDate()}`}</Day>
+                return <DayContainer key={keyForDate} date={date}>{`${monthNamesShort[date.getMonth()]} ${date.getDate()}`}</DayContainer>
             }
-            return <Day key={keyForDate} date={date} onClick={this.props.onDayClick}>{date.getDate()}</Day>
+            return <DayContainer key={keyForDate} date={date}>{date.getDate()}</DayContainer>
         });
 
         return (
@@ -77,11 +77,9 @@ class Week extends React.Component {
     }
 }
 
-
-
-function Day(props) {
-    let classes = "col-md-1 day ";
+export function Day(props) {
     let today = new Date();
+    let classes = "col-md-1 day ";
     if (props.offMonthDay === true) {
         classes += "off-month-day "
     }
@@ -90,15 +88,28 @@ function Day(props) {
         classes += "today "
     }
 
+    // Get events for the day
+    let startOfTodayInMillis = props.date.getTime();
+    let endOfTodayInMillis = new Date(props.date.getFullYear(), props.date.getMonth(), props.date.getDate(), 23, 59, 59, 999).getTime();
+    let bookingsAsNodes = props.bookings.map((booking) => {
+        if (booking.startTime >= startOfTodayInMillis && booking.endTime <= endOfTodayInMillis) {
+            return (
+                <div key={booking.id} className="booking">
+                    {`${booking.id}, ${booking.owner}, ${booking.startTime}, ${booking.endTime}, `}
+                </div>
+            )
+        }
+    });
+
     return (
         <div onClick={() => props.onClick(props.date)} className={classes}>
             {props.children}
+            {bookingsAsNodes}
         </div>
     )
 }
 
 
-// push events live :D ? lav en lytter der sidder og kigger hele tiden
-// evt. nye år
+// TODO push events live :D ? lav en lytter der sidder og kigger hele tiden
 
 export default Calendar;

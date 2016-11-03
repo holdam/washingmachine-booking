@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
-import {startBookingFlow, endBookingFlow} from '../state/actions/misc';
+import {startBookingFlow, endBookingFlow} from '../state/actions/bookingFlow';
 import {createBooking, fetchBookings} from '../state/actions/bookings';
 
 const mapStateToProps = (state, ownProps) => {
@@ -15,15 +15,15 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onDayClick: (date) => {
-            dispatch(startBookingFlow(date))
-        },
         onCreateBooking: (startTime, endTime, owner) => {
             dispatch(endBookingFlow());
             dispatch(createBooking(123123, startTime, endTime, owner))
         },
         onCancelBookingCreation: () => {
             dispatch(endBookingFlow());
+        },
+        fetchBookings: (startDate, endDate) => {
+            dispatch(fetchBookings(startDate, endDate))
         }
     }
 };

@@ -1,6 +1,6 @@
 import {combineReducers} from 'redux';
 import bookings from './bookings';
-import misc from './misc';
+import misc from './bookingFlow';
 
 const washingMachineApp = combineReducers({
     bookings,

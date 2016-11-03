@@ -12,9 +12,19 @@ class WeekRepresentation {
 }
 
 class CalendarAndUsage extends React.Component {
-    componentWillReceiveProps(nextProps) {
-        // TODO fetch
+    constructor(props) {
+        super(props);
+        // TODO correct arguments
+        this.props.fetchBookings(0, 0);
+    }
 
+
+    componentWillReceiveProps(nextProps) {
+        // Fetch data if we are in a new month
+        if (this.props.selectedMonth.getMonth() !== nextProps.selectedMonth.getMonth()) {
+            // TODO correct arguments
+            this.props.fetchBookings(new Date(nextProps.selectedMonth.getMonth(), nextProps.selectedMonth.getFullYear()).getMilliseconds());
+        }
     }
 
     getWeeksOfMonth() {
@@ -90,10 +100,8 @@ class CalendarAndUsage extends React.Component {
                                   bookingDate={this.props.bookingDate}
                                   bookings={this.props.bookings}
                                   showBookingModal={this.props.showBookingModal}
-                                  onDayClick={this.props.onDayClick}
                                   onCreateBooking={this.props.onCreateBooking}
                                   onCancelBookingCreation={this.props.onCancelBookingCreation}
-
                         />
                     </div>
                 </div>

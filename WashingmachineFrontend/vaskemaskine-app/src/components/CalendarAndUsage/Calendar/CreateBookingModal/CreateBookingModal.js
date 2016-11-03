@@ -25,7 +25,6 @@ class CreateBookingModal extends React.Component {
             numberOfWashings: 0,
             numberOfTumbleDries: 0
         }
-
     }
 
     handleHourStartChange(event) {

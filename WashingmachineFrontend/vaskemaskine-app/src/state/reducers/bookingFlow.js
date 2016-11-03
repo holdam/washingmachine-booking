@@ -1,4 +1,4 @@
-import {START_BOOKING_FLOW, END_BOOKING_FLOW} from '../actions/misc';
+import {START_BOOKING_FLOW, END_BOOKING_FLOW} from '../actions/bookingFlow';
 
 function misc(state = {showBookingModal: false, date: undefined}, action) {
     switch (action.type) {
