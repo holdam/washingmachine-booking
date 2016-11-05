@@ -1,18 +1,17 @@
-package db;
+package db.mappers;
 
-import api.Event;
+import api.BookingDTO;
 import core.Util;
 import org.skife.jdbi.v2.StatementContext;
 import org.skife.jdbi.v2.tweak.ResultSetMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 
-public class EventMapper implements ResultSetMapper<Event> {
+public class BookingMapper implements ResultSetMapper<BookingDTO> {
     @Override
-    public Event map(int i, ResultSet resultSet, StatementContext statementContext) throws SQLException {
-        return new Event(Util.convertMillisToDate(resultSet.getTimestamp("start_time").getTime()),
+    public BookingDTO map(int i, ResultSet resultSet, StatementContext statementContext) throws SQLException {
+        return new BookingDTO(Util.convertMillisToDate(resultSet.getTimestamp("start_time").getTime()),
                 Util.convertMillisToDate(resultSet.getTimestamp("end_time").getTime()),
                 resultSet.getString("owner"));
     }

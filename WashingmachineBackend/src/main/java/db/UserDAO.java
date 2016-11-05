@@ -1,6 +1,7 @@
 package db;
 
 import core.User;
+import db.mappers.UserMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
@@ -39,8 +40,8 @@ public interface UserDAO {
     int authenticateUser(@Bind("username") String username, @Bind("password") String password);
 
 
-    @SqlQuery("SELECT users.username as username, role.role_name as role FROM username JOIN roles ON roles.id = roles WHERE username = :username")
-    User getUser(String username);
+    @SqlQuery("SELECT username, role from users where username = :username")
+    User getUser(@Bind("username") String username);
 
     @SqlQuery("SELECT salt FROM users WHERE username = :username")
     String getSaltForUser(@Bind("username") String username);

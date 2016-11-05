@@ -1,6 +1,6 @@
 package resources;
 
-import api.Usage;
+import api.UsageDTO;
 import core.RoleHelper;
 import core.User;
 import core.Util;
@@ -27,38 +27,37 @@ public class UsageResource {
     @Path("/washing_machine")
     @POST
     public void incrementWashingMachineUsage(@Auth User user) {
-        usageDAO.insertUsage(user.getName(), Usage.WASHING_MACHINE, getStartDateOfCurrentMonth());
+        usageDAO.insertUsage(user.getName(), UsageDTO.WASHING_MACHINE, getStartDateOfCurrentMonth());
     }
 
     @Path("/washing_machine")
     @DELETE
     public void decrementWashingMachineUsage(@Auth User user) {
-        usageDAO.deleteUsage(user.getName(), Usage.WASHING_MACHINE, getStartDateOfCurrentMonth());
+        usageDAO.deleteUsage(user.getName(), UsageDTO.WASHING_MACHINE, getStartDateOfCurrentMonth());
     }
 
     @Path("/tumble_drier")
     @POST
     public void incrementTumbleDrierUsage(@Auth User user) {
-        usageDAO.insertUsage(user.getName(), Usage.TUMBLE_DRIER, getStartDateOfCurrentMonth());
+        usageDAO.insertUsage(user.getName(), UsageDTO.TUMBLE_DRIER, getStartDateOfCurrentMonth());
     }
 
     @Path("/tumble_drier")
     @DELETE
     public void decrementTumbleDrierUsage(@Auth User user) {
-        usageDAO.deleteUsage(user.getName(), Usage.TUMBLE_DRIER, getStartDateOfCurrentMonth());
+        usageDAO.deleteUsage(user.getName(), UsageDTO.TUMBLE_DRIER, getStartDateOfCurrentMonth());
     }
 
     @GET
-    public List<Usage> getUsagesForSelfInInterval(@Auth User user, @QueryParam("startTime") @NotNull @Min(0) Long startTime,
-                                                  @QueryParam("endTime") @NotNull @Min(0) Long endTime) {
+    public List<UsageDTO> getUsagesForSelfInInterval(@Auth User user, @QueryParam("startTime") @NotNull @Min(0) Long startTime,
+                                                     @QueryParam("endTime") @NotNull @Min(0) Long endTime) {
         return usageDAO.getUsageForUserInInterval(user.getName(), Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime));
     }
 
     @Path("/all")
     @GET
-    public List<Usage> getAllUsageForAllInInterval(@Auth User user, @QueryParam("startTime") @NotNull @Min(0) Long startTime,
-                                                   @QueryParam("endTime") @NotNull @Min(0) Long endTime) {
-        // TODO must be able to do this in a better way...
+    public List<UsageDTO> getAllUsageForAllInInterval(@Auth User user, @QueryParam("startTime") @NotNull @Min(0) Long startTime,
+                                                      @QueryParam("endTime") @NotNull @Min(0) Long endTime) {
         if (!RoleHelper.isAdmin(user.getRole())) {
             throw new WebApplicationException(403);
         }

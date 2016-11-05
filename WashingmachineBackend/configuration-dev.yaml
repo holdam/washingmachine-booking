@@ -46,4 +46,4 @@ logging:
       threshold: ALL
       timeZone: UTC
       target: stdout
-      logFormat: # TODO
+      logFormat:

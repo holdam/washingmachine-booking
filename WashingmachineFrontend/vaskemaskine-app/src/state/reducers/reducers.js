@@ -1,10 +1,10 @@
 import {combineReducers} from 'redux';
 import bookings from './bookings';
-import misc from './bookingFlow';
+import bookingFlow from './bookingFlow';
 
 const washingMachineApp = combineReducers({
     bookings,
-    misc
+    bookingFlow
 });
 
 export default washingMachineApp;

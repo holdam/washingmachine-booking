@@ -1,4 +1,4 @@
-package db;
+package db.mappers;
 
 import core.User;
 import org.skife.jdbi.v2.StatementContext;

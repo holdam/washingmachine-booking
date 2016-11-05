@@ -1,30 +1,37 @@
 package auth;
 
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+import api.UserTokenDTO;
 import core.User;
-import core.Util;
 import db.UserDAO;
+import db.UserTokenDAO;
 import io.dropwizard.auth.AuthenticationException;
 import io.dropwizard.auth.Authenticator;
-import io.dropwizard.auth.basic.BasicCredentials;
-import org.apache.commons.lang3.RandomStringUtils;
 
-import java.security.MessageDigest;
+import java.util.Calendar;
 import java.util.Optional;
 
+// TODO caching
 
-public class MyAuthenticator implements Authenticator<BasicCredentials, User> {
+public class MyAuthenticator implements Authenticator<String, User> {
+    private UserTokenDAO userTokenDAO;
     private UserDAO userDAO;
 
-    public MyAuthenticator(UserDAO userDAO) {
+    public MyAuthenticator(UserTokenDAO userTokenDAO, UserDAO userDAO) {
+        this.userTokenDAO = userTokenDAO;
         this.userDAO = userDAO;
     }
 
-    public Optional<User> authenticate(BasicCredentials basicCredentials) throws AuthenticationException {
-        String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(basicCredentials.getPassword(), userDAO.getSaltForUser(basicCredentials.getUsername()));
-        if (userDAO.authenticateUser(basicCredentials.getUsername(), hashedAndSaltedPassword) > 0) {
-            return Optional.of(new User(basicCredentials.getUsername(), userDAO.getRoleForUser(basicCredentials.getUsername())));
+    public Optional<User> authenticate(String token) throws AuthenticationException {
+        UserTokenDTO userTokenDTO = userTokenDAO.getUserTokenFromToken(token);
+        if (userTokenDTO == null) {
+            throw new AuthenticationException("Session key not present or invalid");
         }
-        return Optional.empty();
+
+        // If token has expired or is invalid throw exception
+        if (Calendar.getInstance().getTime().after(userTokenDTO.getLifetimeEnds()) || userTokenDTO.getStatus().equals(UserTokenDTO.Status.INVALID)) {
+            throw new AuthenticationException("Token is invalid");
+        }
+
+        return Optional.of(userDAO.getUser(userTokenDTO.getUsername()));
     }
 }

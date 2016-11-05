@@ -1,6 +1,7 @@
 package db;
 
-import api.Usage;
+import api.UsageDTO;
+import db.mappers.UsageMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
@@ -36,8 +37,8 @@ public interface UsageDAO {
     void deleteUsage(@Bind("username") String username, @Bind("type") String type, @Bind("startDateOfMonth") Date startDateOfMonth);
 
     @SqlQuery("SELECT counter, type, owner FROM usage WHERE start_date < :endDate AND :startDate <= start_date AND owner = :username")
-    List<Usage> getUsageForUserInInterval(@Bind("username") String username, @Bind("startDate") Date startDate, @Bind("endDate") Date endDate);
+    List<UsageDTO> getUsageForUserInInterval(@Bind("username") String username, @Bind("startDate") Date startDate, @Bind("endDate") Date endDate);
 
     @SqlQuery("SELECT counter, type, owner FROM usage WHERE start_date < :endDate AND :startDate <= start_date")
-    List<Usage> getAllUsagesInInterval(@Bind("startDate") Date startDate, @Bind("endDate") Date endDate);
+    List<UsageDTO> getAllUsagesInInterval(@Bind("startDate") Date startDate, @Bind("endDate") Date endDate);
 }

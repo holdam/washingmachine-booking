@@ -4,12 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.Date;
 
-public class Event {
+public class BookingDTO {
     private Date startTime;
     private Date endTime;
     private String owner;
 
-    public Event(Date startTime, Date endTime, String owner) {
+    public BookingDTO(Date startTime, Date endTime, String owner) {
         this.startTime = startTime;
         this.endTime = endTime;
         this.owner = owner;

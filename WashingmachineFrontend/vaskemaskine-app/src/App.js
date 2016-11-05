@@ -46,6 +46,9 @@ export default App;
 
 
 // TODO battleplan:
+    // lav så vi kan sende requests mens man er logget ind
+    // "createBooking"
+    //
     // lav events "pæne" i kalenderen - egne skal være farvet en anden farve
     // gør så man kan oprette events færdig
     // gør så man kan redigere events

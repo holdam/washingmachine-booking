@@ -7,8 +7,8 @@ var strings = {
         cancel: 'Annuller',
         startTime: 'Starttidspunkt',
         endTime: 'Sluttidspunkt',
-        numberOfWashes: 'Antal vaskninger',
-        numberOfTumbleDries: 'Antal tørretumblinger',
+        numberOfWashes: 'Antal vaskninger (4 kr)',
+        numberOfTumbleDries: 'Antal tørretumblinger (3 kr)',
         errorsMessages: {
             mustEndBefore22: 'Reservationen skal slutte senest kl. 22.00',
             mustReserveAtLeast30Minutes: 'Du skal mindst reservere en halv time',

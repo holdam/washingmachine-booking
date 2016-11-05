@@ -1,14 +1,14 @@
 import {connect} from 'react-redux';
 import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
 import {endBookingFlow} from '../state/actions/bookingFlow';
-import {createBooking, fetchBookings} from '../state/actions/bookings';
+import {insertBooking, fetchBookings} from '../state/actions/bookings';
 
 const mapStateToProps = (state, ownProps) => {
     return {
         selectedMonth: (ownProps.params.year && ownProps.params.month) ? new Date(ownProps.params.year, ownProps.params.month) : new Date(),
         currentMonth: new Date(),
-        showBookingModal: state.misc.showBookingModal,
-        bookingDate: state.misc.date,
+        showBookingModal: state.bookingFlow.showBookingModal,
+        bookingDate: state.bookingFlow.date,
         bookings: state.bookings.bookings
     }
 };
@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onCreateBooking: (startTime, endTime, owner) => {
             dispatch(endBookingFlow());
-            dispatch(createBooking(123123, startTime, endTime, owner))
+            dispatch(insertBooking(startTime, endTime, owner))
         },
         onCancelBookingCreation: () => {
             dispatch(endBookingFlow());

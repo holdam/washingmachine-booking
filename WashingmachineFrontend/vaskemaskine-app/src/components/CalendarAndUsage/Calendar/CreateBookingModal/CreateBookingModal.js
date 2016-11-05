@@ -95,7 +95,7 @@ class CreateBookingModal extends React.Component {
         });
 
         if (errorMessages.length === 0) {
-            // TODO create bookings
+            this.props.onCreateBooking(startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(), 'TODO');
         }
     }
 
@@ -120,10 +120,10 @@ class CreateBookingModal extends React.Component {
                     </ErrorMessages>
                     <Form horizontal>
                         <FormGroup controlId="formStartTime">
-                            <Col componentClass={ControlLabel} sm={4}>
+                            <Col componentClass={ControlLabel} sm={5}>
                                 {strings.createBookingModal.startTime}
                             </Col>
-                            <Col sm={8}>
+                            <Col sm={7}>
                                 <div>
                                     <HourTimePicker handleChange={this.handleHourStartChange} />
                                     <MinuteTimePicker handleChange={this.handleMinuteStartChange} />
@@ -131,10 +131,10 @@ class CreateBookingModal extends React.Component {
                             </Col>
                         </FormGroup>
                         <FormGroup controlId="formEndTime">
-                            <Col componentClass={ControlLabel} sm={4}>
+                            <Col componentClass={ControlLabel} sm={5}>
                                 {strings.createBookingModal.endTime}
                             </Col>
-                            <Col sm={8}>
+                            <Col sm={7}>
                                 <div>
                                     <HourTimePicker handleChange={this.handleHourEndChange} />
                                     <MinuteTimePicker handleChange={this.handleMinuteEndChange} />
@@ -142,18 +142,18 @@ class CreateBookingModal extends React.Component {
                             </Col>
                         </FormGroup>
                         <FormGroup>
-                            <Col componentClass={ControlLabel} sm={4}>
+                            <Col componentClass={ControlLabel} sm={5}>
                                 {strings.createBookingModal.numberOfWashes}
                             </Col>
-                            <Col sm={8}>
+                            <Col sm={7}>
                                 <input onChange={this.handleNumberOfWashingsChange} className="numberOfWashingsPicker" defaultValue={0} type="number" min="0" />
                             </Col>
                         </FormGroup>
                         <FormGroup>
-                            <Col componentClass={ControlLabel} sm={4}>
+                            <Col componentClass={ControlLabel} sm={5}>
                                 {strings.createBookingModal.numberOfTumbleDries}
                             </Col>
-                            <Col sm={8}>
+                            <Col sm={7}>
                                 <input onChange={this.handleNumberOfTumbleDriesChange} className="numberOfTumbleDriesPicker" defaultValue={0} type="number" min="0" />
                             </Col>
                         </FormGroup>
@@ -231,8 +231,6 @@ function ErrorMessages(props) {
 
 // TODO
 // need to change backend to take number of washes
-// mulighed for at vælge hvor mange vask
-// slet booking / rediger hvis klikker på allerede oprettet
 // evt. giv overblik over dagen
 // skriv at antallet af gange siger hvor meget der skal betales
 

@@ -1,8 +1,8 @@
-import {CREATE_BOOKING, REQUEST_BOOKINGS, RECEIVE_BOOKINGS} from '../actions/bookings';
+import {INSERT_BOOKING, REQUEST_BOOKINGS, RECEIVE_BOOKINGS} from '../actions/bookings';
 
 function bookings(state = {bookings: [], isFetching: false}, action) {
     switch (action.type) {
-        case CREATE_BOOKING:
+        case INSERT_BOOKING:
             return Object.assign({}, state, {
                 bookings: [
                     ...state.bookings,

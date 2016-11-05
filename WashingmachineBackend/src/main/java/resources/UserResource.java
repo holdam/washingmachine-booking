@@ -23,6 +23,7 @@ public class UserResource {
     }
 
     @POST
+    @Path("/create_user")
     public Response createUser(@FormParam("username") @NotNull String username, @FormParam("password") String password) {
         String salt = RandomStringUtils.randomAlphanumeric(50);
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, salt);

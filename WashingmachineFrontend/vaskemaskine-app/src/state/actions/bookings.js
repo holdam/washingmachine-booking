@@ -1,9 +1,9 @@
 import fetch from 'isomorphic-fetch';
 
-export const CREATE_BOOKING = 'CREATE_BOOKING';
-export function createBooking(id, startTime, endTime, owner) {
+export const INSERT_BOOKING = 'INSERT_BOOKING';
+export function insertBooking(id, startTime, endTime, owner) {
     return {
-        type: CREATE_BOOKING,
+        type: INSERT_BOOKING,
         id,
         startTime,
         endTime,
