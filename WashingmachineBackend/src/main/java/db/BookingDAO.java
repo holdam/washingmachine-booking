@@ -36,18 +36,21 @@ public interface BookingDAO {
     List<BookingDTO> getBookingsOverlappingInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 
     @SqlUpdate("DELETE FROM bookings WHERE id = :id AND owner = :username")
-    void deleteBooking(@Bind("username") String username, @Bind("id") int id);
+    int deleteBooking(@Bind("username") String username, @Bind("id") int id);
 
     @SqlQuery("SELECT * FROM bookings WHERE start_time = :start_time AND end_time = :end_time AND owner = :owner")
     BookingDTO getBookingFromOwnerAndDates(@Bind("owner") String owner, @Bind("start_time") Date startTime,
                                            @Bind("end_time") Date endTime);
+
+    @SqlQuery("SELECT * FROM bookings WHERE id = :id AND owner = :username")
+    BookingDTO getBookingFromId(@Bind("username") String username, @Bind("id") int id);
 
     @SqlUpdate("UPDATE bookings " +
             "SET start_time = :startTime, end_time = :endTime," +
             "number_of_washing_machine_uses = :numberOfWashingMachineUses," +
             "number_of_tumble_dry_uses = :numberOfTumbleDryUses " +
             "WHERE id = :id AND owner = :username")
-    void updateBooking(@Bind("username") String username, @Bind("id") int id,
+    int updateBooking(@Bind("username") String username, @Bind("id") int id,
                        @Bind("startTime") Date startTime, @Bind("endTime") Date endTime,
                        @Bind("numberOfWashingMachineUses") int numberOfWashingMachineUses,
                        @Bind("numberOfTumbleDryUses") int numberOfTumbleDryUses);

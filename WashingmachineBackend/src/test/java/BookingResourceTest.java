@@ -18,6 +18,7 @@ public class BookingResourceTest {
     private BookingDAO bookingDAO;
     private BookingResource bookingResource;
     private Calendar calendar;
+    private final String USERNAME_1 = "user";
 
     @Before
     public void setup() {
@@ -71,11 +72,16 @@ public class BookingResourceTest {
     @Test(expected = ValidationErrorException.class)
     public void shouldNotBeAbleToBookBackInTime() {
         calendar.set(Calendar.HOUR_OF_DAY, 10);
-        bookingResource.createBooking(null, new Date(0).getTime(), calendar.getTime().getTime(), 1, 1);
+        calendar.set(Calendar.YEAR, 2000);
+        Date startTime = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        Date endTime = calendar.getTime();
+        bookingResource.createBooking(null, startTime.getTime(), endTime.getTime(), 1, 1);
     }
 
     @Test(expected = ValidationErrorException.class)
     public void shouldNotBeAbleToHaveStartTimeBeforeEndTime() {
+        calendar.set(Calendar.HOUR_OF_DAY, 13);
         long startTime = calendar.getTime().getTime();
         calendar.add(Calendar.HOUR_OF_DAY, -1);
         long endTime = calendar.getTime().getTime();
@@ -118,14 +124,15 @@ public class BookingResourceTest {
     // Covers all other methods as well, we test the DAO instead.
     @Test
     public void shouldBeAbleToCreateCorrectBooking() {
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 0);
         Date startTime = calendar.getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         Date endTime = calendar.getTime();
-        when(bookingDAO.getBookingFromOwnerAndDates("user", startTime, endTime)).
-                thenReturn(new BookingDTO(1337, startTime, endTime, "user", 1, 0));
-        BookingDTO bookingDTO = bookingResource.createBooking(new User("user", 0), startTime.getTime(), endTime.getTime(), 1, 0);
+        when(bookingDAO.getBookingFromOwnerAndDates(USERNAME_1, startTime, endTime)).
+                thenReturn(new BookingDTO(1337, startTime, endTime, USERNAME_1, 1, 0));
+        BookingDTO bookingDTO = bookingResource.createBooking(new User(USERNAME_1, 0), startTime.getTime(), endTime.getTime(), 1, 0);
         assert(bookingDTO.getId() == 1337);
     }
 

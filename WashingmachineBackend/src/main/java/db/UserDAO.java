@@ -33,7 +33,7 @@ public interface UserDAO {
     void createRoleTable();
 
     @SqlUpdate("INSERT INTO users (username, password, salt, role) VALUES (:username, :password, :salt, :role)")
-    void insertUser(@Bind("username") String username, @Bind("password") String password, @Bind("salt") String salt, @Bind("role") int role);
+    int insertUser(@Bind("username") String username, @Bind("password") String password, @Bind("salt") String salt, @Bind("role") int role);
 
     @SqlQuery("SELECT CASE WHEN COUNT(users.id) > 0 THEN 1 ELSE 0 END " +
             "FROM users WHERE username = :username AND password = :password")
@@ -45,9 +45,6 @@ public interface UserDAO {
 
     @SqlQuery("SELECT salt FROM users WHERE username = :username")
     String getSaltForUser(@Bind("username") String username);
-
-    @SqlQuery("SELECT role FROM users WHERE username = :username")
-    int getRoleForUser(@Bind("username") String username);
 
     @SqlUpdate("TRUNCATE TABLE users CASCADE")
     void truncateUsersTable();

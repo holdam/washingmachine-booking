@@ -40,7 +40,9 @@ public class MyAuthenticatorTest {
 
     @Test(expected = AuthenticationException.class)
     public void tokenWithStatusInvalidShouldThrowError() throws AuthenticationException {
-        when(userTokenDAO.getUserTokenFromToken("key")).thenReturn(new UserTokenDTO("bogus", "key", new Date(0), UserTokenDTO.Status.INVALID));
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        when(userTokenDAO.getUserTokenFromToken("key")).thenReturn(new UserTokenDTO("bogus", "key", calendar.getTime(), UserTokenDTO.Status.INVALID));
         myAuthenticator.authenticate("key");
     }
 
