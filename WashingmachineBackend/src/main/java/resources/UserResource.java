@@ -2,10 +2,14 @@ package resources;
 
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import core.RoleHelper;
+import core.User;
 import core.Util;
 import db.UserDAO;
+import exceptions.ValidationErrorException;
 import org.apache.commons.lang3.RandomStringUtils;
 
+import javax.naming.AuthenticationException;
+import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -24,22 +28,19 @@ public class UserResource {
 
     @POST
     @Path("/create_user")
-    public Response createUser(@FormParam("username") @NotNull String username, @FormParam("password") String password) {
-        String salt = RandomStringUtils.randomAlphanumeric(50);
-        String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, salt);
+    public User createUser(@FormParam("username") @NotNull String username, @FormParam("password") String password) throws AuthenticationException {
+        // TODO avoid spam and probably better password creation
 
         // Validations
         if (username.isEmpty() || password.isEmpty()) {
-            throw new WebApplicationException(400);
+            throw new AuthenticationException();
         }
 
-        try {
-            userDAO.insertUser(username, hashedAndSaltedPassword, salt, RoleHelper.ROLE_DEFAULT);
-        } catch (Exception e) {
-            throw new WebApplicationException(400);
-        }
+        String salt = RandomStringUtils.randomAlphanumeric(50);
+        String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, salt);
 
-        return Response.status(Response.Status.OK).build();
+        userDAO.insertUser(username, hashedAndSaltedPassword, salt, RoleHelper.ROLE_DEFAULT);
+        return new User(username, RoleHelper.ROLE_DEFAULT);
     }
 
     // TODO update password and that kind of shit

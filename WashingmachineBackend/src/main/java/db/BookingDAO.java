@@ -19,24 +19,39 @@ public interface BookingDAO {
             "start_time TIMESTAMP NOT NULL," +
             "end_time TIMESTAMP NOT NULL," +
             "owner VARCHAR(100) NOT NULL references users(username)," +
+            "number_of_washing_machine_uses SMALLINT NOT NULL," +
+            "number_of_tumble_dry_uses SMALLINT NOT NULL," +
             "PRIMARY KEY(id)" +
             ");")
     void createBookingTable();
 
-    @SqlUpdate("INSERT INTO bookings (start_time, end_time, owner) VALUES (:bookingDTO.startTime, :bookingDTO.endTime, :bookingDTO.owner)")
+    @SqlUpdate("INSERT INTO bookings (start_time, end_time, owner, number_of_washing_machine_uses, number_of_tumble_dry_uses) " +
+            "VALUES (:bookingDTO.startTime, :bookingDTO.endTime, :bookingDTO.owner, :bookingDTO.numberOfWashingMachineUses, :bookingDTO.numberOfTumbleDryUses)")
     void insertBooking(@BindBean("bookingDTO") BookingDTO bookingDTO);
+
+    @SqlQuery("SELECT * FROM bookings WHERE start_time >= :startTime AND :endTime >= end_time")
+    List<BookingDTO> getBookingsInInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 
     @SqlQuery("SELECT * FROM bookings WHERE start_time < :endTime AND end_time > :startTime")
     List<BookingDTO> getBookingsOverlappingInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 
-    @SqlQuery("SELECT * FROM bookings WHERE start_time >= :startTime AND :endTime <= end_time")
-    List<BookingDTO> getBookingsInInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
+    @SqlUpdate("DELETE FROM bookings WHERE id = :id AND owner = :username")
+    void deleteBooking(@Bind("username") String username, @Bind("id") int id);
 
-    @SqlUpdate("DELETE FROM bookings WHERE start_time = :startTime AND end_time = :endTime AND owner = :username")
-    void deleteBooking(@Bind("username") String username, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
+    @SqlQuery("SELECT * FROM bookings WHERE start_time = :start_time AND end_time = :end_time AND owner = :owner")
+    BookingDTO getBookingFromOwnerAndDates(@Bind("owner") String owner, @Bind("start_time") Date startTime,
+                                           @Bind("end_time") Date endTime);
 
-    @SqlUpdate("UPDATE bookings SET start_time = :startTimeNew, end_time = :endTimeNew WHERE " +
-            "start_time = :startTimeOld AND end_time = :endTimeOld AND owner = :username")
-    void updateBooking(@Bind("username") String username, @Bind("startTimeOld") Date startTimeOld, @Bind("endTimeOld") Date endTimeOld,
-                       @Bind("startTimeNew") Date startTimeNew, @Bind("endTimeNew") Date endTimeNew);
+    @SqlUpdate("UPDATE bookings " +
+            "SET start_time = :startTime, end_time = :endTime," +
+            "number_of_washing_machine_uses = :numberOfWashingMachineUses," +
+            "number_of_tumble_dry_uses = :numberOfTumbleDryUses " +
+            "WHERE id = :id AND owner = :username")
+    void updateBooking(@Bind("username") String username, @Bind("id") int id,
+                       @Bind("startTime") Date startTime, @Bind("endTime") Date endTime,
+                       @Bind("numberOfWashingMachineUses") int numberOfWashingMachineUses,
+                       @Bind("numberOfTumbleDryUses") int numberOfTumbleDryUses);
+
+    @SqlUpdate("TRUNCATE TABLE bookings")
+    void truncateTable();
 }

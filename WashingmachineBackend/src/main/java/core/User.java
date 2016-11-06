@@ -1,5 +1,7 @@
 package core;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.security.Principal;
 
 public class User implements Principal {
@@ -11,10 +13,12 @@ public class User implements Principal {
         this.role = role;
     }
 
+    @JsonProperty
     public String getName() {
         return name;
     }
 
+    @JsonProperty
     public int getRole() {
         return role;
     }

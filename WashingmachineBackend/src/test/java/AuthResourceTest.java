@@ -1,3 +1,4 @@
+import api.UserTokenDTO;
 import core.User;
 import core.Util;
 import db.UserDAO;
@@ -8,6 +9,8 @@ import resources.AuthResource;
 import javax.naming.AuthenticationException;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+import static org.junit.Assert.*;
+
 
 public class AuthResourceTest {
     private AuthResource authResource;
@@ -22,7 +25,7 @@ public class AuthResourceTest {
     }
 
     @Test(expected = AuthenticationException.class)
-    public void nonexistantUserShouldReturnError() throws javax.naming.AuthenticationException {
+    public void nonexistentUserShouldReturnError() throws javax.naming.AuthenticationException {
         when(userDAO.getUser("user")).thenReturn(null);
         authResource.signIn("user", "bogus");
     }
@@ -33,7 +36,8 @@ public class AuthResourceTest {
         when(userDAO.getSaltForUser("user")).thenReturn("salt");
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword("password", "salt");
         when(userDAO.authenticateUser("user", hashedAndSaltedPassword)).thenReturn(1);
-        authResource.signIn("user", "password");
+        UserTokenDTO userTokenDTO = authResource.signIn("user", "password");
+        assertEquals("user", userTokenDTO.getUsername());
     }
 
     @Test(expected = AuthenticationException.class)

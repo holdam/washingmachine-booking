@@ -6,7 +6,6 @@ import core.Util;
 import db.BookingDAO;
 import exceptions.ValidationErrorException;
 import io.dropwizard.auth.Auth;
-import sun.util.resources.cldr.af.CalendarData_af_NA;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -26,12 +25,19 @@ public class BookingResource {
     }
 
     @POST
-    public BookingDTO createBooking(@Auth User user, @FormParam("startTime") @NotNull @Min(0) Long startTime,
-                            @FormParam("endTime") @NotNull @Min(0) Long endTime) {
-        validateBooking(startTime, endTime);
-        BookingDTO bookingDTO = new BookingDTO(Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime), user.getName());
-        bookingDAO.insertBooking(bookingDTO);
-        return bookingDTO;
+    public BookingDTO createBooking(@Auth User user,
+                                    @FormParam("startTime") @NotNull @Min(0) Long startTime,
+                                    @FormParam("endTime") @NotNull @Min(0) Long endTime,
+                                    @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
+                                    @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
+        validateBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses);
+        Date startDate = Util.convertMillisToDate(startTime);
+        Date endDate = Util.convertMillisToDate(endTime);
+        // -1 for now, we will get correct id after insertion
+        BookingDTO bookingDTOForInsertion = new BookingDTO(-1, startDate, endDate,
+                user.getName(), numberOfTumbleDryUses, numberOfWashingMachineUses);
+        bookingDAO.insertBooking(bookingDTOForInsertion);
+        return bookingDAO.getBookingFromOwnerAndDates(user.getName(), startDate, endDate);
     }
 
     @GET
@@ -42,22 +48,22 @@ public class BookingResource {
     }
 
     @DELETE
-    public void deleteBooking(@Auth User user, @FormParam("startTime") @NotNull @Min(0) Long startTime,
-                            @FormParam("endTime") @NotNull @Min(0) Long endTime) {
-        bookingDAO.deleteBooking(user.getName(), Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime));
+    public void deleteBooking(@Auth User user, @FormParam("id") @NotNull int id) {
+        bookingDAO.deleteBooking(user.getName(), id);
     }
 
     @PUT
-    public void editBooking(@Auth User user, @FormParam("startTimeOld") @NotNull @Min(0) Long startTimeOld,
-                            @FormParam("endTimeOld") @NotNull @Min(0) Long endTimeOld,
-                            @FormParam("startTimeNew") @NotNull @Min(0) Long startTimeNew,
-                            @FormParam("endTimeNew") @NotNull @Min(0) Long endTimeNew) {
-        validateBooking(startTimeNew, endTimeNew);
-        bookingDAO.updateBooking(user.getName(), Util.convertMillisToDate(startTimeOld), Util.convertMillisToDate(endTimeOld),
-                Util.convertMillisToDate(startTimeNew), Util.convertMillisToDate(endTimeNew));
+    public void editBooking(@Auth User user, @FormParam("id") int id,
+                            @FormParam("startTime") @NotNull @Min(0) Long startTime,
+                            @FormParam("endTime") @NotNull @Min(0) Long endTime,
+                            @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
+                            @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
+        validateBooking(startTime, endTime,numberOfWashingMachineUses, numberOfTumbleDryUses);
+        bookingDAO.updateBooking(user.getName(), id, Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime),
+                numberOfWashingMachineUses, numberOfTumbleDryUses);
     }
 
-    private void validateBooking(long startTime, long endTime) throws ValidationErrorException {
+    private void validateBooking(long startTime, long endTime, int numberOfWashingMachineUses, int numberOfTumbleDryUses) throws ValidationErrorException {
         Date startDate = Util.convertMillisToDate(startTime);
         Date endDate = Util.convertMillisToDate(endTime);
         Calendar startDateCalendar = Calendar.getInstance();
@@ -74,7 +80,8 @@ public class BookingResource {
                 (startDateCalendar.get(Calendar.HOUR_OF_DAY) < 8 || (startDateCalendar.get(Calendar.HOUR_OF_DAY) >= 22 && startDateCalendar.get(Calendar.MINUTE) > 0)) ||
                 overlappingBookingDTOs.size() > 0 ||
                 startDate.before(new Date()) ||
-                timeDifferenceGreaterThan30Minutes) {
+                !timeDifferenceGreaterThan30Minutes ||
+                (numberOfTumbleDryUses == 0 && numberOfWashingMachineUses == 0)) {
             throw new ValidationErrorException();
         }
     }

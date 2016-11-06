@@ -48,4 +48,10 @@ public interface UserDAO {
 
     @SqlQuery("SELECT role FROM users WHERE username = :username")
     int getRoleForUser(@Bind("username") String username);
+
+    @SqlUpdate("TRUNCATE TABLE users CASCADE")
+    void truncateUsersTable();
+
+    @SqlUpdate("TRUNCATE TABLE roles")
+    void truncateRolesTable();
 }

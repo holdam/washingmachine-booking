@@ -11,8 +11,11 @@ import java.sql.SQLException;
 public class BookingMapper implements ResultSetMapper<BookingDTO> {
     @Override
     public BookingDTO map(int i, ResultSet resultSet, StatementContext statementContext) throws SQLException {
-        return new BookingDTO(Util.convertMillisToDate(resultSet.getTimestamp("start_time").getTime()),
+        return new BookingDTO(resultSet.getInt("id"),
+                Util.convertMillisToDate(resultSet.getTimestamp("start_time").getTime()),
                 Util.convertMillisToDate(resultSet.getTimestamp("end_time").getTime()),
-                resultSet.getString("owner"));
+                resultSet.getString("owner"),
+                resultSet.getInt("number_of_washing_machine_uses"),
+                resultSet.getInt("number_of_tumble_dry_uses"));
     }
 }
