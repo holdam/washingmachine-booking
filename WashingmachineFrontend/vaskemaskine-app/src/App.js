@@ -1,28 +1,13 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import CalendarAndUsageContainer from './containers/CalendarAndUsageContainer';
-import strings from './strings'
 import {Router, Route, browserHistory, IndexRoute} from 'react-router'
 import {createStore, applyMiddleware} from 'redux';
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 import washingMachineApp from './state/reducers/reducers';
 import {Provider} from 'react-redux';
-
-class Header extends React.Component {
-    render() {
-        return (
-            <div className="App">
-                <div className="App-header">
-                    <img src={logo} className="App-logo" alt="logo" />
-                    <h2>{strings.frontpageTitle}</h2>
-                </div>
-                {this.props.children}
-            </div>
-        )
-    }
-}
+import Header from './components/Header/Header'
 
 class App extends React.Component {
     render() {

@@ -53,14 +53,17 @@ public class BookingResource {
     }
 
     @PUT
-    public void editBooking(@Auth User user, @FormParam("id") int id,
+    public BookingDTO editBooking(@Auth User user, @FormParam("id") int id,
                             @FormParam("startTime") @NotNull @Min(0) Long startTime,
                             @FormParam("endTime") @NotNull @Min(0) Long endTime,
                             @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
                             @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
         validateBooking(startTime, endTime,numberOfWashingMachineUses, numberOfTumbleDryUses);
-        bookingDAO.updateBooking(user.getName(), id, Util.convertMillisToDate(startTime), Util.convertMillisToDate(endTime),
+        Date startDate = Util.convertMillisToDate(startTime);
+        Date endDate = Util.convertMillisToDate(endTime);
+        bookingDAO.updateBooking(user.getName(), id, startDate, endDate,
                 numberOfWashingMachineUses, numberOfTumbleDryUses);
+        return bookingDAO.getBookingFromId(user.getName(), id);
     }
 
     private void validateBooking(long startTime, long endTime, int numberOfWashingMachineUses, int numberOfTumbleDryUses) throws ValidationErrorException {
