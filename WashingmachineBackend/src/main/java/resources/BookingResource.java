@@ -6,6 +6,7 @@ import core.Util;
 import db.BookingDAO;
 import exceptions.ValidationErrorException;
 import io.dropwizard.auth.Auth;
+import sun.util.resources.cldr.af.CalendarData_af_NA;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
@@ -64,13 +65,16 @@ public class BookingResource {
         startDateCalendar.setTimeInMillis(startTime);
         endDateCalendar.setTimeInMillis(endTime);
 
-        // TODO same as front end bookings
+        long timeDifference = endTime - startTime;
+        boolean timeDifferenceGreaterThan30Minutes = (timeDifference / 1000 / 60) >= 30;
 
         List<BookingDTO> overlappingBookingDTOs = bookingDAO.getBookingsOverlappingInterval(startDate, endDate);
         if (startDate.after(endDate) ||
-                (endDateCalendar.get(Calendar.HOUR_OF_DAY) < 8 || endDateCalendar.get(Calendar.HOUR_OF_DAY) > 22) ||
-                (startDateCalendar.get(Calendar.HOUR_OF_DAY) < 8 || endDateCalendar.get(Calendar.HOUR_OF_DAY) > 22) ||
-                overlappingBookingDTOs.size() > 0) {
+                (endDateCalendar.get(Calendar.HOUR_OF_DAY) < 8 || (endDateCalendar.get(Calendar.HOUR_OF_DAY) >= 22 && endDateCalendar.get(Calendar.MINUTE) > 0)) ||
+                (startDateCalendar.get(Calendar.HOUR_OF_DAY) < 8 || (startDateCalendar.get(Calendar.HOUR_OF_DAY) >= 22 && startDateCalendar.get(Calendar.MINUTE) > 0)) ||
+                overlappingBookingDTOs.size() > 0 ||
+                startDate.before(new Date()) ||
+                timeDifferenceGreaterThan30Minutes) {
             throw new ValidationErrorException();
         }
     }
