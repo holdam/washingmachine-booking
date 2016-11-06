@@ -1,13 +1,14 @@
 import React from 'react';
 import strings from '../../strings';
-import Login from './Login/Login';
+import LoginContainer from '../../containers/LoginLogoutContainer';
+import './Header.css';
 
 class Header extends React.Component {
     render() {
         return (
             <div className="App">
                 <header>
-                    <Login/>
+                    <LoginContainer />
                     <h2>{strings.frontpageTitle}</h2>
                 </header>
                 {this.props.children}

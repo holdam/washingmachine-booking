@@ -16,6 +16,12 @@ var strings = {
             dayIsBeforeToday: 'Du kan ikke reservere bagud i tiden',
             bookingIsClashing: 'Der ligger allerede en reservation i tidsrummet'
         }
+    },
+    login: {
+        username: 'Brugernavn',
+        password: 'Kodeord',
+        login: 'Log ind',
+        logout: 'Log ud'
     }
 };
 

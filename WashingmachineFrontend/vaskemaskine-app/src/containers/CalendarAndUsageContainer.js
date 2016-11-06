@@ -17,7 +17,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onCreateBooking: (startTime, endTime, owner) => {
             dispatch(endBookingFlow());
-            dispatch(insertBooking(startTime, endTime, owner))
+            dispatch(insertBooking(-1, startTime, endTime, owner))
         },
         onCancelBookingCreation: () => {
             dispatch(endBookingFlow());
