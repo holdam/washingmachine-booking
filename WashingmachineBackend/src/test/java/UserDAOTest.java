@@ -1,4 +1,3 @@
-import api.BookingDTO;
 import core.RoleHelper;
 import core.User;
 import db.BookingDAO;
@@ -9,12 +8,7 @@ import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 
-import static org.junit.Assert.*;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import static org.junit.Assert.assertEquals;
 
 public class UserDAOTest {
     private BookingDAO bookingDAO;

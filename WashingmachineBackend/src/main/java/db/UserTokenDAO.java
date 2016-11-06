@@ -23,7 +23,7 @@ public interface UserTokenDAO {
 
     @SqlUpdate("INSERT INTO user_tokens (username, token, lifetime_ends, status) " +
             "VALUES (:userTokenDTO.username, :userTokenDTO.token, :userTokenDTO.lifetimeEnds, :userTokenDTO.status)")
-    void createUserToken(@BindBean("userTokenDTO") UserTokenDTO userTokenDTO);
+    int createUserToken(@BindBean("userTokenDTO") UserTokenDTO userTokenDTO);
 
     @SqlQuery("SELECT * FROM user_tokens WHERE username = :username")
     UserTokenDTO getUserTokenFromUsername(@Bind("username") String username);
@@ -32,8 +32,8 @@ public interface UserTokenDAO {
     UserTokenDTO getUserTokenFromToken(@Bind("userToken") String userToken);
 
     @SqlUpdate("DELETE FROM user_tokens WHERE username = :username")
-    void deleteUserTokenFromUsername(@Bind("username") String username);
+    int deleteUserTokenFromUsername(@Bind("username") String username);
 
-    @SqlQuery("TRUNCATE TABLE user_tokens")
+    @SqlUpdate("TRUNCATE TABLE user_tokens")
     void truncateTable();
 }
