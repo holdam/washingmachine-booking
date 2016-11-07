@@ -1,5 +1,6 @@
 package resources;
 
+import api.Success;
 import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
 import core.RoleHelper;
 import core.User;
@@ -41,6 +42,17 @@ public class UserResource {
 
         userDAO.insertUser(username, hashedAndSaltedPassword, salt, RoleHelper.ROLE_DEFAULT);
         return new User(username, RoleHelper.ROLE_DEFAULT);
+    }
+
+    @GET
+    @Path("/username_exists")
+    public Success doesUsernameExistAlready(@QueryParam("username") String username) {
+        User user = userDAO.getUser(username);
+        if (user == null) {
+            return new Success("", true);
+        }
+
+        return new Success("Username already exist", false);
     }
 
     // TODO update password and that kind of shit

@@ -1,5 +1,5 @@
 var strings = {
-    frontpageTitle: 'Nordre Ringgade 108 vaskerumbooking',
+    frontpageTitle: 'Dejlig overskrift',
     createBookingModal: {
         title: 'Opret reservation',
         body: 'todo',
@@ -21,7 +21,14 @@ var strings = {
         username: 'Brugernavn',
         password: 'Kodeord',
         login: 'Log ind',
-        logout: 'Log ud'
+        logout: 'Log ud',
+        createUser: 'Opret bruger',
+        createUserModal: {
+            errorsMessages: {
+                passwordCantBeEmpty: 'Dit password kan ikke være tomt',
+                usernameCantBeEmpty: 'Dit brugernavn kan ikke være tomt'
+            }
+        }
     }
 };
 

@@ -1,6 +1,7 @@
 import React from 'react';
 import {Form, FormGroup, FormControl, Button} from 'react-bootstrap'
 import strings from '../../../strings';
+import CreateUserModal from './CreateUserModal/CreateUserModal';
 import './Login.css';
 
 class Login extends React.Component {
@@ -34,6 +35,7 @@ class Login extends React.Component {
         let usernameIsValidClass = (!!this.state.username) ? '' : 'invalid';
         let passwordIsValidClass = (!!this.state.password) ? '' : 'invalid';
 
+        console.log(this.props);
 
         return (
             <div className="login">
@@ -46,8 +48,15 @@ class Login extends React.Component {
                         <FormControl className={passwordIsValidClass} onChange={this.handlePasswordChange} type="password" placeholder={strings.login.password} />
                     </FormGroup>
                     {' '}
-                    <Button onClick={this.login}>{strings.login.login}</Button>
+                    <Button bsStyle="primary" onClick={this.login}>{strings.login.login}</Button>
+                    {' '}
+                    <Button onClick={this.props.onStartCreateUserFlow}>{strings.login.createUser}</Button>
                 </Form>
+                <CreateUserModal
+                    showModal={this.props.showCreateUserModal}
+                    onCancelCreateUser={this.props.onEndCreateUserFlow}
+                    onCreateUser={this.props.onCreateUser}
+                />
             </div>
         )
     }

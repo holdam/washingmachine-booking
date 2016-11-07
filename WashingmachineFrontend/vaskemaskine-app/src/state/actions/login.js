@@ -6,10 +6,11 @@ function startLogin() {
 }
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-function loginSuccessful(userAccessToken) {
+function loginSuccessful(userAccessToken, username) {
     return {
         type: LOGIN_SUCCESS,
-        userAccessToken
+        userAccessToken,
+        username
     }
 }
 
@@ -28,6 +29,23 @@ export function logout() {
     }
 }
 
+export const FETCH_USERNAME_FOR_TOKEN = 'FETCH_USERNAME_FOR_TOKEN';
+export function fetchUsernameForToken(userAccessToken) {
+    return {
+        type: FETCH_USERNAME_FOR_TOKEN
+    }
+}
+
+export function createUser(username, password) {
+    return function(dispatch) {
+        // TODO attempt to create user
+        // error handling
+        // succesful -> login
+        // TODO use returned token
+        dispatch(loginSuccessful("bogus", username));
+    }
+}
+
 
 export function login(username, password) {
     return function (dispatch) {
@@ -40,6 +58,6 @@ export function login(username, password) {
 
         // todo also set in local storage som vi kan loade in når siden starter
 
-        dispatch(loginSuccessful(userAccessToken));
+        dispatch(loginSuccessful(userAccessToken, username));
     }
 }

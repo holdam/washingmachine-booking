@@ -4,6 +4,7 @@ import strings from '../../../../strings';
 import {monthNames} from '../../../../commons/util';
 import './CreateBookingModal.css';
 import {ControlLabel, Form, FormGroup, Col, Alert} from "react-bootstrap";
+import ErrorMessages from '../../../../commons/ErrorMessages';
 
 class CreateBookingModal extends React.Component {
     constructor(props) {
@@ -205,28 +206,6 @@ class MinuteTimePicker extends React.Component {
             </select>
         )
     }
-}
-
-function ErrorMessages(props) {
-    if (!props.alertVisible) {
-        return (
-            <span></span>
-        )
-    }
-
-    let errorMessages = props.children.map((errorMessage) => {
-        return (
-            <li key={errorMessage}>{errorMessage}</li>
-        )
-    });
-
-    return (
-        <Alert bsStyle="danger">
-            <ul>
-                {errorMessages}
-            </ul>
-        </Alert>
-    )
 }
 
 // TODO

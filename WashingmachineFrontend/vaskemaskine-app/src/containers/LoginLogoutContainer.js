@@ -1,10 +1,14 @@
 import LoginLogout from "../components/Header/Login/LoginLogout";
 import {connect} from 'react-redux';
-import {login, logout} from '../state/actions/login';
+import {login, logout, fetchUsernameForToken, createUser} from '../state/actions/login';
+import {startCreateUserFlow, endCreateUserFlow} from '../state/actions/createUserFlow';
 
 const mapStateToProps = (state) => {
     return {
-        userAccessToken: localStorage.getItem('userAccessToken')
+        userAccessToken: localStorage.getItem('userAccessToken'),
+        username: state.login.username,
+        showCreateUserModal: state.createUserFlow.showCreateUserModal,
+
     }
 };
 
@@ -15,6 +19,19 @@ const mapDispatchToProps = (dispatch) => {
         },
         onLogout: () => {
             dispatch(logout());
+        },
+        setup: (userAccessToken) => {
+            dispatch(fetchUsernameForToken(userAccessToken));
+        },
+        onStartCreateUserFlow: () => {
+            dispatch(startCreateUserFlow());
+        },
+        onEndCreateUserFlow: () => {
+            dispatch(endCreateUserFlow());
+        },
+        onCreateUser: (username, password) => {
+            dispatch(endCreateUserFlow());
+            dispatch(createUser(username, password));
         }
     }
 };

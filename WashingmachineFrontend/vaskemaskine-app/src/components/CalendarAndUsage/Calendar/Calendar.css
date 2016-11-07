@@ -1,5 +1,7 @@
-.row-eq-height {
-    display: flex;
+@media (min-width: 1000px) {
+    .row-eq-height {
+        display: flex;
+    }
 }
 
 .weekday-names {

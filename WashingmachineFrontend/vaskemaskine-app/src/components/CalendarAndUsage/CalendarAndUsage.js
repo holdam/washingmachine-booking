@@ -23,7 +23,8 @@ class CalendarAndUsage extends React.Component {
         // Fetch data if we are in a new month
         if (this.props.selectedMonth.getMonth() !== nextProps.selectedMonth.getMonth()) {
             // TODO correct arguments
-            this.props.fetchBookings(new Date(nextProps.selectedMonth.getMonth(), nextProps.selectedMonth.getFullYear()).getMilliseconds());
+            //this.props.fetchBookings(new Date(nextProps.selectedMonth.getMonth()).getMilliseconds(), nextProps.selectedMonth.getFullYear()).getMilliseconds());
+            this.props.fetchBookings();
         }
     }
 

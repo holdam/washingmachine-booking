@@ -27,6 +27,4 @@ function bookings(state = {bookings: [], isFetching: false}, action) {
     }
 }
 
-// TODO caching
-
 export default bookings;

@@ -6,7 +6,11 @@ import strings from '../../../strings';
 class Logout extends React.Component {
     render() {
         return (
-            <Button onClick={this.props.onLogout}>{strings.login.logout}</Button>
+            <div>
+                <span>{this.props.username}</span>
+                {' '}
+                <Button onClick={this.props.onLogout}>{strings.login.logout}</Button>
+            </div>
         )
     }
 }
