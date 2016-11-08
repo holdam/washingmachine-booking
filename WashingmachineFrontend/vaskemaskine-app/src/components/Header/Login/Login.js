@@ -1,6 +1,6 @@
 import React from 'react';
 import {Form, FormGroup, FormControl, Button} from 'react-bootstrap'
-import strings from '../../../strings';
+import strings from '../../../commons/strings';
 import CreateUserModal from './CreateUserModal/CreateUserModal';
 import './Login.css';
 
@@ -15,6 +15,7 @@ class Login extends React.Component {
         this.handleUsernameChange = this.handleUsernameChange.bind(this);
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.login = this.login.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     handleUsernameChange(event) {
@@ -26,26 +27,33 @@ class Login extends React.Component {
     }
 
     login() {
-        if (!!this.state.username || !!this.state.password) {
+        if (!!this.state.username && !!this.state.password) {
             this.props.onLogin(this.state.username, this.state.password);
+        } else {
+            this.props.onLoginFailed('Username or password missing');
+        }
+    }
+
+    handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            this.login();
         }
     }
 
     render() {
-        let usernameIsValidClass = (!!this.state.username) ? '' : 'invalid';
-        let passwordIsValidClass = (!!this.state.password) ? '' : 'invalid';
-
-        console.log(this.props);
+        let usernameIsValidState = (!!this.state.username) ? 'success' : 'error';
+        let passwordIsValidState = (!!this.state.password) ? 'success' : 'error';
 
         return (
             <div className="login">
+                {this.props.hasLoginFailed ? <LoginFailed/> : null}
                 <Form inline>
-                    <FormGroup controlId="loginFormUsername">
-                        <FormControl className={usernameIsValidClass} onChange={this.handleUsernameChange} type="text" placeholder={strings.login.username} />
+                    <FormGroup validationState={usernameIsValidState} controlId="loginFormUsername">
+                        <FormControl onKeyPress={this.handleKeyPress} onChange={this.handleUsernameChange} type="text" placeholder={strings.login.username} />
                     </FormGroup>
                     {' '}
-                    <FormGroup controlId="loginFormPassword">
-                        <FormControl className={passwordIsValidClass} onChange={this.handlePasswordChange} type="password" placeholder={strings.login.password} />
+                    <FormGroup validationState={passwordIsValidState} controlId="loginFormPassword">
+                        <FormControl onKeyPress={this.handleKeyPress} onChange={this.handlePasswordChange} type="password" placeholder={strings.login.password} />
                     </FormGroup>
                     {' '}
                     <Button bsStyle="primary" onClick={this.login}>{strings.login.login}</Button>
@@ -60,6 +68,12 @@ class Login extends React.Component {
             </div>
         )
     }
+}
+
+function LoginFailed(props) {
+    return (
+        <div>Login failed :(</div>
+    )
 }
 
 export default Login;

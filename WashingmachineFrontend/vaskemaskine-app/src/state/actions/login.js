@@ -1,9 +1,5 @@
-export const START_LOGIN = 'START_LOGIN';
-function startLogin() {
-    return {
-        type: START_LOGIN
-    }
-}
+import fetch from 'isomorphic-fetch';
+import urls from '../../commons/urls';
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 function loginSuccessful(userAccessToken, username) {
@@ -15,7 +11,7 @@ function loginSuccessful(userAccessToken, username) {
 }
 
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
-function loginFailed(error) {
+export function loginFailed(error) {
     return {
         type: LOGIN_FAILURE,
         error
@@ -29,35 +25,47 @@ export function logout() {
     }
 }
 
-export const FETCH_USERNAME_FOR_TOKEN = 'FETCH_USERNAME_FOR_TOKEN';
 export function fetchUsernameForToken(userAccessToken) {
-    return {
-        type: FETCH_USERNAME_FOR_TOKEN
+    return function(dispatch) {
+        fetch(`${urls.api.user}/user_from_user_access_token?userAccessToken=${userAccessToken}`)
+            .then(function (response) {
+                return response.json();
+            }).then(function (data) {
+            dispatch(loginSuccessful(userAccessToken, data.name))
+        });
     }
 }
 
 export function createUser(username, password) {
     return function(dispatch) {
-        // TODO attempt to create user
-        // error handling
-        // succesful -> login
-        // TODO use returned token
-        dispatch(loginSuccessful("bogus", username));
-    }
+        fetch(`${urls.api.user}/create_user`, {
+            method: 'POST',
+            body: `username=${username}&password=${password}`,
+            headers: new Headers({
+                'Content-Type': 'application/x-www-form-urlencoded'
+            })
+        }).then(function () {
+            dispatch(login(username, password));
+        });
+    };
 }
-
 
 export function login(username, password) {
     return function (dispatch) {
-        dispatch(startLogin());
-
-        // TODO attempt to login (prob using fetch)
-        // TODO error handling
-        let userAccessToken = "token";
-
-
-        // todo also set in local storage som vi kan loade in når siden starter
-
-        dispatch(loginSuccessful(userAccessToken, username));
+        fetch(`${urls.api.auth}/signin`, {
+            method: 'POST',
+            body: `username=${username}&password=${password}`,
+            headers: new Headers({
+                'Content-Type': 'application/x-www-form-urlencoded'
+            })
+        }).then(function (response) {
+            if (response.status !== 200) {
+                dispatch(loginFailed(response.statusText));
+                throw new Error(response.statusText);
+            }
+            return response.json();
+        }).then(function (data) {
+            dispatch(loginSuccessful(data.token, username));
+        });
     }
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import strings from '../../strings';
+import strings from '../../commons/strings';
 import LoginContainer from '../../containers/LoginLogoutContainer';
 import './Header.css';
 

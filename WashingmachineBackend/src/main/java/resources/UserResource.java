@@ -6,6 +6,7 @@ import core.RoleHelper;
 import core.User;
 import core.Util;
 import db.UserDAO;
+import db.UserTokenDAO;
 import exceptions.ValidationErrorException;
 import org.apache.commons.lang3.RandomStringUtils;
 
@@ -22,14 +23,16 @@ import java.security.NoSuchAlgorithmException;
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
     private UserDAO userDAO;
+    private UserTokenDAO userTokenDAO;
 
-    public UserResource(UserDAO userDAO) {
+    public UserResource(UserDAO userDAO, UserTokenDAO userTokenDAO) {
         this.userDAO = userDAO;
+        this.userTokenDAO = userTokenDAO;
     }
 
     @POST
     @Path("/create_user")
-    public User createUser(@FormParam("username") @NotNull String username, @FormParam("password") String password) throws AuthenticationException {
+    public User createUser(@FormParam("username") @NotNull String username, @FormParam("password") @NotNull String password) throws AuthenticationException {
         // TODO avoid spam and probably better password creation
 
         // Validations
@@ -53,6 +56,14 @@ public class UserResource {
         }
 
         return new Success("Username already exist", false);
+    }
+
+    // TODO testing
+    @GET
+    @Path("/user_from_user_access_token")
+    public User userFromUserAccessToken(@QueryParam("userAccessToken") String userAccessToken) {
+        String username = userTokenDAO.getUsernameFromToken(userAccessToken);
+        return userDAO.getUser(username);
     }
 
     // TODO update password and that kind of shit

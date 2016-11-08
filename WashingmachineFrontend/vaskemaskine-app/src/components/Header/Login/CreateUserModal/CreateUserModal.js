@@ -1,9 +1,10 @@
 import './CreateUserModal.css'
 import * as React from "react";
 import {Modal, Form, FormGroup, Col, ControlLabel, Button} from 'react-bootstrap';
-import strings from '../../../../strings';
+import strings from '../../../../commons/strings';
 import ErrorMessages from '../../../../commons/ErrorMessages';
 import fetch from 'isomorphic-fetch';
+import urls from '../../../../commons/urls';
 
 class CreateUserModal extends React.Component {
     constructor(props) {
@@ -18,6 +19,7 @@ class CreateUserModal extends React.Component {
         this.handlePasswordChange = this.handlePasswordChange.bind(this);
         this.handleCreateUser = this.handleCreateUser.bind(this);
         this.cancelCreateUser = this.cancelCreateUser.bind(this);
+        this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
     handleUsernameChange(event) {
@@ -39,23 +41,31 @@ class CreateUserModal extends React.Component {
             errorMessages.push(strings.login.createUserModal.errorsMessages.passwordCantBeEmpty);
         }
 
-        // TODO check if username exists already
-
-        this.setState({errorMessages: errorMessages});
-
-        fetch('//localhost:8080/user/username_exists')
+        fetch(`${urls.api.user}/username_exists?username=${username}`)
             .then(function (response) {
+                return response.json();
+            }).then(function (data) {
+                if (data.success === false) {
+                    errorMessages.push(strings.login.createUserModal.errorsMessages.usernameTaken);
+                }
 
-            });
+                this.setState({errorMessages: errorMessages});
 
-        if (errorMessages.length === 0) {
-       //     this.props.onCreateUser(this.state.username, this.state.password);
-        }
+                if (errorMessages.length === 0) {
+                    this.props.onCreateUser(this.state.username, this.state.password);
+                }
+            }.bind(this));
     }
 
     cancelCreateUser() {
         this.setState({errorMessages: []});
         this.props.onCancelCreateUser();
+    }
+
+    handleKeyPress(event) {
+        if (event.key === 'Enter') {
+            this.handleCreateUser();
+        }
     }
 
     render() {
@@ -74,7 +84,7 @@ class CreateUserModal extends React.Component {
                                 {strings.login.username}
                             </Col>
                             <Col sm={8}>
-                                <input onChange={this.handleUsernameChange} type="text" />
+                                <input autoFocus="true" onKeyPress={this.handleKeyPress} onChange={this.handleUsernameChange} type="text" />
                             </Col>
                         </FormGroup>
                         <FormGroup>
@@ -82,7 +92,7 @@ class CreateUserModal extends React.Component {
                                 {strings.login.password}
                             </Col>
                             <Col sm={8}>
-                                <input onChange={this.handlePasswordChange} type="password" />
+                                <input onKeyPress={this.handleKeyPress} onChange={this.handlePasswordChange} type="password" />
                             </Col>
                         </FormGroup>
                     </Form>

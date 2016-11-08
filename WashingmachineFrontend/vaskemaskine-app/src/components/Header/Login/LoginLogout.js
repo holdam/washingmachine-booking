@@ -15,7 +15,10 @@ class LoginLogout extends React.Component {
     render() {
         let panel = null;
         if (!!this.props.userAccessToken) {
-            panel = <Logout onLogout={this.props.onLogout} username={this.props.username}  />;
+            panel = <Logout
+                onLogout={this.props.onLogout}
+                username={this.props.username}
+            />;
         } else {
             panel = <Login
                 onLogin={this.props.onLogin}
@@ -23,6 +26,8 @@ class LoginLogout extends React.Component {
                 onStartCreateUserFlow={this.props.onStartCreateUserFlow}
                 onEndCreateUserFlow={this.props.onEndCreateUserFlow}
                 onCreateUser={this.props.onCreateUser}
+                hasLoginFailed={this.props.hasLoginFailed}
+                onLoginFailed={this.props.onLoginFailed}
             />
         }
 

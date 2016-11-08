@@ -1,6 +1,6 @@
 import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
-import strings from '../../../../strings';
+import strings from '../../../../commons/strings';
 import {monthNames} from '../../../../commons/util';
 import './CreateBookingModal.css';
 import {ControlLabel, Form, FormGroup, Col, Alert} from "react-bootstrap";
@@ -94,6 +94,8 @@ class CreateBookingModal extends React.Component {
         this.setState({
             errorMessages
         });
+
+        // TODO must be logged in
 
         if (errorMessages.length === 0) {
             this.props.onCreateBooking(startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(), 'TODO');
@@ -191,8 +193,6 @@ class HourTimePicker extends React.Component {
 }
 
 class MinuteTimePicker extends React.Component {
-    // todo perhaps try and limit minutes to 0 when 22 chosen, med 05-55 greydd out
-
     render() {
         let minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
         let selectOptions = minutes.map((minute) => {
@@ -209,8 +209,6 @@ class MinuteTimePicker extends React.Component {
 }
 
 // TODO
-// need to change backend to take number of washes
 // evt. giv overblik over dagen
-// skriv at antallet af gange siger hvor meget der skal betales
 
 export default CreateBookingModal;

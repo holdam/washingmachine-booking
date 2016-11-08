@@ -1,6 +1,6 @@
 import LoginLogout from "../components/Header/Login/LoginLogout";
 import {connect} from 'react-redux';
-import {login, logout, fetchUsernameForToken, createUser} from '../state/actions/login';
+import {login, logout, fetchUsernameForToken, createUser, loginFailed} from '../state/actions/login';
 import {startCreateUserFlow, endCreateUserFlow} from '../state/actions/createUserFlow';
 
 const mapStateToProps = (state) => {
@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
         userAccessToken: localStorage.getItem('userAccessToken'),
         username: state.login.username,
         showCreateUserModal: state.createUserFlow.showCreateUserModal,
-
+        hasLoginFailed: state.login.hasLoginFailed
     }
 };
 
@@ -19,6 +19,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         onLogout: () => {
             dispatch(logout());
+        },
+        onLoginFailed: (error) => {
+            dispatch(loginFailed(error));
         },
         setup: (userAccessToken) => {
             dispatch(fetchUsernameForToken(userAccessToken));

@@ -26,7 +26,8 @@ var strings = {
         createUserModal: {
             errorsMessages: {
                 passwordCantBeEmpty: 'Dit password kan ikke være tomt',
-                usernameCantBeEmpty: 'Dit brugernavn kan ikke være tomt'
+                usernameCantBeEmpty: 'Dit brugernavn kan ikke være tomt',
+                usernameTaken: 'Dit brugernavn er allerede taget'
             }
         }
     }
