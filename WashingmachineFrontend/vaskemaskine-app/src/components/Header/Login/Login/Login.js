@@ -1,7 +1,7 @@
 import React from 'react';
 import {Form, FormGroup, FormControl, Button} from 'react-bootstrap'
-import strings from '../../../commons/strings';
-import CreateUserModal from './CreateUserModal/CreateUserModal';
+import strings from '../../../../commons/strings';
+import CreateUserModal from '../CreateUserModal/CreateUserModal';
 import './Login.css';
 
 class Login extends React.Component {

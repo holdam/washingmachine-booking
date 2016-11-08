@@ -11,6 +11,7 @@ import java.util.Calendar;
 import java.util.Optional;
 
 // TODO caching
+// TODO give new token if about to run out
 
 public class MyAuthenticator implements Authenticator<String, User> {
     private UserTokenDAO userTokenDAO;

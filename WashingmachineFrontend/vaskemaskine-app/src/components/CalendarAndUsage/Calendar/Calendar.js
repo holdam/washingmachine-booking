@@ -23,6 +23,7 @@ class Calendar extends React.Component {
                                     onCancelBookingCreation={this.props.onCancelBookingCreation}
                                     bookingDate={this.props.bookingDate}
                                     bookings={this.props.bookings}
+                                    isLoggedIn={this.props.isLoggedIn}
                 />
                 {weeks}
             </div>
@@ -59,6 +60,7 @@ class Week extends React.Component {
                 if (date.getDate() === 1) {
                     return <DayContainer key={keyForDate} date={date} offMonthDay={true}>{`${monthNamesShort[date.getMonth()]} ${date.getDate()}`}</DayContainer>
                 }
+
                 return <DayContainer key={keyForDate} date={date} offMonthDay={true}>{date.getDate()}</DayContainer>
             }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import './Logout.css';
 import {Button} from 'react-bootstrap'
-import strings from '../../../commons/strings';
+import strings from '../../../../commons/strings';
 
 class Logout extends React.Component {
     render() {

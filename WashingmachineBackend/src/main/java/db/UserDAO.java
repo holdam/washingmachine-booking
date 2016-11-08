@@ -40,7 +40,7 @@ public interface UserDAO {
     int authenticateUser(@Bind("username") String username, @Bind("password") String password);
 
 
-    @SqlQuery("SELECT username, role from users where username = :username")
+    @SqlQuery("SELECT username, role from users where upper(username) = upper(:username)")
     User getUser(@Bind("username") String username);
 
     @SqlQuery("SELECT salt FROM users WHERE username = :username")

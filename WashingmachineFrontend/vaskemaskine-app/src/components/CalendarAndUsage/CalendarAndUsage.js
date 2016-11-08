@@ -14,23 +14,29 @@ class WeekRepresentation {
 class CalendarAndUsage extends React.Component {
     constructor(props) {
         super(props);
-        // TODO correct arguments
-        this.props.fetchBookings(0, 0);
+        this.fetchBookings = this.fetchBookings.bind(this);
+        this.fetchBookings(props.selectedMonth.getFullYear(), props.selectedMonth.getMonth());
     }
-
 
     componentWillReceiveProps(nextProps) {
         // Fetch data if we are in a new month
         if (this.props.selectedMonth.getMonth() !== nextProps.selectedMonth.getMonth()) {
-            // TODO correct arguments
-            //this.props.fetchBookings(new Date(nextProps.selectedMonth.getMonth()).getMilliseconds(), nextProps.selectedMonth.getFullYear()).getMilliseconds());
-            this.props.fetchBookings();
+            this.fetchBookings(nextProps.selectedMonth.getFullYear(), nextProps.selectedMonth.getMonth());
         }
     }
 
-    getWeeksOfMonth() {
+    fetchBookings(year, month) {
+        let weeks = this.getWeeksOfMonth(year, month);
+        let firstDayOfWeeks = weeks[0].days[0];
+        let lastDayOfWeeks = weeks[5].days[6];
+        lastDayOfWeeks.setHours(23);
+        lastDayOfWeeks.setMinutes(59);
+        this.props.fetchBookings(firstDayOfWeeks.getTime(), lastDayOfWeeks.getTime());
+    }
+
+    getWeeksOfMonth(year, month) {
         let weeks = [];
-        let thisMonth = new Date(this.props.selectedMonth.getFullYear(), this.props.selectedMonth.getMonth() + 1, 0);
+        let thisMonth = new Date(year, month + 1, 0);
         let lastMonth = new Date(thisMonth.getFullYear(), thisMonth.getMonth(), 0);
 
         // Handling first week
@@ -83,7 +89,8 @@ class CalendarAndUsage extends React.Component {
     }
 
     render() {
-        let weeks = this.getWeeksOfMonth();
+        let weeks = this.getWeeksOfMonth(this.props.selectedMonth.getFullYear(), this.props.selectedMonth.getMonth());
+
         return (
             <div className="calendarAndUsage">
                 <MonthPicker month={this.props.selectedMonth.getMonth()}
@@ -103,6 +110,7 @@ class CalendarAndUsage extends React.Component {
                                   showBookingModal={this.props.showBookingModal}
                                   onCreateBooking={this.props.onCreateBooking}
                                   onCancelBookingCreation={this.props.onCancelBookingCreation}
+                                  isLoggedIn={this.props.isLoggedIn}
                         />
                     </div>
                 </div>

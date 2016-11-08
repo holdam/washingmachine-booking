@@ -1,4 +1,6 @@
 import fetch from 'isomorphic-fetch';
+import urls from '../../commons/urls';
+import {endBookingFlow} from './bookingFlow';
 
 export const INSERT_BOOKING = 'INSERT_BOOKING';
 export function insertBooking(id, startTime, endTime, owner) {
@@ -24,33 +26,33 @@ function receiveBookings(bookings) {
     }
 }
 
-export function fetchBookings(startDate, endDate) {
+export function createBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses) {
+    return function (dispatch) {
+        const userAccessToken = localStorage.getItem("userAccessToken");
+        fetch(`${urls.api.booking}?access_token=${userAccessToken}`, {
+            method: 'POST',
+            body: `startTime=${startTime}&endTime=${endTime}&numberOfWashingMachineUses=${numberOfWashingMachineUses}&numberOfTumbleDryUses=${numberOfTumbleDryUses}`,
+            headers: new Headers({
+                'Content-Type': 'application/x-www-form-urlencoded'
+            })
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
+            dispatch(endBookingFlow());
+            dispatch(insertBooking(data.id, data.startTime, data.endTime, data.owner));
+        });
+    }
+}
+
+export function fetchBookings(startTime, endTime) {
     return function (dispatch) {
         dispatch(requestBookings());
-        
 
-        // TODO use backend return fetch ->
-        let bookings = [
-            {
-                id: 1,
-                startTime: 1478045557049,
-                endTime: 1478045567049,
-                owner: 'Jens'
-            },
-            {
-                id: 2,
-                startTime: 1478045567050,
-                endTime: 1478045577050,
-                owner: 'Kasper'
-            },
-            {
-                id: 3,
-                startTime: 1477998000000,
-                endTime: 1478005200000,
-                owner: 'Jens'
-            }
-        ];
-
-        dispatch(receiveBookings(bookings));
+        fetch(`${urls.api.booking}/interval?startTime=${startTime}&endTime=${endTime}`)
+            .then(function (response) {
+                return response.json();
+            }).then(function (data) {
+            dispatch(receiveBookings(data));
+        });
     }
 }

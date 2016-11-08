@@ -41,7 +41,7 @@ public class MyApplication extends Application<MyConfiguration> {
 
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(new BookingResource(bookingDAO));
-        environment.jersey().register(new UserResource(userDAO));
+        environment.jersey().register(new UserResource(userDAO, userTokenDAO));
         environment.jersey().register(new AuthResource(userTokenDAO, userDAO));
     }
 }

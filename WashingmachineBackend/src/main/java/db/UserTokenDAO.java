@@ -1,11 +1,13 @@
 package db;
 
 import api.UserTokenDTO;
+import db.mappers.UserMapper;
 import db.mappers.UserTokenMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
 import org.skife.jdbi.v2.sqlobject.SqlUpdate;
+import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
 @RegisterMapper(UserTokenMapper.class)
@@ -30,6 +32,9 @@ public interface UserTokenDAO {
 
     @SqlQuery("SELECT * FROM user_tokens WHERE token = :userToken")
     UserTokenDTO getUserTokenFromToken(@Bind("userToken") String userToken);
+
+    @SqlQuery("SELECT username FROM user_tokens WHERE token = :token")
+    String getUsernameFromToken(@Bind("token") String token);
 
     @SqlUpdate("DELETE FROM user_tokens WHERE username = :username")
     int deleteUserTokenFromUsername(@Bind("username") String username);

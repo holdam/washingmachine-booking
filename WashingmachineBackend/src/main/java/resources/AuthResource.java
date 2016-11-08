@@ -7,6 +7,7 @@ import db.UserDAO;
 import db.UserTokenDAO;
 
 import javax.naming.AuthenticationException;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -28,7 +29,7 @@ public class AuthResource {
 
     @POST
     @Path("/signin")
-    public UserTokenDTO signIn(@FormParam("username") String username, @FormParam("password") String password) throws AuthenticationException {
+    public UserTokenDTO signIn(@FormParam("username") @NotNull String username, @NotNull @FormParam("password") String password) throws AuthenticationException {
         User user = userDAO.getUser(username);
 
         if (user == null) {
@@ -38,6 +39,7 @@ public class AuthResource {
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, userDAO.getSaltForUser(username));
         if (userDAO.authenticateUser(username, hashedAndSaltedPassword) > 0) {
             // Delete any existing token
+            // TODO perhaps we should not delete token to make so you can use multiple devices
             userTokenDAO.deleteUserTokenFromUsername(username);
 
             // Create token for user

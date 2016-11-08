@@ -2,6 +2,7 @@ import api.Success;
 import core.RoleHelper;
 import core.User;
 import db.UserDAO;
+import db.UserTokenDAO;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -15,11 +16,13 @@ import javax.naming.AuthenticationException;
 public class UserResourceTest {
     UserResource userResource;
     UserDAO userDAO;
+    UserTokenDAO userTokenDAO;
 
     @Before
     public void setup() {
         userDAO = Mockito.mock(UserDAO.class);
-        userResource = new UserResource(userDAO);
+        userTokenDAO = Mockito.mock(UserTokenDAO.class);
+        userResource = new UserResource(userDAO, userTokenDAO);
     }
 
     @Test(expected = AuthenticationException.class)

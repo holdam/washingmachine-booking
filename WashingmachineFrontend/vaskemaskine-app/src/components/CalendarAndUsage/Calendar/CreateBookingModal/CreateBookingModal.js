@@ -91,14 +91,17 @@ class CreateBookingModal extends React.Component {
             }
         }
 
+        if (!this.props.isLoggedIn) {
+            errorMessages.push(strings.createBookingModal.errorsMessages.mustBeLoggedIn);
+        }
+
         this.setState({
             errorMessages
         });
 
-        // TODO must be logged in
-
         if (errorMessages.length === 0) {
-            this.props.onCreateBooking(startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(), 'TODO');
+            this.props.onCreateBooking(startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
+                this.state.numberOfWashings, this.state.numberOfTumbleDries);
         }
     }
 
@@ -208,7 +211,6 @@ class MinuteTimePicker extends React.Component {
     }
 }
 
-// TODO
-// evt. giv overblik over dagen
+// TODO evt. giv overblik over dagen
 
 export default CreateBookingModal;

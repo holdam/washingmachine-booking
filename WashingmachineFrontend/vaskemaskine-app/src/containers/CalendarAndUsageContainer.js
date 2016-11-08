@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
 import {endBookingFlow} from '../state/actions/bookingFlow';
-import {insertBooking, fetchBookings} from '../state/actions/bookings';
+import {createBooking, fetchBookings} from '../state/actions/bookings';
 
 const mapStateToProps = (state, ownProps) => {
     return {
@@ -9,21 +9,21 @@ const mapStateToProps = (state, ownProps) => {
         currentMonth: new Date(),
         showBookingModal: state.bookingFlow.showBookingModal,
         bookingDate: state.bookingFlow.date,
-        bookings: state.bookings.bookings
+        bookings: state.bookings.bookings,
+        isLoggedIn : !!state.login.username
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onCreateBooking: (startTime, endTime, owner) => {
-            dispatch(endBookingFlow());
-            dispatch(insertBooking(-1, startTime, endTime, owner))
+        onCreateBooking: (startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses) => {
+            dispatch(createBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses));
         },
         onCancelBookingCreation: () => {
             dispatch(endBookingFlow());
         },
-        fetchBookings: (startDate, endDate) => {
-            dispatch(fetchBookings(startDate, endDate))
+        fetchBookings: (startTime, endTime) => {
+            dispatch(fetchBookings(startTime, endTime))
         }
     }
 };
