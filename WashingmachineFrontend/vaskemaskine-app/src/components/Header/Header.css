@@ -4,3 +4,15 @@ header {
     padding: 20px;
     color: white;
 }
+
+.navbar {
+    margin-bottom: 0 !important;
+    min-height: 60px !important;
+}
+
+@media (min-width: 1000px) {
+    .navbar > .container {
+        margin-left: 320px;
+        float: left;
+    }
+}

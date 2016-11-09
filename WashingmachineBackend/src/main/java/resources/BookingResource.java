@@ -84,7 +84,7 @@ public class BookingResource {
                 overlappingBookingDTOs.size() > 0 ||
                 startDate.before(new Date()) ||
                 !timeDifferenceGreaterThan30Minutes ||
-                (numberOfTumbleDryUses == 0 && numberOfWashingMachineUses == 0)) {
+                (numberOfTumbleDryUses <= 0 && numberOfWashingMachineUses <= 0)) {
             throw new ValidationErrorException();
         }
     }

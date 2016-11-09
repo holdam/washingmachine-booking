@@ -1,0 +1,43 @@
+.weekday-names {
+    padding-bottom: 15px;
+}
+
+.day {
+    min-height: 95px !important;
+    text-align: right;
+    vertical-align: top;
+    border: 1px solid #ddd;
+    margin-left: -1px;
+    margin-bottom: -1px;
+}
+
+
+
+.day:hover {
+    background: #ececec;
+    cursor: pointer;
+}
+
+.off-month-day {
+    color: darkgrey;
+}
+
+.today {
+    border-top: 3px solid blueviolet;
+}
+
+.booking {
+    background: cadetblue;
+    margin-left: -15px;
+    margin-right: -15px;
+    padding: 3px;
+    margin-bottom: 3px;
+}
+
+.booking:hover {
+    background: #476869;
+}
+
+.booking {
+    color: #222222;
+}

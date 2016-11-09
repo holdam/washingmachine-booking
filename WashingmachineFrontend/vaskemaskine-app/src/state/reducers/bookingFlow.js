@@ -9,7 +9,8 @@ function bookingFlow(state = {showBookingModal: false, date: undefined}, action)
             });
         case END_BOOKING_FLOW:
             return Object.assign({}, state, {
-                showBookingModal: false
+                showBookingModal: false,
+                date: undefined
             });
         default:
             return state;

@@ -1,6 +1,6 @@
 import './Calendar.css';
 import React from 'react';
-import {monthNamesShort, weekdayNames, getStartAndEndDayMillisFromDate} from '../../../commons/util';
+import {monthNamesShort, weekdayNames} from '../../../commons/util';
 import CreateBookingModal from './CreateBookingModal/CreateBookingModal';
 import DayContainer from '../../../containers/DayContainer';
 
@@ -22,8 +22,10 @@ class Calendar extends React.Component {
                                     onCreateBooking={this.props.onCreateBooking}
                                     onCancelBookingCreation={this.props.onCancelBookingCreation}
                                     bookingDate={this.props.bookingDate}
-                                    bookings={this.props.bookings}
                                     isLoggedIn={this.props.isLoggedIn}
+                                    onCancelEditBookingCreation={this.props.onCancelEditBookingCreation}
+                                    isEditMode={this.props.isEditMode}
+                                    editBookingInformation={this.props.editBookingInformation}
                 />
                 {weeks}
             </div>
@@ -77,38 +79,6 @@ class Week extends React.Component {
             </div>
         )
     }
-}
-
-export function Day(props) {
-    let today = new Date();
-    let classes = "col-md-1 day ";
-    if (props.offMonthDay === true) {
-        classes += "off-month-day "
-    }
-
-    if (props.date.getFullYear() === today.getFullYear() && props.date.getMonth() === today.getMonth() && props.date.getDate() === today.getDate()) {
-        classes += "today "
-    }
-
-    // Get events for the day
-    let startOfTodayInMillis, endOfTodayInMillis;
-    ({startOfTodayInMillis, endOfTodayInMillis} = getStartAndEndDayMillisFromDate(props.date));
-    let bookingsAsNodes = props.bookings.map((booking) => {
-        if (booking.startTime >= startOfTodayInMillis && booking.endTime <= endOfTodayInMillis) {
-            return (
-                <div key={booking.id} className="booking">
-                    {`${booking.id}, ${booking.owner}, ${booking.startTime}, ${booking.endTime}, `}
-                </div>
-            )
-        }
-    });
-
-    return (
-        <div onClick={() => props.onClick(props.date)} className={classes}>
-            {props.children}
-            {bookingsAsNodes}
-        </div>
-    )
 }
 
 

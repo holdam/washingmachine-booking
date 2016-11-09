@@ -1,5 +1,5 @@
 var strings = {
-    frontpageTitle: 'Dejlig overskrift',
+    frontpageTitle: 'Vaskerumsbooking',
     createBookingModal: {
         title: 'Opret reservation',
         body: 'todo',
@@ -23,7 +23,9 @@ var strings = {
         password: 'Kodeord',
         login: 'Log ind',
         logout: 'Log ud',
+        loginFailed: 'Login mislykkedes',
         createUser: 'Opret bruger',
+        welcome: 'Hej',
         createUserModal: {
             errorsMessages: {
                 passwordCantBeEmpty: 'Dit password kan ikke være tomt',

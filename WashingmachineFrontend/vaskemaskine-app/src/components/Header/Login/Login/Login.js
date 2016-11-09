@@ -46,7 +46,6 @@ class Login extends React.Component {
 
         return (
             <div className="login">
-                {this.props.hasLoginFailed ? <LoginFailed/> : null}
                 <Form inline>
                     <FormGroup validationState={usernameIsValidState} controlId="loginFormUsername">
                         <FormControl onKeyPress={this.handleKeyPress} onChange={this.handleUsernameChange} type="text" placeholder={strings.login.username} />
@@ -59,6 +58,7 @@ class Login extends React.Component {
                     <Button bsStyle="primary" onClick={this.login}>{strings.login.login}</Button>
                     {' '}
                     <Button onClick={this.props.onStartCreateUserFlow}>{strings.login.createUser}</Button>
+                    {this.props.hasLoginFailed ? <LoginFailed/> : null}
                 </Form>
                 <CreateUserModal
                     showModal={this.props.showCreateUserModal}
@@ -72,7 +72,7 @@ class Login extends React.Component {
 
 function LoginFailed(props) {
     return (
-        <div>Login failed :(</div>
+        <span className="login-failed">{strings.login.loginFailed}</span>
     )
 }
 

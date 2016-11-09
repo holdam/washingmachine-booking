@@ -10,7 +10,9 @@ function bookings(state = {bookings: [], isFetching: false}, action) {
                         id: action.id,
                         startTime: action.startTime,
                         endTime: action.endTime,
-                        owner: action.owner
+                        owner: action.owner,
+                        numberOfWashingMachineUses: action.numberOfWashingMachineUses,
+                        numberOfTumbleDryUses: action.numberOfTumbleDryUses
                     }
                 ]});
         case REQUEST_BOOKINGS:

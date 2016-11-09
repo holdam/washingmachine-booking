@@ -16,16 +16,36 @@ class CreateBookingModal extends React.Component {
         this.handleNumberOfWashingsChange = this.handleNumberOfWashingsChange.bind(this);
         this.handleNumberOfTumbleDriesChange = this.handleNumberOfTumbleDriesChange.bind(this);
         this.handleCreateBooking = this.handleCreateBooking.bind(this);
-        this.cancelBookingCreation = this.cancelBookingCreation.bind(this);
+        this.cancelCancellation = this.cancelCancellation.bind(this);
 
         this.state = {
+            id: -1,
             startHour: 8,
             startMinutes: 0,
             endHours: 8,
             endMinutes: 0,
-            numberOfWashings: 0,
-            numberOfTumbleDries: 0,
-            errorMessages: []
+            numberOfWashingMachineUses: 0,
+            numberOfTumbleDryUses: 0,
+            errorMessages: [],
+            isEditMode: false
+        }
+    }
+
+    componentWillReceiveProps(nextProps) {
+        // Load values if passed
+        if (nextProps.isEditMode) {
+            console.log(nextProps);
+            let startDate = new Date(nextProps.editBookingInformation.startTime);
+            let endDate = new Date(nextProps.editBookingInformation.endTime);
+
+            this.setState({
+                startHour: startDate.getHours(),
+                startMinutes: startDate.getMinutes(),
+                endHours: endDate.getHours(),
+                endMinutes: endDate.getMinutes(),
+                numberOfWashingMachineUses: nextProps.editBookingInformation.numberOfWashingMachineUses,
+                numberOfTumbleDryUses: nextProps.editBookingInformation.numberOfTumbleDryUses
+            });
         }
     }
 
@@ -46,11 +66,11 @@ class CreateBookingModal extends React.Component {
     }
 
     handleNumberOfWashingsChange(event) {
-        this.setState({numberOfWashings: event.target.value});
+        this.setState({numberOfWashingMachineUses: event.target.value});
     }
 
     handleNumberOfTumbleDriesChange(event) {
-        this.setState({numberOfTumbleDries: event.target.value});
+        this.setState({numberOfTumbleDryUses: event.target.value});
     }
 
     handleCreateBooking() {
@@ -73,7 +93,7 @@ class CreateBookingModal extends React.Component {
             errorMessages.push(strings.createBookingModal.errorsMessages.mustReserveAtLeast30Minutes);
         }
 
-        if (this.state.numberOfWashings <= 0 && this.state.numberOfTumbleDries <= 0) {
+        if (this.state.numberOfWashingMachineUses <= 0 && this.state.numberOfTumbleDryUses <= 0) {
             errorMessages.push(strings.createBookingModal.errorsMessages.mustReserveEitherTumbleDrierOrWashingMachine);
         }
 
@@ -101,22 +121,31 @@ class CreateBookingModal extends React.Component {
 
         if (errorMessages.length === 0) {
             this.props.onCreateBooking(startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
-                this.state.numberOfWashings, this.state.numberOfTumbleDries);
+                this.state.numberOfWashingMachineUses, this.state.numberOfTumbleDryUses);
         }
     }
 
-    cancelBookingCreation() {
-        // Clear error messages when closing modal
+    cancelCancellation() {
+        // Reset values when closing modal
         this.setState({
-            errorMessages: []
+            id: -1,
+            startHour: 8,
+            startMinutes: 0,
+            endHours: 8,
+            endMinutes: 0,
+            numberOfWashingMachineUses: 0,
+            numberOfTumbleDryUses: 0,
+            errorMessages: [],
+            isEditMode: false
         });
 
         this.props.onCancelBookingCreation();
+        this.props.onCancelEditBookingCreation();
     }
 
     render() {
         return (
-            <Modal show={this.props.showModal} onHide={this.cancelBookingCreation}>
+            <Modal show={this.props.showModal} onHide={this.cancelCancellation}>
                 <Modal.Header closeButton>
                     <Modal.Title>{`${strings.createBookingModal.title} ${this.convertDateToString((this.props.bookingDate || new Date()))}`}</Modal.Title>
                 </Modal.Header>
@@ -157,7 +186,7 @@ class CreateBookingModal extends React.Component {
                         </FormGroup>
                         <FormGroup>
                             <Col componentClass={ControlLabel} sm={5}>
-                                {strings.createBookingModal.numberOfTumbleDries}
+                                {strings.createBookingModal.numberOfTumbleDryUses}
                             </Col>
                             <Col sm={7}>
                                 <input onChange={this.handleNumberOfTumbleDriesChange} className="numberOfTumbleDriesPicker" defaultValue={0} type="number" min="0" />
@@ -166,7 +195,7 @@ class CreateBookingModal extends React.Component {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.cancelBookingCreation}>{strings.createBookingModal.cancel}</Button>
+                    <Button onClick={this.cancelCancellation}>{strings.createBookingModal.cancel}</Button>
                     <Button onClick={this.handleCreateBooking} bsStyle="primary">{strings.createBookingModal.save}</Button>
                 </Modal.Footer>
             </Modal>

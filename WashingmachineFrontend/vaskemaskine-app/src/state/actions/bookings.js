@@ -3,13 +3,15 @@ import urls from '../../commons/urls';
 import {endBookingFlow} from './bookingFlow';
 
 export const INSERT_BOOKING = 'INSERT_BOOKING';
-export function insertBooking(id, startTime, endTime, owner) {
+export function insertBooking(id, startTime, endTime, owner, numberOfWashingMachineUses, numberOfTumbleDryUses) {
     return {
         type: INSERT_BOOKING,
         id,
         startTime,
         endTime,
-        owner
+        owner,
+        numberOfWashingMachineUses,
+        numberOfTumbleDryUses
     }
 }
 
@@ -39,7 +41,7 @@ export function createBooking(startTime, endTime, numberOfWashingMachineUses, nu
             return response.json();
         }).then(function (data) {
             dispatch(endBookingFlow());
-            dispatch(insertBooking(data.id, data.startTime, data.endTime, data.owner));
+            dispatch(insertBooking(data.id, data.startTime, data.endTime, data.owner, data.numberOfWashingMachineUses, data.numberOfTumbleDryUses));
         });
     }
 }

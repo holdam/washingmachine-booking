@@ -1,6 +1,7 @@
 import {connect} from 'react-redux';
-import {Day} from '../components/CalendarAndUsage/Calendar/Calendar';
+import Day from '../components/CalendarAndUsage/Calendar/Day/Day';
 import {startBookingFlow} from '../state/actions/bookingFlow';
+import {startEditBookingFlow} from '../state/actions/editBookingFlow';
 
 const mapStateToProps = (state) => {
     return {
@@ -12,6 +13,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         onClick: (date) => {
             dispatch(startBookingFlow(date))
+        },
+        onBookingClick: (id, owner, startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses, date) => {
+            dispatch(startEditBookingFlow(id, owner, startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses, date));
         }
     }
 };

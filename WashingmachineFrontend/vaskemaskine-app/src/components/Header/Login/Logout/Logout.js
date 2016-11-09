@@ -6,8 +6,8 @@ import strings from '../../../../commons/strings';
 class Logout extends React.Component {
     render() {
         return (
-            <div>
-                <span>{this.props.username}</span>
+            <div className="logged-in-menu">
+                <span className="welcome-username">{`${strings.login.welcome}, ${this.props.username}`}</span>
                 {' '}
                 <Button onClick={this.props.onLogout}>{strings.login.logout}</Button>
             </div>

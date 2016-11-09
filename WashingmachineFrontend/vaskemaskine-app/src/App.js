@@ -31,12 +31,12 @@ export default App;
 
 
 // TODO battleplan:
-    // lav events "pæne" i kalenderen - egne skal være farvet en anden farve
-    // gør så man kan redigere events
+// gør så man kan redigere og slette events
+// lav events "pæne" i kalenderen - egne skal være farvet en anden farve
+// forbrug og admin panel
 // TODO evt. farv lørdag/søndag i en anden farve
 // TODO vis forbrug evt. for forskellige længder af perioder?
 
-// TODO lav bruger / login evt bare i i topbar
 // TODO admin/kasser panel
 // login vil være at gemme noge ti local storage el lign som kan sendes
 // TODO reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
