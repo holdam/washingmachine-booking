@@ -11,8 +11,6 @@
     margin-bottom: -1px;
 }
 
-
-
 .day:hover {
     background: #ececec;
     cursor: pointer;
@@ -26,18 +24,26 @@
     border-top: 3px solid blueviolet;
 }
 
-.booking {
-    background: cadetblue;
+.own-booking, .others-booking {
     margin-left: -15px;
     margin-right: -15px;
     padding: 3px;
     margin-bottom: 3px;
-}
-
-.booking:hover {
-    background: #476869;
-}
-
-.booking {
     color: #222222;
+}
+
+.own-booking {
+    background: aquamarine;
+}
+
+.own-booking:hover {
+    background: #4a9071;
+}
+
+.others-booking {
+    background: palevioletred;
+}
+
+.others-booking:hover {
+    cursor: not-allowed;
 }

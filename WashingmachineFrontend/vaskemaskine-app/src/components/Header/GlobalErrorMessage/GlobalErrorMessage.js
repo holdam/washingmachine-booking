@@ -1,7 +1,7 @@
 import React from 'react';
 import {Alert} from 'react-bootstrap';
 import strings from '../../../commons/strings';
-
+import './GlobalErrorMessage.css';
 
 function GlobalErrorMessage(props) {
     return (

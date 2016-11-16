@@ -17,32 +17,50 @@ export class Day extends React.Component {
         // Get events for the day
         let startOfTodayInMillis, endOfTodayInMillis;
         ({startOfTodayInMillis, endOfTodayInMillis} = getStartAndEndDayMillisFromDate(this.props.date));
-        let bookingsAsNodes = this.props.bookings.map((booking) => {
-            if (booking.startTime >= startOfTodayInMillis && booking.endTime <= endOfTodayInMillis) {
-                let startTime = new Date(booking.startTime);
-                let endTime = new Date(booking.endTime);
-                let startHour = (startTime.getHours() < 10) ? `0${startTime.getHours()}` : startTime.getHours();
-                let startMinutes = (startTime.getMinutes() < 10) ? `0${startTime.getMinutes()}` : startTime.getMinutes();
-                let endHour = (endTime.getHours() < 10) ? `0${endTime.getHours()}` : endTime.getHours();
-                let endMinutes = (endTime.getMinutes() < 10) ? `0${endTime.getMinutes()}` : endTime.getMinutes();
 
-                return (
-                    <div onClick={(e) => {
-                        e.stopPropagation(); this.props.onBookingClick(
-                            booking.id,
-                            booking.owner,
-                            booking.startTime,
-                            booking.endTime,
-                            booking.numberOfWashingMachineUses,
-                            booking.numberOfTumbleDryUses,
-                            this.props.date
-                        )
-                    }} key={booking.id} className="booking">
-                        <div>{booking.owner}</div>
-                        <div>{`${startHour}:${startMinutes} - ${endHour}:${endMinutes}`}</div>
-                    </div>
-                )
+        // Filter out the ones not residing in this day
+        let bookingsOfTheDay = this.props.bookings.filter((booking) => {
+            return booking.startTime >= startOfTodayInMillis && booking.endTime <= endOfTodayInMillis;
+        });
+
+        // Sort bookings by time
+        bookingsOfTheDay = bookingsOfTheDay.sort((booking, booking2) => {
+            if (booking.startTime < booking2.startTime) {
+                return -1;
             }
+            return 1;
+        });
+
+        // Turn into nice html
+        let bookingsAsNodes = bookingsOfTheDay.map((booking) => {
+            let startTime = new Date(booking.startTime);
+            let endTime = new Date(booking.endTime);
+            let startHour = (startTime.getHours() < 10) ? `0${startTime.getHours()}` : startTime.getHours();
+            let startMinutes = (startTime.getMinutes() < 10) ? `0${startTime.getMinutes()}` : startTime.getMinutes();
+            let endHour = (endTime.getHours() < 10) ? `0${endTime.getHours()}` : endTime.getHours();
+            let endMinutes = (endTime.getMinutes() < 10) ? `0${endTime.getMinutes()}` : endTime.getMinutes();
+            let ownOrOthersBookingClass = (booking.owner === this.props.username) ? 'own-booking' : 'others-booking';
+
+            return (
+                <div onClick={
+                    // If owner of event open editing menu, otherwise do nothing
+                    (booking.owner === this.props.username) ?
+                        ((e) => {e.stopPropagation();
+                            this.props.onBookingClick(
+                                booking.id,
+                                booking.owner,
+                                booking.startTime,
+                                booking.endTime,
+                                booking.numberOfWashingMachineUses,
+                                booking.numberOfTumbleDryUses,
+                                this.props.date
+                            )}) :
+                        ((e) => {e.stopPropagation();})
+                } key={booking.id} className={ownOrOthersBookingClass}>
+                    <div>{booking.owner}</div>
+                    <div>{`${startHour}:${startMinutes} - ${endHour}:${endMinutes}`}</div>
+                </div>
+            )
         });
 
         return (
