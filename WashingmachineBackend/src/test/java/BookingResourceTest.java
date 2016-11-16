@@ -1,7 +1,9 @@
 import api.BookingDTO;
+import core.RoleHelper;
 import core.User;
 import db.BookingDAO;
 import exceptions.ValidationErrorException;
+import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import resources.BookingResource;
@@ -132,8 +134,52 @@ public class BookingResourceTest {
         Date endTime = calendar.getTime();
         when(bookingDAO.getBookingFromOwnerAndDates(USERNAME_1, startTime, endTime)).
                 thenReturn(new BookingDTO(1337, startTime, endTime, USERNAME_1, 1, 0));
-        BookingDTO bookingDTO = bookingResource.createBooking(new User(USERNAME_1, 0), startTime.getTime(), endTime.getTime(), 1, 0);
+        BookingDTO bookingDTO = bookingResource.createBooking(new User(USERNAME_1, RoleHelper.ROLE_DEFAULT), startTime.getTime(), endTime.getTime(), 1, 0);
         assert(bookingDTO.getId() == 1337);
     }
 
+    // Just need to test that even if overlapping exists, it's ok if it's only itself
+    @Test
+    public void editBookingShouldWork() {
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 0);
+        Date startTime = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        Date endTime = calendar.getTime();
+
+        calendar.add(Calendar.DAY_OF_YEAR, 10);
+        Date endDateNotWithinBounds = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        Date startDateNotWithinBounds = calendar.getTime();
+
+        ArrayList<BookingDTO> bookingsInInterval = new ArrayList<>();
+        bookingsInInterval.add(new BookingDTO(1, startTime, endTime, USERNAME_1, 1, 1));
+        bookingsInInterval.add(new BookingDTO(123, endDateNotWithinBounds, startDateNotWithinBounds, USERNAME_1, 1, 1));
+        when(bookingDAO.getBookingsOverlappingInterval(startTime, endTime)).thenReturn(bookingsInInterval);
+        when(bookingDAO.getBookingFromId(USERNAME_1, 1)).thenReturn(new BookingDTO(1, startTime, endTime, USERNAME_1, 1, 1));
+        BookingDTO bookingDTO = bookingResource.editBooking(new User(USERNAME_1, RoleHelper.ROLE_DEFAULT), 1, startTime.getTime(), endTime.getTime(),
+                123, 321);
+
+        Assert.assertEquals(1, bookingDTO.getId());
+        Assert.assertEquals(USERNAME_1, bookingDTO.getOwner());
+        Assert.assertEquals(startTime, bookingDTO.getStartTime());
+        Assert.assertEquals(endTime, bookingDTO.getEndTime());
+    }
+
+    @Test(expected = ValidationErrorException.class)
+    public void overlappingBookingShouldResultInException() {
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 0);
+        Date startTime = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        Date endTime = calendar.getTime();
+
+        ArrayList<BookingDTO> bookingsInInterval = new ArrayList<>();
+        bookingsInInterval.add(new BookingDTO(234, startTime, endTime, USERNAME_1, 1, 2));
+        when(bookingDAO.getBookingsOverlappingInterval(startTime, endTime)).thenReturn(bookingsInInterval);
+        bookingResource.editBooking(new User(USERNAME_1, RoleHelper.ROLE_DEFAULT), 1, startTime.getTime(), endTime.getTime(),
+                123, 321);
+    }
 }

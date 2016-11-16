@@ -58,7 +58,6 @@ public class UserResource {
         return new Success("Username already exist", false);
     }
 
-    // TODO testing
     @GET
     @Path("/user_from_user_access_token")
     public User userFromUserAccessToken(@QueryParam("userAccessToken") String userAccessToken) {

@@ -58,15 +58,12 @@ public class BookingResource {
                                   @FormParam("endTime") @NotNull @Min(0) Long endTime,
                                   @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
                                   @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
-        validateBookingEdit(startTime, endTime,numberOfWashingMachineUses, numberOfTumbleDryUses, id);
-        Date startDate = Util.convertMillisToDate(startTime);
-        Date endDate = Util.convertMillisToDate(endTime);
-        bookingDAO.updateBooking(user.getName(), id, startDate, endDate,
-                numberOfWashingMachineUses, numberOfTumbleDryUses);
+        validateBookingEdit(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses, id);
+        bookingDAO.updateBooking(user.getName(), id, Util.convertMillisToDate(startTime),
+                Util.convertMillisToDate(endTime), numberOfWashingMachineUses, numberOfTumbleDryUses);
         return bookingDAO.getBookingFromId(user.getName(), id);
     }
 
-    // TODO testing
     private void validateBookingEdit(long startTime, long endTime, int numberOfWashingMachineUses, int numberOfTumbleDryUses, int id) {
         Date startDate = Util.convertMillisToDate(startTime);
         Date endDate = Util.convertMillisToDate(endTime);
@@ -79,7 +76,6 @@ public class BookingResource {
         commonValidationsForBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses);
     }
 
-    // TODO testing
     private void validateBookingCreation(long startTime, long endTime, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
         Date startDate = Util.convertMillisToDate(startTime);
         Date endDate = Util.convertMillisToDate(endTime);

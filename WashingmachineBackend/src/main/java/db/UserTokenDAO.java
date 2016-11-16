@@ -44,7 +44,6 @@ public interface UserTokenDAO {
     @SqlUpdate("TRUNCATE TABLE user_tokens")
     void truncateTable();
 
-    // TODO test
     @SqlUpdate("UPDATE user_tokens SET lifetime_ends = :time WHERE token = :token")
     int setNewTimeForToken(@Bind("token") String token, @Bind("time") Date time);
 }

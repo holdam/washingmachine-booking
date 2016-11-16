@@ -35,7 +35,6 @@ public class UserTokenDAOTest {
         userTokenDAO.createUserTokenTable();
         userDAO.insertUser(USERNAME_1, USER_1_PASSWORD, USER_1_SALT, RoleHelper.ROLE_DEFAULT);
         userDAO.insertUser(USERNAME_2, USER_1_PASSWORD, USER_1_SALT, RoleHelper.ROLE_DEFAULT);
-
     }
 
     @After
@@ -100,6 +99,14 @@ public class UserTokenDAOTest {
         assertEquals(calendar.get(Calendar.MONTH), calendar2.get(Calendar.MONTH));
         assertEquals(calendar.get(Calendar.YEAR), calendar2.get(Calendar.YEAR));
     }
+
+    @Test
+    public void getUsernameFromTokenShouldWork() {
+        insertUserTokenForUser1();
+        String username = userTokenDAO.getUsernameFromToken(USER_1_TOKEN);
+        assertEquals(USERNAME_1, username);
+    }
+
 
     private int insertUserTokenForUser1() {
         UserTokenDTO userTokenDTO = new UserTokenDTO(USERNAME_1, USER_1_TOKEN, new Date(), UserTokenDTO.Status.VALID);

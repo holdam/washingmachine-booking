@@ -96,7 +96,7 @@ export function deleteBooking(id) {
             headers: new Headers({
                 'Content-Type': 'application/x-www-form-urlencoded'
             })
-        }).then(function (data) {
+        }).then(function () {
             dispatch(endEditBookingFlow());
             dispatch(removeBooking(id));
         });
