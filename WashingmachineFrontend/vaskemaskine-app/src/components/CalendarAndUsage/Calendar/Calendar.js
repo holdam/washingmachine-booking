@@ -1,7 +1,7 @@
 import './Calendar.css';
 import React from 'react';
 import {monthNamesShort, weekdayNames} from '../../../commons/util';
-import CreateBookingModal from './CreateBookingModal/BookingModal';
+import BookingModal from './BookingModal/BookingModal';
 import DayContainer from '../../../containers/DayContainer';
 
 class Calendar extends React.Component {
@@ -18,17 +18,17 @@ class Calendar extends React.Component {
 
         return (
             <div className="calendar">
-                <CreateBookingModal showModal={this.props.showBookingModal}
-                                    onCreateBooking={this.props.onCreateBooking}
-                                    onCancelBookingCreation={this.props.onCancelBookingCreation}
-                                    bookingDate={this.props.bookingDate}
-                                    bookings={this.props.bookings}
-                                    isLoggedIn={this.props.isLoggedIn}
-                                    onCancelEditBookingCreation={this.props.onCancelEditBookingCreation}
-                                    isEditMode={this.props.isEditMode}
-                                    editBookingInformation={this.props.editBookingInformation}
-                                    onEditBooking={this.props.onEditBooking}
-                                    onDeleteBooking={this.props.onDeleteBooking}
+                <BookingModal showModal={this.props.showBookingModal}
+                              onCreateBooking={this.props.onCreateBooking}
+                              onCancelBookingCreation={this.props.onCancelBookingCreation}
+                              bookingDate={this.props.bookingDate}
+                              bookings={this.props.bookings}
+                              isLoggedIn={this.props.isLoggedIn}
+                              onCancelEditBookingCreation={this.props.onCancelEditBookingCreation}
+                              isEditMode={this.props.isEditMode}
+                              editBookingInformation={this.props.editBookingInformation}
+                              onEditBooking={this.props.onEditBooking}
+                              onDeleteBooking={this.props.onDeleteBooking}
                 />
                 {weeks}
             </div>

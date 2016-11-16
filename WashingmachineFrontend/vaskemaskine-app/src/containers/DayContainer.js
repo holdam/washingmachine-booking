@@ -6,7 +6,8 @@ import {startEditBookingFlow} from '../state/actions/editBookingFlow';
 const mapStateToProps = (state) => {
     return {
         bookings: state.bookings.bookings,
-        username: state.login.username
+        username: state.login.username,
+        isLoggedIn: !!state.login.username
     }
 };
 

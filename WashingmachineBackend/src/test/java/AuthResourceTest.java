@@ -21,7 +21,7 @@ public class AuthResourceTest {
     public void setup() {
         userTokenDAO = mock(UserTokenDAO.class);
         userDAO = mock(UserDAO.class);
-        authResource = new AuthResource(userTokenDAO, userDAO);
+        authResource = new AuthResource(userTokenDAO, userDAO, 123);
     }
 
     @Test(expected = AuthenticationException.class)

@@ -1,2 +1,2 @@
-import CreateBookingModal from 'components/CalendarAndUsage/Calendar/CreateBookingModal/CreateBookingModal';
+import CreateBookingModal from 'components/CalendarAndUsage/Calendar/BookingModal/BookingModal';
 

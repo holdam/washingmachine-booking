@@ -64,7 +64,7 @@ export class Day extends React.Component {
         });
 
         return (
-            <div onClick={() => this.props.onClick(this.props.date)} className={classes}>
+            <div onClick={() => { if(this.props.isLoggedIn) this.props.onClick(this.props.date)}} className={classes}>
                 {this.props.children}
                 {bookingsAsNodes}
             </div>

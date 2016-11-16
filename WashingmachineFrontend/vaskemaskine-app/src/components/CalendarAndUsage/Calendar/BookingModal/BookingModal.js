@@ -6,7 +6,7 @@ import './BookingModal.css';
 import {ControlLabel, Form, FormGroup, Col, Alert} from "react-bootstrap";
 import ErrorMessages from '../../../../commons/ErrorMessages';
 
-class CreateBookingModal extends React.Component {
+class BookingModal extends React.Component {
     constructor(props) {
         super(props);
         this.handleHourStartChange = this.handleHourStartChange.bind(this);
@@ -20,6 +20,7 @@ class CreateBookingModal extends React.Component {
         this.cancelBooking = this.cancelBooking.bind(this);
         this.validations = this.validations.bind(this);
         this.handleDeleteBooking = this.handleDeleteBooking.bind(this);
+        this.resetState = this.resetState.bind(this);
 
         this.state = {
             id: -1,
@@ -39,8 +40,6 @@ class CreateBookingModal extends React.Component {
         if (nextProps.isEditMode) {
             let startDate = new Date(nextProps.editBookingInformation.startTime);
             let endDate = new Date(nextProps.editBookingInformation.endTime);
-
-            console.log(nextProps)
 
             this.setState({
                 id: nextProps.editBookingInformation.id,
@@ -95,6 +94,7 @@ class CreateBookingModal extends React.Component {
         endTimeOfNewBooking.setMinutes(this.state.endMinutes);
 
         if (errorMessages.length === 0) {
+            this.resetState();
             this.props.onCreateBooking(startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
                 this.state.numberOfWashingMachineUses, this.state.numberOfTumbleDryUses);
         }
@@ -116,6 +116,7 @@ class CreateBookingModal extends React.Component {
         endTimeOfNewBooking.setMinutes(this.state.endMinutes);
 
         if (errorMessages.length === 0) {
+            this.resetState();
             this.props.onEditBooking(this.state.id, startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
                 this.state.numberOfWashingMachineUses, this.state.numberOfTumbleDryUses);
         }
@@ -124,6 +125,7 @@ class CreateBookingModal extends React.Component {
     handleDeleteBooking() {
         let confirmation = window.confirm(strings.createBookingModal.confirmDeletion);
         if (confirmation) {
+            this.resetState();
             this.props.onDeleteBooking(this.state.id);
         }
     }
@@ -173,8 +175,7 @@ class CreateBookingModal extends React.Component {
         return errorMessages;
     }
 
-    cancelBooking() {
-        // Reset values when closing modal
+    resetState() {
         this.setState({
             id: -1,
             startHour: 8,
@@ -186,6 +187,10 @@ class CreateBookingModal extends React.Component {
             errorMessages: [],
             isEditMode: false
         });
+    }
+
+    cancelBooking() {
+        this.resetState();
 
         this.props.onCancelBookingCreation();
         this.props.onCancelEditBookingCreation();
@@ -307,6 +312,5 @@ class MinuteTimePicker extends React.Component {
     }
 }
 
-// TODO evt. giv overblik over dagen
 
-export default CreateBookingModal;
+export default BookingModal;

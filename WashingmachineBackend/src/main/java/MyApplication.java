@@ -1,4 +1,5 @@
 import auth.MyAuthenticator;
+import com.codahale.metrics.MetricRegistry;
 import core.User;
 import db.BookingDAO;
 import db.UserDAO;
@@ -6,6 +7,7 @@ import db.UserTokenDAO;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
+import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
@@ -33,15 +35,19 @@ public class MyApplication extends Application<MyConfiguration> {
         bookingDAO.createBookingTable();
         userTokenDAO.createUserTokenTable();
 
+        CachingAuthenticator<String, User> cachingAuthenticator = new CachingAuthenticator<String, User>(
+            new MetricRegistry(), new MyAuthenticator(userTokenDAO, userDAO, config.getTokenLifetime()), config.getAuthenticationCachePolicy()
+        );
+
         environment.jersey().register(new AuthDynamicFeature(
                 new OAuthCredentialAuthFilter.Builder<User>()
-                .setAuthenticator(new MyAuthenticator(userTokenDAO, userDAO))
+                .setAuthenticator(cachingAuthenticator)
                 .setPrefix("token")
                 .buildAuthFilter()));
 
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(new BookingResource(bookingDAO));
         environment.jersey().register(new UserResource(userDAO, userTokenDAO));
-        environment.jersey().register(new AuthResource(userTokenDAO, userDAO));
+        environment.jersey().register(new AuthResource(userTokenDAO, userDAO, config.getTokenLifetime()));
     }
 }

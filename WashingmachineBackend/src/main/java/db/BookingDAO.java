@@ -25,6 +25,21 @@ public interface BookingDAO {
             ");")
     void createBookingTable();
 
+    @SqlUpdate("CREATE TABLE IF NOT EXISTS bookings_rev (" +
+            "booking_id INTEGER," +
+            "start_time TIMESTAMP NOT NULL," +
+            "end_time TIMESTAMP NOT NULL," +
+            "owner VARCHAR(100) NOT NULL references users(username)," +
+            "number_of_washing_machine_uses SMALLINT NOT NULL," +
+            "number_of_tumble_dry_uses SMALLINT NOT NULL," +
+            "update_type VARCHAR(10)" +
+            ");")
+    void createBookingRevTable();
+
+    @SqlUpdate("CREATE TRIGGER booking_rev_trigger" +
+            "AFTER INSERT OR UPDATE OR DELETE ON bookings")
+    void createBookingRevTrigger();
+
     @SqlUpdate("INSERT INTO bookings (start_time, end_time, owner, number_of_washing_machine_uses, number_of_tumble_dry_uses) " +
             "VALUES (:bookingDTO.startTime, :bookingDTO.endTime, :bookingDTO.owner, :bookingDTO.numberOfWashingMachineUses, :bookingDTO.numberOfTumbleDryUses)")
     void insertBooking(@BindBean("bookingDTO") BookingDTO bookingDTO);
@@ -51,9 +66,9 @@ public interface BookingDAO {
             "number_of_tumble_dry_uses = :numberOfTumbleDryUses " +
             "WHERE id = :id AND owner = :username")
     int updateBooking(@Bind("username") String username, @Bind("id") int id,
-                       @Bind("startTime") Date startTime, @Bind("endTime") Date endTime,
-                       @Bind("numberOfWashingMachineUses") int numberOfWashingMachineUses,
-                       @Bind("numberOfTumbleDryUses") int numberOfTumbleDryUses);
+                      @Bind("startTime") Date startTime, @Bind("endTime") Date endTime,
+                      @Bind("numberOfWashingMachineUses") int numberOfWashingMachineUses,
+                      @Bind("numberOfTumbleDryUses") int numberOfTumbleDryUses);
 
     @SqlUpdate("TRUNCATE TABLE bookings")
     void truncateTable();

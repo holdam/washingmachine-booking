@@ -46,4 +46,7 @@ logging:
       threshold: ALL
       timeZone: UTC
       target: stdout
-      logFormat:
+
+authenticationCachePolicy: maximumSize=10000, expireAfterAccess=10m
+
+tokenLifetime: 7

@@ -10,6 +10,8 @@ import org.skife.jdbi.v2.sqlobject.SqlUpdate;
 import org.skife.jdbi.v2.sqlobject.customizers.Mapper;
 import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 
+import java.util.Date;
+
 @RegisterMapper(UserTokenMapper.class)
 public interface UserTokenDAO {
     @SqlUpdate("CREATE TABLE IF NOT EXISTS user_tokens (" +
@@ -41,4 +43,8 @@ public interface UserTokenDAO {
 
     @SqlUpdate("TRUNCATE TABLE user_tokens")
     void truncateTable();
+
+    // TODO test
+    @SqlUpdate("UPDATE user_tokens SET lifetime_ends = :time WHERE token = :token")
+    int setNewTimeForToken(@Bind("token") String token, @Bind("time") Date time);
 }

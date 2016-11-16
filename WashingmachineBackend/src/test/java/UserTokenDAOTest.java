@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 
+import java.util.Calendar;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
@@ -22,6 +23,7 @@ public class UserTokenDAOTest {
     private final String USER_1_PASSWORD = "password_that_should_have_been_hashed_and_salted";
     private final String USER_1_SALT = "salt";
     private final String USER_1_TOKEN = "token";
+    private final String USER_2_TOKEN = "token2";
 
     @Before
     public void setup() {
@@ -31,7 +33,8 @@ public class UserTokenDAOTest {
         userDAO.createRoleTable();
         userDAO.createUsersTable();
         userTokenDAO.createUserTokenTable();
-        userDAO.insertUser(USERNAME_1, USER_1_PASSWORD, "bogus", RoleHelper.ROLE_DEFAULT);
+        userDAO.insertUser(USERNAME_1, USER_1_PASSWORD, USER_1_SALT, RoleHelper.ROLE_DEFAULT);
+        userDAO.insertUser(USERNAME_2, USER_1_PASSWORD, USER_1_SALT, RoleHelper.ROLE_DEFAULT);
 
     }
 
@@ -80,8 +83,30 @@ public class UserTokenDAOTest {
         assertEquals(0, numberDeleted);
     }
 
+    @Test
+    public void setNewTimeForTokenShouldWork() {
+        insertUserTokenForUser1();
+        insertUserTokenForUser2();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, 10);
+        int numberUpdated = userTokenDAO.setNewTimeForToken(USER_1_TOKEN, calendar.getTime());
+        assertEquals(1, numberUpdated);
+        UserTokenDTO userTokenDTO = userTokenDAO.getUserTokenFromToken(USER_1_TOKEN);
+
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.setTime(userTokenDTO.getLifetimeEnds());
+
+        assertEquals(calendar.get(Calendar.DAY_OF_YEAR), calendar2.get(Calendar.DAY_OF_YEAR));
+        assertEquals(calendar.get(Calendar.MONTH), calendar2.get(Calendar.MONTH));
+        assertEquals(calendar.get(Calendar.YEAR), calendar2.get(Calendar.YEAR));
+    }
+
     private int insertUserTokenForUser1() {
         UserTokenDTO userTokenDTO = new UserTokenDTO(USERNAME_1, USER_1_TOKEN, new Date(), UserTokenDTO.Status.VALID);
+        return userTokenDAO.createUserToken(userTokenDTO);
+    }
+    private int insertUserTokenForUser2() {
+        UserTokenDTO userTokenDTO = new UserTokenDTO(USERNAME_2, USER_2_TOKEN, new Date(), UserTokenDTO.Status.VALID);
         return userTokenDAO.createUserToken(userTokenDTO);
     }
 }

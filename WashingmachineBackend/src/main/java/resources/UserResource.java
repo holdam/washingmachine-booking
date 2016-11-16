@@ -33,7 +33,7 @@ public class UserResource {
     @POST
     @Path("/create_user")
     public User createUser(@FormParam("username") @NotNull String username, @FormParam("password") @NotNull String password) throws AuthenticationException {
-        // TODO avoid spam and probably better password creation
+        // TODO avoid spam and probably better password creation (more restrict than just nonempty passwords)
 
         // Validations
         if (username.isEmpty() || password.isEmpty()) {

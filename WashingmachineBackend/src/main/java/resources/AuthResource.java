@@ -21,10 +21,12 @@ import java.util.UUID;
 public class AuthResource {
     private UserTokenDAO userTokenDAO;
     private UserDAO userDAO;
+    private int tokenLifetime;
 
-    public AuthResource(UserTokenDAO userTokenDAO, UserDAO userDAO) {
+    public AuthResource(UserTokenDAO userTokenDAO, UserDAO userDAO, int tokenLifetime) {
         this.userTokenDAO = userTokenDAO;
         this.userDAO = userDAO;
+        this.tokenLifetime = tokenLifetime;
     }
 
     @POST
@@ -45,7 +47,7 @@ public class AuthResource {
             // Create token for user
             String uuid = UUID.randomUUID().toString();
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_YEAR, 14);
+            calendar.add(Calendar.DAY_OF_YEAR, tokenLifetime);
             UserTokenDTO userTokenDTOToInsert = new UserTokenDTO(username, uuid, calendar.getTime(), UserTokenDTO.Status.VALID);
             userTokenDAO.createUserToken(userTokenDTOToInsert);
             return userTokenDTOToInsert;
