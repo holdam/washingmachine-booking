@@ -16,7 +16,10 @@ class CreateBookingModal extends React.Component {
         this.handleNumberOfWashingsChange = this.handleNumberOfWashingsChange.bind(this);
         this.handleNumberOfTumbleDriesChange = this.handleNumberOfTumbleDriesChange.bind(this);
         this.handleCreateBooking = this.handleCreateBooking.bind(this);
-        this.cancelCancellation = this.cancelCancellation.bind(this);
+        this.handleEditBooking = this.handleEditBooking.bind(this);
+        this.cancelBooking = this.cancelBooking.bind(this);
+        this.validations = this.validations.bind(this);
+        this.handleDeleteBooking = this.handleDeleteBooking.bind(this);
 
         this.state = {
             id: -1,
@@ -34,17 +37,20 @@ class CreateBookingModal extends React.Component {
     componentWillReceiveProps(nextProps) {
         // Load values if passed
         if (nextProps.isEditMode) {
-            console.log(nextProps);
             let startDate = new Date(nextProps.editBookingInformation.startTime);
             let endDate = new Date(nextProps.editBookingInformation.endTime);
 
+            console.log(nextProps)
+
             this.setState({
+                id: nextProps.editBookingInformation.id,
                 startHour: startDate.getHours(),
                 startMinutes: startDate.getMinutes(),
                 endHours: endDate.getHours(),
                 endMinutes: endDate.getMinutes(),
                 numberOfWashingMachineUses: nextProps.editBookingInformation.numberOfWashingMachineUses,
-                numberOfTumbleDryUses: nextProps.editBookingInformation.numberOfTumbleDryUses
+                numberOfTumbleDryUses: nextProps.editBookingInformation.numberOfTumbleDryUses,
+                isEditMode: true
             });
         }
     }
@@ -74,6 +80,55 @@ class CreateBookingModal extends React.Component {
     }
 
     handleCreateBooking() {
+        let errorMessages = this.validations();
+
+        this.setState({
+            errorMessages
+        });
+
+        let startTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+        startTimeOfNewBooking.setHours(this.state.startHour);
+        startTimeOfNewBooking.setMinutes(this.state.startMinutes);
+
+        let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+        endTimeOfNewBooking.setHours(this.state.endHours);
+        endTimeOfNewBooking.setMinutes(this.state.endMinutes);
+
+        if (errorMessages.length === 0) {
+            this.props.onCreateBooking(startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
+                this.state.numberOfWashingMachineUses, this.state.numberOfTumbleDryUses);
+        }
+    }
+
+    handleEditBooking() {
+        let errorMessages = this.validations();
+
+        this.setState({
+            errorMessages
+        });
+
+        let startTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+        startTimeOfNewBooking.setHours(this.state.startHour);
+        startTimeOfNewBooking.setMinutes(this.state.startMinutes);
+
+        let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+        endTimeOfNewBooking.setHours(this.state.endHours);
+        endTimeOfNewBooking.setMinutes(this.state.endMinutes);
+
+        if (errorMessages.length === 0) {
+            this.props.onEditBooking(this.state.id, startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
+                this.state.numberOfWashingMachineUses, this.state.numberOfTumbleDryUses);
+        }
+    }
+
+    handleDeleteBooking() {
+        let confirmation = window.confirm(strings.createBookingModal.confirmDeletion);
+        if (confirmation) {
+            this.props.onDeleteBooking(this.state.id);
+        }
+    }
+
+    validations() {
         // Validations
         let errorMessages = [];
 
@@ -106,7 +161,7 @@ class CreateBookingModal extends React.Component {
         endTimeOfNewBooking.setMinutes(this.state.endMinutes);
 
         for (let booking of this.props.bookings) {
-            if (booking.startTime < endTimeOfNewBooking.getTime() && booking.endTime > startTimeOfNewBooking.getTime()) {
+            if (booking.startTime < endTimeOfNewBooking.getTime() && booking.endTime > startTimeOfNewBooking.getTime() && booking.id !== this.state.id) {
                 errorMessages.push(strings.createBookingModal.errorsMessages.bookingIsClashing);
             }
         }
@@ -115,17 +170,10 @@ class CreateBookingModal extends React.Component {
             errorMessages.push(strings.createBookingModal.errorsMessages.mustBeLoggedIn);
         }
 
-        this.setState({
-            errorMessages
-        });
-
-        if (errorMessages.length === 0) {
-            this.props.onCreateBooking(startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
-                this.state.numberOfWashingMachineUses, this.state.numberOfTumbleDryUses);
-        }
+        return errorMessages;
     }
 
-    cancelCancellation() {
+    cancelBooking() {
         // Reset values when closing modal
         this.setState({
             id: -1,
@@ -144,10 +192,16 @@ class CreateBookingModal extends React.Component {
     }
 
     render() {
+        let createOrEditButton = (this.props.isEditMode)
+            ? <EditButton handleClick={this.handleEditBooking} />
+            : <CreateButton handleClick={this.handleCreateBooking} />;
+
         return (
-            <Modal show={this.props.showModal} onHide={this.cancelCancellation}>
+            <Modal show={this.props.showModal} onHide={this.cancelBooking}>
                 <Modal.Header closeButton>
-                    <Modal.Title>{`${strings.createBookingModal.title} ${this.convertDateToString((this.props.bookingDate || new Date()))}`}</Modal.Title>
+                    <Modal.Title>
+                        {`${this.props.isEditMode ? strings.createBookingModal.titleEdit : strings.createBookingModal.titleCreate} ${this.convertDateToString((this.props.bookingDate || new Date()))}`}
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <ErrorMessages alertVisible={this.state.errorMessages.length > 0}>
@@ -160,8 +214,8 @@ class CreateBookingModal extends React.Component {
                             </Col>
                             <Col sm={7}>
                                 <div>
-                                    <HourTimePicker handleChange={this.handleHourStartChange} />
-                                    <MinuteTimePicker handleChange={this.handleMinuteStartChange} />
+                                    <HourTimePicker hour={this.state.startHour} handleChange={this.handleHourStartChange} />
+                                    <MinuteTimePicker minutes={this.state.startMinutes} handleChange={this.handleMinuteStartChange} />
                                 </div>
                             </Col>
                         </FormGroup>
@@ -171,8 +225,8 @@ class CreateBookingModal extends React.Component {
                             </Col>
                             <Col sm={7}>
                                 <div>
-                                    <HourTimePicker handleChange={this.handleHourEndChange} />
-                                    <MinuteTimePicker handleChange={this.handleMinuteEndChange} />
+                                    <HourTimePicker hour={this.state.endHours} handleChange={this.handleHourEndChange} />
+                                    <MinuteTimePicker minutes={this.state.endMinutes} handleChange={this.handleMinuteEndChange} />
                                 </div>
                             </Col>
                         </FormGroup>
@@ -181,22 +235,23 @@ class CreateBookingModal extends React.Component {
                                 {strings.createBookingModal.numberOfWashes}
                             </Col>
                             <Col sm={7}>
-                                <input onChange={this.handleNumberOfWashingsChange} className="numberOfWashingsPicker" defaultValue={0} type="number" min="0" />
+                                <input onChange={this.handleNumberOfWashingsChange} className="numberOfWashingsPicker" value={this.state.numberOfWashingMachineUses} type="number" min="0" />
                             </Col>
                         </FormGroup>
                         <FormGroup>
                             <Col componentClass={ControlLabel} sm={5}>
-                                {strings.createBookingModal.numberOfTumbleDryUses}
+                                {strings.createBookingModal.numberOfTumbleDries}
                             </Col>
                             <Col sm={7}>
-                                <input onChange={this.handleNumberOfTumbleDriesChange} className="numberOfTumbleDriesPicker" defaultValue={0} type="number" min="0" />
+                                <input onChange={this.handleNumberOfTumbleDriesChange} className="numberOfTumbleDryPicker" value={this.state.numberOfTumbleDryUses} type="number" min="0" />
                             </Col>
                         </FormGroup>
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.cancelCancellation}>{strings.createBookingModal.cancel}</Button>
-                    <Button onClick={this.handleCreateBooking} bsStyle="primary">{strings.createBookingModal.save}</Button>
+                    {this.props.isEditMode ? <Button className="deleteButton" bsStyle="danger" onClick={this.handleDeleteBooking}>{strings.createBookingModal.delete}</Button> : null}
+                    <Button onClick={this.cancelBooking}>{strings.createBookingModal.cancel}</Button>
+                    {createOrEditButton}
                 </Modal.Footer>
             </Modal>
         )
@@ -205,6 +260,18 @@ class CreateBookingModal extends React.Component {
     convertDateToString(date) {
         return `d. ${date.getDate()}. ${monthNames[date.getMonth()]}, ${date.getFullYear()}`
     }
+}
+
+function CreateButton(props) {
+    return (
+        <Button onClick={props.handleClick} bsStyle="primary">{strings.createBookingModal.save}</Button>
+    )
+}
+
+function EditButton(props) {
+    return (
+        <Button onClick={props.handleClick} bsStyle="primary">{strings.createBookingModal.confirmEdit}</Button>
+    )
 }
 
 class HourTimePicker extends React.Component {
@@ -217,7 +284,7 @@ class HourTimePicker extends React.Component {
         });
 
         return (
-            <select className="hourPicker" defaultValue={8} onChange={this.props.handleChange}>
+            <select className="hourPicker" value={this.props.hour} onChange={this.props.handleChange}>
                 {selectOptions}
             </select>
         )
@@ -233,7 +300,7 @@ class MinuteTimePicker extends React.Component {
             )
         });
         return (
-            <select className="minutePicker" defaultValue={0} onChange={this.props.handleChange}>
+            <select className="minutePicker" value={this.props.minutes} onChange={this.props.handleChange}>
                 {selectOptions}
             </select>
         )

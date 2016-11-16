@@ -16,6 +16,12 @@ function bookingFlow(state = {showBookingModal: false, id: -1, owner: '', startT
         case END_EDIT_BOOKING_FLOW:
             return Object.assign({}, state, {
                 showBookingModal: false,
+                id: -1,
+                owner: '',
+                startTime: -1,
+                endTime: -1,
+                numberOfWashingMachineUses: -1,
+                numberOfTumbleDryUses: -1,
                 date: undefined
             });
         default:

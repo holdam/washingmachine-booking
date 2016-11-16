@@ -19,6 +19,13 @@ export class Day extends React.Component {
         ({startOfTodayInMillis, endOfTodayInMillis} = getStartAndEndDayMillisFromDate(this.props.date));
         let bookingsAsNodes = this.props.bookings.map((booking) => {
             if (booking.startTime >= startOfTodayInMillis && booking.endTime <= endOfTodayInMillis) {
+                let startTime = new Date(booking.startTime);
+                let endTime = new Date(booking.endTime);
+                let startHour = (startTime.getHours() < 10) ? `0${startTime.getHours()}` : startTime.getHours();
+                let startMinutes = (startTime.getMinutes() < 10) ? `0${startTime.getMinutes()}` : startTime.getMinutes();
+                let endHour = (endTime.getHours() < 10) ? `0${endTime.getHours()}` : endTime.getHours();
+                let endMinutes = (endTime.getMinutes() < 10) ? `0${endTime.getMinutes()}` : endTime.getMinutes();
+
                 return (
                     <div onClick={(e) => {
                         e.stopPropagation(); this.props.onBookingClick(
@@ -31,7 +38,8 @@ export class Day extends React.Component {
                             this.props.date
                         )
                     }} key={booking.id} className="booking">
-                        {`${booking.id}, ${booking.owner}, ${booking.startTime}, ${booking.endTime}, `}
+                        <div>{booking.owner}</div>
+                        <div>{`${startHour}:${startMinutes} - ${endHour}:${endMinutes}`}</div>
                     </div>
                 )
             }

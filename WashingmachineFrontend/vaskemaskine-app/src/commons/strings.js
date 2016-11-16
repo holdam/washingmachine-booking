@@ -1,14 +1,18 @@
 var strings = {
     frontpageTitle: 'Vaskerumsbooking',
     createBookingModal: {
-        title: 'Opret reservation',
+        titleCreate: 'Opret reservation',
+        titleEdit: 'Rediger reservation',
         body: 'todo',
         save: 'Opret',
+        delete: 'Slet reservation',
+        confirmEdit: 'Gem redigering',
         cancel: 'Annuller',
         startTime: 'Starttidspunkt',
         endTime: 'Sluttidspunkt',
         numberOfWashes: 'Antal vaskninger (4 kr)',
         numberOfTumbleDries: 'Antal tørretumblinger (3 kr)',
+        confirmDeletion: 'Er du sikker på du vil slette reservationen?',
         errorsMessages: {
             mustEndBefore22: 'Reservationen skal slutte senest kl. 22.00',
             mustReserveAtLeast30Minutes: 'Du skal mindst reservere en halv time',
@@ -32,6 +36,11 @@ var strings = {
                 usernameCantBeEmpty: 'Dit brugernavn kan ikke være tomt',
                 usernameTaken: 'Dit brugernavn er allerede taget'
             }
+        }
+    },
+    misc: {
+        globalErrorMessages: {
+            error: 'Fejl!'
         }
     }
 };

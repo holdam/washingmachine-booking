@@ -3,7 +3,11 @@
     margin: 5px;
 }
 
-.numberOfWashingsPicker, .numberOfTumbleDriesPicker {
+.numberOfWashingsPicker, .numberOfTumbleDryPicker {
     padding: 3px;
     margin: 3px;
+}
+
+.deleteButton {
+    float: left;
 }

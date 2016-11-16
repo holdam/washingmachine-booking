@@ -30,7 +30,7 @@ public class BookingResource {
                                     @FormParam("endTime") @NotNull @Min(0) Long endTime,
                                     @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
                                     @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
-        validateBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses);
+        validateBookingCreation(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses);
         Date startDate = Util.convertMillisToDate(startTime);
         Date endDate = Util.convertMillisToDate(endTime);
         // -1 for now, we will get correct id after insertion
@@ -54,11 +54,11 @@ public class BookingResource {
 
     @PUT
     public BookingDTO editBooking(@Auth User user, @FormParam("id") int id,
-                            @FormParam("startTime") @NotNull @Min(0) Long startTime,
-                            @FormParam("endTime") @NotNull @Min(0) Long endTime,
-                            @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
-                            @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
-        validateBooking(startTime, endTime,numberOfWashingMachineUses, numberOfTumbleDryUses);
+                                  @FormParam("startTime") @NotNull @Min(0) Long startTime,
+                                  @FormParam("endTime") @NotNull @Min(0) Long endTime,
+                                  @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
+                                  @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
+        validateBookingEdit(startTime, endTime,numberOfWashingMachineUses, numberOfTumbleDryUses, id);
         Date startDate = Util.convertMillisToDate(startTime);
         Date endDate = Util.convertMillisToDate(endTime);
         bookingDAO.updateBooking(user.getName(), id, startDate, endDate,
@@ -66,7 +66,33 @@ public class BookingResource {
         return bookingDAO.getBookingFromId(user.getName(), id);
     }
 
-    private void validateBooking(long startTime, long endTime, int numberOfWashingMachineUses, int numberOfTumbleDryUses) throws ValidationErrorException {
+    // TODO testing
+    private void validateBookingEdit(long startTime, long endTime, int numberOfWashingMachineUses, int numberOfTumbleDryUses, int id) {
+        Date startDate = Util.convertMillisToDate(startTime);
+        Date endDate = Util.convertMillisToDate(endTime);
+        List<BookingDTO> overlappingBookingDTOs = bookingDAO.getBookingsOverlappingInterval(startDate, endDate);
+
+        if (overlappingBookingDTOs.size() > 0 && overlappingBookingDTOs.get(0).getId() != id) {
+            throw new ValidationErrorException();
+        }
+
+        commonValidationsForBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses);
+    }
+
+    // TODO testing
+    private void validateBookingCreation(long startTime, long endTime, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
+        Date startDate = Util.convertMillisToDate(startTime);
+        Date endDate = Util.convertMillisToDate(endTime);
+        List<BookingDTO> overlappingBookingDTOs = bookingDAO.getBookingsOverlappingInterval(startDate, endDate);
+
+        if (overlappingBookingDTOs.size() > 0 ) {
+            throw new ValidationErrorException();
+        }
+
+        commonValidationsForBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses);
+    }
+
+    private void commonValidationsForBooking(long startTime, long endTime, int numberOfWashingMachineUses, int numberOfTumbleDryUses) throws ValidationErrorException {
         Date startDate = Util.convertMillisToDate(startTime);
         Date endDate = Util.convertMillisToDate(endTime);
         Calendar startDateCalendar = Calendar.getInstance();
@@ -77,11 +103,9 @@ public class BookingResource {
         long timeDifference = endTime - startTime;
         boolean timeDifferenceGreaterThan30Minutes = (timeDifference / 1000 / 60) >= 30;
 
-        List<BookingDTO> overlappingBookingDTOs = bookingDAO.getBookingsOverlappingInterval(startDate, endDate);
         if (startDate.after(endDate) ||
                 (endDateCalendar.get(Calendar.HOUR_OF_DAY) < 8 || (endDateCalendar.get(Calendar.HOUR_OF_DAY) >= 22 && endDateCalendar.get(Calendar.MINUTE) > 0)) ||
                 (startDateCalendar.get(Calendar.HOUR_OF_DAY) < 8 || (startDateCalendar.get(Calendar.HOUR_OF_DAY) >= 22 && startDateCalendar.get(Calendar.MINUTE) > 0)) ||
-                overlappingBookingDTOs.size() > 0 ||
                 startDate.before(new Date()) ||
                 !timeDifferenceGreaterThan30Minutes ||
                 (numberOfTumbleDryUses <= 0 && numberOfWashingMachineUses <= 0)) {
