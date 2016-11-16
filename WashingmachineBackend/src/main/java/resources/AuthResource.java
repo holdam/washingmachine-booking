@@ -40,19 +40,35 @@ public class AuthResource {
 
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, userDAO.getSaltForUser(username));
         if (userDAO.authenticateUser(username, hashedAndSaltedPassword) > 0) {
-            // Delete any existing token
-            // TODO perhaps we should not delete token to make so you can use multiple devices
-            userTokenDAO.deleteUserTokenFromUsername(username);
+            // If token doesn't exist yet, we create one.
+            UserTokenDTO userTokenDTO = userTokenDAO.getUserTokenFromUsername(username);
+            if (userTokenDTO == null) {
+                return createTokenForUser(username);
+            }
 
-            // Create token for user
-            String uuid = UUID.randomUUID().toString();
+
+            // Create new token for user if old one has about one day left on it
             Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.DAY_OF_YEAR, tokenLifetime);
-            UserTokenDTO userTokenDTOToInsert = new UserTokenDTO(username, uuid, calendar.getTime(), UserTokenDTO.Status.VALID);
-            userTokenDAO.createUserToken(userTokenDTOToInsert);
-            return userTokenDTOToInsert;
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+            if (calendar.getTime().after(userTokenDTO.getLifetimeEnds())) {
+                userTokenDAO.deleteUserTokenFromUsername(username);
+                return createTokenForUser(username);
+            } else {
+                // We return the current token
+                return userTokenDAO.getUserTokenFromUsername(username);
+            }
+
         }
 
         throw new AuthenticationException("User not authenticated");
+    }
+
+    private UserTokenDTO createTokenForUser(String username) {
+        String uuid = UUID.randomUUID().toString();
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DAY_OF_YEAR, tokenLifetime);
+        UserTokenDTO userTokenDTOToInsert = new UserTokenDTO(username, uuid, calendar.getTime(), UserTokenDTO.Status.VALID);
+        userTokenDAO.createUserToken(userTokenDTOToInsert);
+        return userTokenDTOToInsert;
     }
 }
