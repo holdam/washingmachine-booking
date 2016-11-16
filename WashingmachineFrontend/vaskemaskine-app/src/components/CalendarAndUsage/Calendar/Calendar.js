@@ -1,7 +1,7 @@
 import './Calendar.css';
 import React from 'react';
 import {monthNamesShort, weekdayNames} from '../../../commons/util';
-import CreateBookingModal from './CreateBookingModal/CreateBookingModal';
+import CreateBookingModal from './CreateBookingModal/BookingModal';
 import DayContainer from '../../../containers/DayContainer';
 
 class Calendar extends React.Component {

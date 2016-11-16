@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
-import {endBookingFlow} from '../state/actions/bookingFlow';
+import {endCreateBookingFlow} from '../state/actions/createBookingFlow';
 import {createBooking, fetchBookings, editBooking, deleteBooking} from '../state/actions/bookings';
 import {endEditBookingFlow} from '../state/actions/editBookingFlow';
 
@@ -29,7 +29,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(createBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses));
         },
         onCancelBookingCreation: () => {
-            dispatch(endBookingFlow());
+            dispatch(endCreateBookingFlow());
         },
         fetchBookings: (startTime, endTime) => {
             dispatch(fetchBookings(startTime, endTime))

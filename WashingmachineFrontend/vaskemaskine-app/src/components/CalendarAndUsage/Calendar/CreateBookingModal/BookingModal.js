@@ -2,7 +2,7 @@ import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
 import strings from '../../../../commons/strings';
 import {monthNames} from '../../../../commons/util';
-import './CreateBookingModal.css';
+import './BookingModal.css';
 import {ControlLabel, Form, FormGroup, Col, Alert} from "react-bootstrap";
 import ErrorMessages from '../../../../commons/ErrorMessages';
 

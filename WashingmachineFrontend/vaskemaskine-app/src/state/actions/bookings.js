@@ -1,6 +1,6 @@
 import fetch from 'isomorphic-fetch';
 import urls from '../../commons/urls';
-import {endBookingFlow} from './bookingFlow';
+import {endCreateBookingFlow} from './createBookingFlow';
 import {endEditBookingFlow} from './editBookingFlow';
 
 export const INSERT_BOOKING = 'INSERT_BOOKING';
@@ -49,7 +49,7 @@ export function createBooking(startTime, endTime, numberOfWashingMachineUses, nu
         }).then(function (response) {
             return response.json();
         }).then(function (data) {
-            dispatch(endBookingFlow());
+            dispatch(endCreateBookingFlow());
             dispatch(insertBooking(data.id, data.startTime, data.endTime, data.owner, data.numberOfWashingMachineUses, data.numberOfTumbleDryUses));
         });
     }

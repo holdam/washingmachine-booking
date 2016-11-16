@@ -31,6 +31,7 @@ export default App;
 
 
 // TODO rename createmodal + flow
+// TODO man skal ikke se det som at man kan oprette event når ikke logget ind
 // TODO rev tabel til bookings
 // TODO store (redux) til prod og dev
 // TODO logging af backend i log files

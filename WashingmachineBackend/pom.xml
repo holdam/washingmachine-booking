@@ -8,7 +8,7 @@
     <artifactId>vaskemaskine</artifactId>
     <version>1.0-SNAPSHOT</version>
     <properties>
-        <dropwizard.version>1.0.1</dropwizard.version>
+        <dropwizard.version>1.0.4</dropwizard.version>
     </properties>
 
     <dependencies>

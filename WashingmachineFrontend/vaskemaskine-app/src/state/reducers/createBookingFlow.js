@@ -1,13 +1,13 @@
-import {START_BOOKING_FLOW, END_BOOKING_FLOW} from '../actions/bookingFlow';
+import {START_CREATE_BOOKING_FLOW, END_CREATE_BOOKING_FLOW} from '../actions/createBookingFlow';
 
-function bookingFlow(state = {showBookingModal: false, date: undefined}, action) {
+function createBookingFlow(state = {showBookingModal: false, date: undefined}, action) {
     switch (action.type) {
-        case START_BOOKING_FLOW:
+        case START_CREATE_BOOKING_FLOW:
             return Object.assign({}, state, {
                 showBookingModal: true,
                 date: action.date
             });
-        case END_BOOKING_FLOW:
+        case END_CREATE_BOOKING_FLOW:
             return Object.assign({}, state, {
                 showBookingModal: false,
                 date: undefined
@@ -17,4 +17,4 @@ function bookingFlow(state = {showBookingModal: false, date: undefined}, action)
     }
 }
 
-export default bookingFlow;
+export default createBookingFlow;
