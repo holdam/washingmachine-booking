@@ -48,14 +48,22 @@ public interface BookingDAO {
     // TODO testing
     /**
      *
-     * @param startTime starting time when to retrieve bookings from
-     * @param endTime ending time when to retrieve bookings from
+     * @param startTime starting time of when to retrieve bookings from
+     * @param endTime ending time of when to retrieve bookings from
      * @param username the username provided will provide detailed information about the booking,
      *                 for other bookings only the start and end time and the owner of it will be provided.
      * @return bookings in interval, detailed bookings for the username provided
      */
-    @SqlQuery("SELECT * FROM bookings WHERE start_time >= :startTime AND :endTime >= end_time")
-    List<BookingDTO> getBookingsInInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime, String username);
+    @SqlQuery("SELECT id, start_time, end_time, owner, " +
+            "CASE number_of_washing_machine_uses WHEN 0 THEN 0 ELSE 0 END AS number_of_washing_machine_uses, " +
+            "CASE number_of_tumble_dry_uses WHEN 0 THEN 0 ELSE 0 END AS number_of_tumble_dry_uses " +
+            "FROM bookings " +
+            "WHERE start_time >= :startTime " +
+            "AND :endTime >= end_time " +
+            "AND owner != :username " +
+            "UNION " +
+            "SELECT * FROM bookings WHERE start_time >= :startTime AND :endTime >= end_time AND owner = :username")
+    List<BookingDTO> getBookingsInInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime, @Bind("username") String username);
 
     @SqlQuery("SELECT * FROM bookings WHERE start_time < :endTime AND end_time > :startTime")
     List<BookingDTO> getBookingsOverlappingInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);

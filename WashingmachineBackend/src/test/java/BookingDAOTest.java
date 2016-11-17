@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -168,5 +169,41 @@ public class BookingDAOTest {
         assertEquals(null, bookingDTOToTest);
         bookingDTOToTest = bookingDAO.getBookingFromId(USERNAME_1, bookingDTO.getId());
         assertEquals(bookingDTOToTest.getOwner(), USERNAME_1);
+    }
+
+    @Test
+    public void getBookingsInIntervalShouldOnlyReturnSensitiveDataOfOwnReservations() {
+        Calendar calendar = Calendar.getInstance();
+        BookingDTO ownBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 123, 321);
+        BookingDTO someoneElsesBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_2, 1337, 7331);
+
+        bookingDAO.insertBooking(ownBooking);
+        bookingDAO.insertBooking(someoneElsesBooking);
+
+        calendar.add(Calendar.HOUR_OF_DAY, -1);
+        Date startTimeForSearch = calendar.getTime();
+        calendar.add(Calendar.HOUR_OF_DAY, 2);
+        Date endTimeForSearch = calendar.getTime();
+
+        List<BookingDTO> bookings = bookingDAO.getBookingsInInterval(startTimeForSearch, endTimeForSearch, USERNAME_1);
+
+        // Get own bookings and the someone elses booking out
+        BookingDTO ownBookingRetrieved = null;
+        BookingDTO someoneElsesBookingRetrieved = null;
+        for (BookingDTO booking : bookings) {
+            if (booking.getOwner().equals(USERNAME_1)) {
+                ownBookingRetrieved = booking;
+            } else {
+                someoneElsesBookingRetrieved = booking;
+            }
+        }
+
+        assertEquals(USERNAME_1, ownBookingRetrieved.getOwner());
+        assertEquals(123, ownBookingRetrieved.getNumberOfWashingMachineUses());
+        assertEquals(321, ownBookingRetrieved.getNumberOfTumbleDryUses());
+
+        assertEquals(USERNAME_2, someoneElsesBookingRetrieved.getOwner());
+        assertEquals(0, someoneElsesBookingRetrieved.getNumberOfWashingMachineUses());
+        assertEquals(0, someoneElsesBookingRetrieved.getNumberOfTumbleDryUses());
     }
 }
