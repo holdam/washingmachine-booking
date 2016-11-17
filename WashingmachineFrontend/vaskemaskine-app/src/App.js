@@ -30,8 +30,8 @@ export default App;
 // TODO apparently kan man sætte token i cookien og lave Htttponly
 
 // TODO giv overblik over dagen når man booker eller redigerer
+// TODO lad folk redigere bagud i tiden
 
-// TODO rev tabel til bookings
 // TODO evt. farv lørdag/søndag i en anden farve
 // TODO reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
 // TODO https
@@ -41,3 +41,4 @@ export default App;
 // TODO admin/kasser panel/forbrug
 // TODO vis forbrug evt. for forskellige længder af perioder?
 // TODO s i backend
+// TODO rev tabel til bookings

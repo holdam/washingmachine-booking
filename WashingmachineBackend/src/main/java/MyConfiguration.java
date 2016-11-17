@@ -6,13 +6,14 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public class MyConfiguration extends Configuration {
     @NotEmpty
     private String authenticationCachePolicy;
 
     @NotEmpty
-    private String targetOrigin;
+    private List<String> targetsOrigin;
 
     @NotNull
     private int tokenLifetime;
@@ -42,7 +43,7 @@ public class MyConfiguration extends Configuration {
     }
 
     @JsonProperty
-    public String getTargetOrigin() {
-        return targetOrigin;
+    public List getTargetsOrigin() {
+        return targetsOrigin;
     }
 }

@@ -13,6 +13,8 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.NewCookie;
+import javax.ws.rs.core.Response;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -31,19 +33,21 @@ public class AuthResource {
 
     @POST
     @Path("/signin")
-    public UserTokenDTO signIn(@FormParam("username") @NotNull String username, @NotNull @FormParam("password") String password) throws AuthenticationException {
+    public Response signIn(@FormParam("username") @NotNull String username, @NotNull @FormParam("password") String password) throws AuthenticationException {
         User user = userDAO.getUser(username);
 
         if (user == null) {
             throw new AuthenticationException("User does not exist");
         }
+        // TODO http only cookies
 
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, userDAO.getSaltForUser(username));
         if (userDAO.authenticateUser(username, hashedAndSaltedPassword) > 0) {
             // If token doesn't exist yet, we create one.
             UserTokenDTO userTokenDTO = userTokenDAO.getUserTokenFromUsername(username);
             if (userTokenDTO == null) {
-                return createTokenForUser(username);
+                userTokenDTO = createTokenForUser(username);
+                return Response.ok().cookie(new NewCookie("userAccessToken", userTokenDTO.getToken())).build();
             }
 
 
@@ -52,12 +56,16 @@ public class AuthResource {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             if (calendar.getTime().after(userTokenDTO.getLifetimeEnds())) {
                 userTokenDAO.deleteUserTokenFromUsername(username);
-                // TODO set token as cookie instead
-                return createTokenForUser(username);
+                userTokenDTO = createTokenForUser(username);
+                return Response.ok().cookie(new NewCookie("userAccessToken", userTokenDTO.getToken())).build();
             } else {
                 // We return the current token
-                // TODO set token as cookie instead
-                return userTokenDAO.getUserTokenFromUsername(username);
+                return Response.ok()
+                        .cookie(
+                                new NewCookie(
+                                        "userAccessToken", userTokenDTO.getToken(), "/", "127.0.0.1",
+                                        "what is this", 3600, false)
+                        ).build();
             }
 
         }

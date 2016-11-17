@@ -48,8 +48,9 @@ public class MyApplication extends Application<MyConfiguration> {
                 .buildAuthFilter()));
 
         // Filters
-        environment.jersey().register(new CSRFFilter(config.getTargetOrigin()));
+        environment.jersey().register(new CSRFFilter(config.getTargetsOrigin()));
 
+        // Resources
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(new BookingResource(bookingDAO, userTokenDAO));
         environment.jersey().register(new UserResource(userDAO, userTokenDAO));

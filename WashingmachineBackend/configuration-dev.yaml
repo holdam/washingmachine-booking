@@ -51,4 +51,7 @@ authenticationCachePolicy: maximumSize=10000, expireAfterAccess=10m
 
 tokenLifetime: 7
 
-targetOrigin: localhost:3000/
+targetsOrigin:
+  - localhost:3000/
+  - 127.0.0.1:3000/
+  - own.domain.example.com:3000/

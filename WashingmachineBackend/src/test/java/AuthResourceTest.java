@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import resources.AuthResource;
 import javax.naming.AuthenticationException;
+import javax.ws.rs.core.Response;
 import java.util.Calendar;
 
 import static org.mockito.Mockito.mock;
@@ -38,14 +39,15 @@ public class AuthResourceTest {
         authResource.signIn(USERNAME, "bogus");
     }
 
+    // TODO
     @Test
     public void ifNoTokenAlreadyExistsForUserWeCreateOne() throws AuthenticationException {
         when(userDAO.getUser(USERNAME)).thenReturn(new User(USERNAME, 0));
         when(userDAO.getSaltForUser(USERNAME)).thenReturn(SALT);
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(PASSWORD, SALT);
         when(userDAO.authenticateUser(USERNAME, hashedAndSaltedPassword)).thenReturn(1);
-        UserTokenDTO userTokenDTO = authResource.signIn(USERNAME, PASSWORD);
-        assertEquals(USERNAME, userTokenDTO.getUsername());
+        Response signedInUserToken = authResource.signIn(USERNAME, PASSWORD);
+        assertNotNull(signedInUserToken.getCookies().get("userAccessToken").getValue());
     }
 
     @Test(expected = AuthenticationException.class)
@@ -65,8 +67,8 @@ public class AuthResourceTest {
 
         when(userDAO.getUser(USERNAME)).thenReturn(new User(USERNAME, RoleHelper.ROLE_DEFAULT));
         when(userDAO.authenticateUser(Mockito.contains(USERNAME), Mockito.anyString())).thenReturn(1);
-        UserTokenDTO signedInUserToken = authResource.signIn(USERNAME, PASSWORD);
-        assertEquals(TOKEN, signedInUserToken.getToken());
+        Response signedInUserToken = authResource.signIn(USERNAME, PASSWORD);
+        assertEquals(TOKEN, signedInUserToken.getCookies().get("userAccessToken").getValue());
     }
 
     @Test
@@ -77,7 +79,7 @@ public class AuthResourceTest {
 
         when(userDAO.getUser(USERNAME)).thenReturn(new User(USERNAME, RoleHelper.ROLE_DEFAULT));
         when(userDAO.authenticateUser(Mockito.contains(USERNAME), Mockito.anyString())).thenReturn(1);
-        UserTokenDTO signedInUserToken = authResource.signIn(USERNAME, PASSWORD);
-        assertNotEquals(TOKEN, signedInUserToken.getToken());
+        Response signedInUserToken = authResource.signIn(USERNAME, PASSWORD);
+        assertNotEquals(TOKEN, signedInUserToken.getCookies().get("userAccessToken").getValue());
     }
 }

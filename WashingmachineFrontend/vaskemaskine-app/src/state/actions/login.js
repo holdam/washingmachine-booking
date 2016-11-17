@@ -63,9 +63,6 @@ export function login(username, password) {
                 dispatch(loginFailed(response.statusText));
                 throw new Error(response.statusText);
             }
-            return response.json();
-        }).then(function (data) {
-            dispatch(loginSuccessful(data.token, username));
         });
     }
 }
