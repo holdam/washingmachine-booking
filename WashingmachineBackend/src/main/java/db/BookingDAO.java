@@ -44,6 +44,8 @@ public interface BookingDAO {
             "VALUES (:bookingDTO.startTime, :bookingDTO.endTime, :bookingDTO.owner, :bookingDTO.numberOfWashingMachineUses, :bookingDTO.numberOfTumbleDryUses)")
     void insertBooking(@BindBean("bookingDTO") BookingDTO bookingDTO);
 
+
+    // TODO testing
     /**
      *
      * @param startTime starting time when to retrieve bookings from
