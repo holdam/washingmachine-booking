@@ -78,7 +78,9 @@ export function fetchBookings(startTime, endTime) {
     return function (dispatch) {
         dispatch(requestBookings());
 
-        fetch(`${urls.api.booking}/interval?startTime=${startTime}&endTime=${endTime}`)
+        // If we're logged in, we need more detailed information
+        const userAccessToken = localStorage.getItem("userAccessToken");
+        fetch(`${urls.api.booking}/interval?startTime=${startTime}&endTime=${endTime}&access_token=${userAccessToken}`)
             .then(function (response) {
                 return response.json();
             }).then(function (data) {
