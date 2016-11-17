@@ -62,7 +62,7 @@ public class BookingResource {
                                                   @QueryParam("endTime") @NotNull @Min(0) Long endTime,
                                                   @QueryParam("access_token") Optional<String> userAccessToken) {
 
-        String username = (userAccessToken.isPresent()) ? userTokenDAO.getUsernameFromToken(userAccessToken.get()) : "";
+        String username = (userAccessToken.isPresent() && !userAccessToken.get().equals("null")) ? userTokenDAO.getUsernameFromToken(userAccessToken.get()) : "";
         return bookingDAO.getBookingsInInterval(Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),
                 Util.convertMillisToDateAndFloorToNearest5Minutes(endTime), username);
     }
