@@ -2,17 +2,13 @@ import React from 'react';
 import './App.css';
 import CalendarAndUsageContainer from './containers/CalendarAndUsageContainer';
 import {Router, Route, browserHistory, IndexRoute} from 'react-router'
-import {createStore, applyMiddleware} from 'redux';
-import thunkMiddleware from 'redux-thunk'
-import createLogger from 'redux-logger'
-import washingMachineApp from './state/reducers/reducers';
 import {Provider} from 'react-redux';
 import Header from './components/Header/Header'
+import getStore from './state/stores/store'
 
 class App extends React.Component {
     render() {
-        const loggerMiddleware = createLogger();
-        let store = createStore(washingMachineApp, applyMiddleware(thunkMiddleware, loggerMiddleware));
+        const store = getStore();
         return (
             <Provider store={store}>
                 <Router history={browserHistory}>
@@ -29,13 +25,12 @@ class App extends React.Component {
 
 export default App;
 
-// TODO store (redux) til prod og dev
-// TODO skjul data der ikke er ens egne (?)
-// TODO testing af backend hvor der er TODOS
-// TODO crsf
-// TODO limit så man ikke kan bruge andet end hvert 5. minut (eller bare reducer til nærmeste 5. minut på backenden)
 
-// TODO evt. giv overblik over dagen når man booker eller redigerer
+// TODO skjul data der ikke er ens egne (?)
+// TODO store (redux) til prod og dev
+// TODO crsf
+
+// TODO giv overblik over dagen når man booker eller redigerer
 
 
 // TODO rev tabel til bookings
@@ -47,3 +42,4 @@ export default App;
 // TODO might not want to let people delete in all cases....
 // TODO admin/kasser panel/forbrug
 // TODO vis forbrug evt. for forskellige længder af perioder?
+// TODO s i backend

@@ -11,7 +11,7 @@ public class MyConfiguration extends Configuration {
     @NotEmpty
     private String authenticationCachePolicy;
 
-    @NotEmpty
+    @NotNull
     private int tokenLifetime;
 
     @Valid

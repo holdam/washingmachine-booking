@@ -22,9 +22,15 @@ public class Util {
         return null;
     }
 
-    public static Date convertMillisToDate(long millis) {
+    public static Date convertMillisToDateAndFloorToNearest5Minutes(long millis) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(millis);
+
+        // Convert down to nearest 5 minutes
+        int minutesToReduceWith = calendar.get(Calendar.MINUTE) % 5;
+        calendar.add(Calendar.MINUTE, -minutesToReduceWith);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         return calendar.getTime();
     }
 }
