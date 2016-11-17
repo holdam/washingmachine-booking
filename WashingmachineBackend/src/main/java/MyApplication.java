@@ -46,7 +46,7 @@ public class MyApplication extends Application<MyConfiguration> {
                 .buildAuthFilter()));
 
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
-        environment.jersey().register(new BookingResource(bookingDAO));
+        environment.jersey().register(new BookingResource(bookingDAO, userTokenDAO));
         environment.jersey().register(new UserResource(userDAO, userTokenDAO));
         environment.jersey().register(new AuthResource(userTokenDAO, userDAO, config.getTokenLifetime()));
     }

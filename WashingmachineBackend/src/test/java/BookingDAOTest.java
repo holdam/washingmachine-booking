@@ -52,6 +52,9 @@ public class BookingDAOTest {
         // Create two bookings with different start end points
         Date startDate1, endDate1, startDate2, endDate2, searchDateStart, searchDateEnd;
         Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         startDate1 = calendar.getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 11);
@@ -69,7 +72,7 @@ public class BookingDAOTest {
         calendar.set(Calendar.HOUR_OF_DAY, 14);
         searchDateEnd = calendar.getTime();
 
-        List<BookingDTO> bookings = bookingDAO.getBookingsInInterval(searchDateStart, searchDateEnd);
+        List<BookingDTO> bookings = bookingDAO.getBookingsInInterval(searchDateStart, searchDateEnd, "");
         assertEquals(2, bookings.size());
         assertEquals(endDate1, bookings.get(0).getEndTime());
         assertEquals(USERNAME_1, bookings.get(0).getOwner());

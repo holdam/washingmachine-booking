@@ -27,11 +27,9 @@ export default App;
 
 
 // TODO skjul data der ikke er ens egne (?)
-// TODO store (redux) til prod og dev
 // TODO crsf
 
 // TODO giv overblik over dagen når man booker eller redigerer
-
 
 // TODO rev tabel til bookings
 // TODO evt. farv lørdag/søndag i en anden farve

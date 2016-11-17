@@ -2,6 +2,7 @@ import api.BookingDTO;
 import core.RoleHelper;
 import core.User;
 import db.BookingDAO;
+import db.UserTokenDAO;
 import exceptions.ValidationErrorException;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,13 +20,15 @@ import static org.mockito.Mockito.when;
 public class BookingResourceTest {
     private BookingDAO bookingDAO;
     private BookingResource bookingResource;
+    private UserTokenDAO userTokenDAO;
     private Calendar calendar;
     private final String USERNAME_1 = "user";
 
     @Before
     public void setup() {
         bookingDAO = mock(BookingDAO.class);
-        bookingResource = new BookingResource(bookingDAO);
+        userTokenDAO = mock(UserTokenDAO.class);
+        bookingResource = new BookingResource(bookingDAO, userTokenDAO);
         calendar = Calendar.getInstance();
     }
 
@@ -114,6 +117,8 @@ public class BookingResourceTest {
     public void shouldNotBeAbleToBookWithClashingBookings() {
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         Date startTime = calendar.getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         Date endTime = calendar.getTime();
@@ -129,6 +134,8 @@ public class BookingResourceTest {
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         Date startTime = calendar.getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         Date endTime = calendar.getTime();
@@ -172,6 +179,8 @@ public class BookingResourceTest {
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 0);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
         Date startTime = calendar.getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         Date endTime = calendar.getTime();

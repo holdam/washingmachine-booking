@@ -44,8 +44,16 @@ public interface BookingDAO {
             "VALUES (:bookingDTO.startTime, :bookingDTO.endTime, :bookingDTO.owner, :bookingDTO.numberOfWashingMachineUses, :bookingDTO.numberOfTumbleDryUses)")
     void insertBooking(@BindBean("bookingDTO") BookingDTO bookingDTO);
 
+    /**
+     *
+     * @param startTime starting time when to retrieve bookings from
+     * @param endTime ending time when to retrieve bookings from
+     * @param username the username provided will provide detailed information about the booking,
+     *                 for other bookings only the start and end time and the owner of it will be provided.
+     * @return bookings in interval, detailed bookings for the username provided
+     */
     @SqlQuery("SELECT * FROM bookings WHERE start_time >= :startTime AND :endTime >= end_time")
-    List<BookingDTO> getBookingsInInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
+    List<BookingDTO> getBookingsInInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime, String username);
 
     @SqlQuery("SELECT * FROM bookings WHERE start_time < :endTime AND end_time > :startTime")
     List<BookingDTO> getBookingsOverlappingInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);

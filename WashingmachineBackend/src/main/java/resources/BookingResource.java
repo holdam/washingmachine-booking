@@ -4,6 +4,7 @@ import api.BookingDTO;
 import core.User;
 import core.Util;
 import db.BookingDAO;
+import db.UserTokenDAO;
 import exceptions.ValidationErrorException;
 import io.dropwizard.auth.Auth;
 
@@ -14,14 +15,17 @@ import javax.ws.rs.core.MediaType;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Path("/booking")
 @Produces(MediaType.APPLICATION_JSON)
 public class BookingResource {
     private BookingDAO bookingDAO;
+    private UserTokenDAO userTokenDAO;
 
-    public BookingResource(BookingDAO bookingDAO) {
+    public BookingResource(BookingDAO bookingDAO, UserTokenDAO userTokenDAO) {
         this.bookingDAO = bookingDAO;
+        this.userTokenDAO = userTokenDAO;
     }
 
     @POST
@@ -55,8 +59,12 @@ public class BookingResource {
     @GET
     @Path("/interval")
     public List<BookingDTO> getBookingsInInterval(@QueryParam("startTime") @NotNull @Min(0) Long startTime,
-                                                  @QueryParam("endTime") @NotNull @Min(0) Long endTime) {
-        return bookingDAO.getBookingsInInterval(Util.convertMillisToDateAndFloorToNearest5Minutes(startTime), Util.convertMillisToDateAndFloorToNearest5Minutes(endTime));
+                                                  @QueryParam("endTime") @NotNull @Min(0) Long endTime,
+                                                  @QueryParam("access_token") Optional<String> userAccessToken) {
+
+        String username = (userAccessToken.isPresent()) ? userTokenDAO.getUsernameFromToken(userAccessToken.get()) : "";
+        return bookingDAO.getBookingsInInterval(Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),
+                Util.convertMillisToDateAndFloorToNearest5Minutes(endTime), username);
     }
 
     @DELETE
