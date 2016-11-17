@@ -52,9 +52,11 @@ public class AuthResource {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             if (calendar.getTime().after(userTokenDTO.getLifetimeEnds())) {
                 userTokenDAO.deleteUserTokenFromUsername(username);
+                // TODO set token as cookie instead
                 return createTokenForUser(username);
             } else {
                 // We return the current token
+                // TODO set token as cookie instead
                 return userTokenDAO.getUserTokenFromUsername(username);
             }
 
@@ -64,6 +66,8 @@ public class AuthResource {
     }
 
     private UserTokenDTO createTokenForUser(String username) {
+        // TODO may want to use more secure randomized string
+
         String uuid = UUID.randomUUID().toString();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, tokenLifetime);

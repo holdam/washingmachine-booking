@@ -26,8 +26,8 @@ class App extends React.Component {
 export default App;
 
 
-// TODO skjul data der ikke er ens egne (?)
-// TODO crsf
+
+// TODO apparently kan man sætte token i cookien og lave Htttponly
 
 // TODO giv overblik over dagen når man booker eller redigerer
 

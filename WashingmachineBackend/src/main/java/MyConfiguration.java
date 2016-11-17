@@ -11,6 +11,9 @@ public class MyConfiguration extends Configuration {
     @NotEmpty
     private String authenticationCachePolicy;
 
+    @NotEmpty
+    private String targetOrigin;
+
     @NotNull
     private int tokenLifetime;
 
@@ -36,5 +39,10 @@ public class MyConfiguration extends Configuration {
     @JsonProperty
     public int getTokenLifetime() {
         return tokenLifetime;
+    }
+
+    @JsonProperty
+    public String getTargetOrigin() {
+        return targetOrigin;
     }
 }

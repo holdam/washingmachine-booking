@@ -15,6 +15,7 @@ import org.skife.jdbi.v2.DBI;
 import resources.AuthResource;
 import resources.BookingResource;
 import resources.UserResource;
+import filters.CSRFFilter;
 
 public class MyApplication extends Application<MyConfiguration> {
 
@@ -35,15 +36,19 @@ public class MyApplication extends Application<MyConfiguration> {
         bookingDAO.createBookingTable();
         userTokenDAO.createUserTokenTable();
 
+
+        // Authorization with caching
         CachingAuthenticator<String, User> cachingAuthenticator = new CachingAuthenticator<String, User>(
             new MetricRegistry(), new MyAuthenticator(userTokenDAO, userDAO, config.getTokenLifetime()), config.getAuthenticationCachePolicy()
         );
-
         environment.jersey().register(new AuthDynamicFeature(
                 new OAuthCredentialAuthFilter.Builder<User>()
                 .setAuthenticator(cachingAuthenticator)
                 .setPrefix("token")
                 .buildAuthFilter()));
+
+        // Filters
+        environment.jersey().register(new CSRFFilter(config.getTargetOrigin()));
 
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(new BookingResource(bookingDAO, userTokenDAO));

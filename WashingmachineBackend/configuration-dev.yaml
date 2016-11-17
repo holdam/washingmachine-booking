@@ -50,3 +50,5 @@ logging:
 authenticationCachePolicy: maximumSize=10000, expireAfterAccess=10m
 
 tokenLifetime: 7
+
+targetOrigin: localhost:3000/
