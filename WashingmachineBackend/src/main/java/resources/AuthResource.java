@@ -47,9 +47,8 @@ public class AuthResource {
             UserTokenDTO userTokenDTO = userTokenDAO.getUserTokenFromUsername(username);
             if (userTokenDTO == null) {
                 userTokenDTO = createTokenForUser(username);
-                return Response.ok().cookie(new NewCookie("userAccessToken", userTokenDTO.getToken())).build();
+                return createResponseFromToken(userTokenDTO);
             }
-
 
             // Create new token for user if old one has about one day left on it
             Calendar calendar = Calendar.getInstance();
@@ -57,21 +56,27 @@ public class AuthResource {
             if (calendar.getTime().after(userTokenDTO.getLifetimeEnds())) {
                 userTokenDAO.deleteUserTokenFromUsername(username);
                 userTokenDTO = createTokenForUser(username);
-                return Response.ok().cookie(new NewCookie("userAccessToken", userTokenDTO.getToken())).build();
+                return createResponseFromToken(userTokenDTO);
             } else {
                 // We return the current token
-                return Response.ok()
-                        .cookie(
-                                new NewCookie(
-                                        "userAccessToken", userTokenDTO.getToken(), "/", "127.0.0.1",
-                                        "what is this", 3600, false)
-                        ).build();
+                return createResponseFromToken(userTokenDTO);
             }
-
         }
 
         throw new AuthenticationException("User not authenticated");
     }
+
+    private Response createResponseFromToken(UserTokenDTO userTokenDTO) {
+        long timeLeftToken = (userTokenDTO.getLifetimeEnds().getTime() - Calendar.getInstance().getTime().getTime()) / 1000;
+        // TODO safe token
+        return Response.ok()
+                .cookie(
+                        new NewCookie(
+                                "userAccessToken", userTokenDTO.getToken(), "/", "test.myexample.com:3000",
+                                "what", Math.toIntExact(timeLeftToken), false)
+                ).build();
+    }
+
 
     private UserTokenDTO createTokenForUser(String username) {
         // TODO may want to use more secure randomized string

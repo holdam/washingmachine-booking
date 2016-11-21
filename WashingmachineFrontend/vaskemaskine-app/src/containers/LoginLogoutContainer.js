@@ -2,10 +2,11 @@ import LoginLogout from "../components/Header/Login/LoginLogout";
 import {connect} from 'react-redux';
 import {login, logout, fetchUsernameForToken, createUser, loginFailed} from '../state/actions/login';
 import {startCreateUserFlow, endCreateUserFlow} from '../state/actions/createUserFlow';
+import {getCookieValueFromName} from '../commons/util';
 
 const mapStateToProps = (state) => {
     return {
-        userAccessToken: localStorage.getItem('userAccessToken'),
+        userAccessToken: getCookieValueFromName('userAccessToken'),
         username: state.login.username,
         showCreateUserModal: state.createUserFlow.showCreateUserModal,
         hasLoginFailed: state.login.hasLoginFailed

@@ -54,4 +54,5 @@ tokenLifetime: 7
 targetsOrigin:
   - localhost:3000/
   - 127.0.0.1:3000/
-  - own.domain.example.com:3000/
+  - myexample.com:3000/
+  - localhost.com:3000/

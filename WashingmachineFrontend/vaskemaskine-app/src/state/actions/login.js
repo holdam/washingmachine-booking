@@ -27,6 +27,7 @@ export function logout() {
 
 export function fetchUsernameForToken(userAccessToken) {
     return function(dispatch) {
+        // TODO don't use user access tokens
         fetch(`${urls.api.user}/user_from_user_access_token?userAccessToken=${userAccessToken}`)
             .then(function (response) {
                 return response.json();
@@ -57,7 +58,7 @@ export function login(username, password) {
             body: `username=${username}&password=${password}`,
             headers: new Headers({
                 'Content-Type': 'application/x-www-form-urlencoded'
-            })
+            }),
         }).then(function (response) {
             if (response.status !== 200) {
                 dispatch(loginFailed(response.statusText));
