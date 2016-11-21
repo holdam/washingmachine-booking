@@ -12,6 +12,7 @@ import static org.mockito.Mockito.when;
 
 
 import javax.naming.AuthenticationException;
+import javax.ws.rs.core.Cookie;
 
 public class UserResourceTest {
     UserResource userResource;
@@ -54,7 +55,7 @@ public class UserResourceTest {
     public void userFromUserAccessTokenShouldWork() {
         when(userTokenDAO.getUsernameFromToken("token")).thenReturn("user");
         when(userDAO.getUser("user")).thenReturn(new User("user", RoleHelper.ROLE_DEFAULT));
-        User user = userResource.userFromUserAccessToken(null);
+        User user = userResource.userFromUserAccessToken(new Cookie("token", "token"));
         assertEquals("user", user.getName());
         assertEquals(RoleHelper.ROLE_DEFAULT, user.getRole());
     }

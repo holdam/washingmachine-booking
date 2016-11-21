@@ -13,6 +13,6 @@ export function getCookieValueFromName(name) {
     let cookie = cookies.filter((cookie) => {
         return cookie.indexOf(name) !== -1;
     });
-    if (cookie == null) return null;
+    if (cookie.length === 0) return null;
     return cookie[0].substring(name.length + 1, cookie[0].length)
 }

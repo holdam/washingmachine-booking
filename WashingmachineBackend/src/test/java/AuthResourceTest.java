@@ -39,7 +39,6 @@ public class AuthResourceTest {
         authResource.signIn(USERNAME, "bogus");
     }
 
-    // TODO
     @Test
     public void ifNoTokenAlreadyExistsForUserWeCreateOne() throws AuthenticationException {
         when(userDAO.getUser(USERNAME)).thenReturn(new User(USERNAME, 0));

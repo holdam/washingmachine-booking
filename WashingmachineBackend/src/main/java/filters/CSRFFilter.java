@@ -15,7 +15,6 @@ public class CSRFFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
-        // TODO may need to use "origin" as well - come back when HTTPS is implemented
         boolean targetExists = false;
         for (String targetOrigin : targetsOrigin) {
             String referer = containerRequestContext.getHeaders().getFirst("Referer");

@@ -2,6 +2,7 @@ import api.BookingDTO;
 import core.RoleHelper;
 import db.BookingDAO;
 import db.UserDAO;
+import org.hamcrest.Matchers;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +14,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 
 public class BookingDAOTest {
     private BookingDAO bookingDAO;
@@ -51,7 +53,7 @@ public class BookingDAOTest {
     @Test
     public void shouldBeAbleToFindBookingsInInterval() {
         // Create two bookings with different start end points
-        Date startDate1, endDate1, startDate2, endDate2, searchDateStart, searchDateEnd;
+        Date startDate1, endDate1, startDate2, endDate2, startDate3, endDate3, searchDateStart, searchDateEnd;
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.MINUTE, 0);
         calendar.set(Calendar.SECOND, 0);
@@ -64,9 +66,14 @@ public class BookingDAOTest {
         startDate2 = calendar.getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 13);
         endDate2 = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        startDate3 = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 16);
+        endDate3 = calendar.getTime();
 
         bookingDAO.insertBooking(new BookingDTO(-1, startDate1, endDate1, USERNAME_1, 0, 1));
         bookingDAO.insertBooking(new BookingDTO(-1, startDate2, endDate2, USERNAME_2, 0, 1));
+        bookingDAO.insertBooking(new BookingDTO(-1, startDate3, endDate3, USERNAME_1, 123, 321));
 
         calendar.set(Calendar.HOUR_OF_DAY, 9);
         searchDateStart = calendar.getTime();
@@ -75,8 +82,11 @@ public class BookingDAOTest {
 
         List<BookingDTO> bookings = bookingDAO.getBookingsInInterval(searchDateStart, searchDateEnd, "");
         assertEquals(2, bookings.size());
-        assertEquals(endDate1, bookings.get(0).getEndTime());
-        assertEquals(USERNAME_1, bookings.get(0).getOwner());
+
+        for (BookingDTO booking : bookings) {
+            assertThat(booking.getStartTime(), Matchers.either(Matchers.is(startDate1)).or(Matchers.is(startDate2)));
+            assertThat(booking.getEndTime(), Matchers.either(Matchers.is(endDate1)).or(Matchers.is(endDate2)));
+        }
     }
 
     @Test

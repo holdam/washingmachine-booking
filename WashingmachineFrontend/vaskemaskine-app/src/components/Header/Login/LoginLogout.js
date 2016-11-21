@@ -6,15 +6,12 @@ import './LoginLogout.css'
 class LoginLogout extends React.Component {
     constructor(props) {
         super(props);
-        // Load username if user is logged in
-        if (!!this.props.userAccessToken) {
-            this.props.setup(this.props.userAccessToken);
-        }
+        this.props.setup();
     }
 
     render() {
         let panel = null;
-        if (!!this.props.userAccessToken) {
+        if (!!this.props.isLoggedIn) {
             panel = <Logout
                 onLogout={this.props.onLogout}
                 username={this.props.username}
