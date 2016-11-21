@@ -1,3 +1,4 @@
+import auth.CookieCredentialAuthFilter;
 import auth.MyAuthenticator;
 import com.codahale.metrics.MetricRegistry;
 import core.User;
@@ -38,22 +39,23 @@ public class MyApplication extends Application<MyConfiguration> {
 
 
         // Authorization with caching
-        CachingAuthenticator<String, User> cachingAuthenticator = new CachingAuthenticator<String, User>(
-            new MetricRegistry(), new MyAuthenticator(userTokenDAO, userDAO, config.getTokenLifetime()), config.getAuthenticationCachePolicy()
+        CachingAuthenticator<String, User> cachingAuthenticator = new CachingAuthenticator<>(
+                new MetricRegistry(),
+                new MyAuthenticator(userTokenDAO, userDAO, config.getTokenLifetime()),
+                config.getAuthenticationCachePolicy()
         );
         environment.jersey().register(new AuthDynamicFeature(
-                new OAuthCredentialAuthFilter.Builder<User>()
-                .setAuthenticator(cachingAuthenticator)
-                .setPrefix("token")
-                .buildAuthFilter()));
+                new CookieCredentialAuthFilter.Builder<User>()
+                        .setAuthenticator(cachingAuthenticator)
+                        .buildAuthFilter()));
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
 
         // Filters
         environment.jersey().register(new CSRFFilter(config.getTargetsOrigin()));
 
         // Resources
-        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
         environment.jersey().register(new BookingResource(bookingDAO, userTokenDAO));
         environment.jersey().register(new UserResource(userDAO, userTokenDAO));
-        environment.jersey().register(new AuthResource(userTokenDAO, userDAO, config.getTokenLifetime()));
+        environment.jersey().register(new AuthResource(userTokenDAO, userDAO, config.getTokenLifetime(), config.getDomain()));
     }
 }

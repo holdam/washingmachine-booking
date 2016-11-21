@@ -11,6 +11,7 @@ import io.dropwizard.auth.Auth;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import java.util.Calendar;
 import java.util.Date;
@@ -60,9 +61,9 @@ public class BookingResource {
     @Path("/interval")
     public List<BookingDTO> getBookingsInInterval(@QueryParam("startTime") @NotNull @Min(0) Long startTime,
                                                   @QueryParam("endTime") @NotNull @Min(0) Long endTime,
-                                                  @QueryParam("access_token") Optional<String> userAccessToken) {
+                                                  @CookieParam("userAccessToken") Cookie userAccessToken) {
 
-        String username = (userAccessToken.isPresent() && !userAccessToken.get().equals("null")) ? userTokenDAO.getUsernameFromToken(userAccessToken.get()) : "";
+        String username = (userAccessToken != null) ? userTokenDAO.getUsernameFromToken(userAccessToken.getValue()) : "";
         return bookingDAO.getBookingsInInterval(Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),
                 Util.convertMillisToDateAndFloorToNearest5Minutes(endTime), username);
     }

@@ -14,6 +14,7 @@ import javax.naming.AuthenticationException;
 import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.security.MessageDigest;
@@ -60,8 +61,8 @@ public class UserResource {
 
     @GET
     @Path("/user_from_user_access_token")
-    public User userFromUserAccessToken(@QueryParam("userAccessToken") String userAccessToken) {
-        String username = userTokenDAO.getUsernameFromToken(userAccessToken);
+    public User userFromUserAccessToken(@CookieParam("userAccessToken") Cookie userAccessToken) {
+        String username = userTokenDAO.getUsernameFromToken(userAccessToken.getValue());
         return userDAO.getUser(username);
     }
 

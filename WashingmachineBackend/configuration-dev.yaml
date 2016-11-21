@@ -56,3 +56,6 @@ targetsOrigin:
   - 127.0.0.1:3000/
   - myexample.com:3000/
   - localhost.com:3000/
+  - test.myexample.com:3000/
+
+domain: test.myexample.com

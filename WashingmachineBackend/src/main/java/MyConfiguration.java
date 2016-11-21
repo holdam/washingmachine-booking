@@ -18,6 +18,9 @@ public class MyConfiguration extends Configuration {
     @NotNull
     private int tokenLifetime;
 
+    @NotEmpty
+    private String domain;
+
     @Valid
     @NotNull
     private DataSourceFactory database = new DataSourceFactory();
@@ -45,5 +48,10 @@ public class MyConfiguration extends Configuration {
     @JsonProperty
     public List getTargetsOrigin() {
         return targetsOrigin;
+    }
+
+    @JsonProperty
+    public String getDomain() {
+        return domain;
     }
 }

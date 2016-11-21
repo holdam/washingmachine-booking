@@ -8,10 +8,8 @@ import db.UserTokenDAO;
 
 import javax.naming.AuthenticationException;
 import javax.validation.constraints.NotNull;
-import javax.ws.rs.FormParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
@@ -24,22 +22,23 @@ public class AuthResource {
     private UserTokenDAO userTokenDAO;
     private UserDAO userDAO;
     private int tokenLifetime;
+    private String domain;
 
-    public AuthResource(UserTokenDAO userTokenDAO, UserDAO userDAO, int tokenLifetime) {
+    public AuthResource(UserTokenDAO userTokenDAO, UserDAO userDAO, int tokenLifetime, String domain) {
         this.userTokenDAO = userTokenDAO;
         this.userDAO = userDAO;
         this.tokenLifetime = tokenLifetime;
+        this.domain = domain;
     }
 
     @POST
-    @Path("/signin")
+    @Path("/sign_in")
     public Response signIn(@FormParam("username") @NotNull String username, @NotNull @FormParam("password") String password) throws AuthenticationException {
         User user = userDAO.getUser(username);
 
         if (user == null) {
             throw new AuthenticationException("User does not exist");
         }
-        // TODO http only cookies
 
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, userDAO.getSaltForUser(username));
         if (userDAO.authenticateUser(username, hashedAndSaltedPassword) > 0) {
@@ -66,14 +65,22 @@ public class AuthResource {
         throw new AuthenticationException("User not authenticated");
     }
 
+    @POST
+    @Path("/sign_out")
+    public Response signOut(@CookieParam("userAccessToken") Cookie userAccessToken) {
+        return Response.ok()
+                .cookie(new NewCookie(userAccessToken, null, 0, false))
+                .build();
+    }
+
     private Response createResponseFromToken(UserTokenDTO userTokenDTO) {
         long timeLeftToken = (userTokenDTO.getLifetimeEnds().getTime() - Calendar.getInstance().getTime().getTime()) / 1000;
         // TODO safe token
         return Response.ok()
                 .cookie(
                         new NewCookie(
-                                "userAccessToken", userTokenDTO.getToken(), "/", "test.myexample.com:3000",
-                                "what", Math.toIntExact(timeLeftToken), false)
+                                "userAccessToken", userTokenDTO.getToken(), "/", domain,
+                                "", Math.toIntExact(timeLeftToken), false)
                 ).build();
     }
 

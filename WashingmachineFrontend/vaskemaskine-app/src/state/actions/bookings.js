@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch';
 import urls from '../../commons/urls';
 import {endCreateBookingFlow} from './createBookingFlow';
 import {endEditBookingFlow} from './editBookingFlow';
+import {getCookieValueFromName} from '../../commons/util';
 
 export const INSERT_BOOKING = 'INSERT_BOOKING';
 export function insertBooking(id, startTime, endTime, owner, numberOfWashingMachineUses, numberOfTumbleDryUses) {
@@ -39,13 +40,13 @@ function receiveBookings(bookings) {
 
 export function createBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses) {
     return function (dispatch) {
-        const userAccessToken = localStorage.getItem("userAccessToken");
-        fetch(`${urls.api.booking}?access_token=${userAccessToken}`, {
+        fetch(urls.api.booking, {
             method: 'POST',
             body: `startTime=${startTime}&endTime=${endTime}&numberOfWashingMachineUses=${numberOfWashingMachineUses}&numberOfTumbleDryUses=${numberOfTumbleDryUses}`,
             headers: new Headers({
                 'Content-Type': 'application/x-www-form-urlencoded'
-            })
+            }),
+            credentials: 'include'
         }).then(function (response) {
             return response.json();
         }).then(function (data) {
@@ -57,13 +58,13 @@ export function createBooking(startTime, endTime, numberOfWashingMachineUses, nu
 
 export function editBooking(id, startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses) {
     return function (dispatch) {
-        const userAccessToken = localStorage.getItem("userAccessToken");
-        fetch(`${urls.api.booking}?access_token=${userAccessToken}`, {
+        fetch(urls.api.booking, {
             method: 'PUT',
             body: `id=${id}&startTime=${startTime}&endTime=${endTime}&numberOfWashingMachineUses=${numberOfWashingMachineUses}&numberOfTumbleDryUses=${numberOfTumbleDryUses}`,
             headers: new Headers({
                 'Content-Type': 'application/x-www-form-urlencoded'
-            })
+            }),
+            credentials: 'include'
         }).then(function (response) {
             return response.json();
         }).then(function (data) {
@@ -79,11 +80,11 @@ export function fetchBookings(startTime, endTime) {
         dispatch(requestBookings());
 
         // If we're logged in, we need more detailed information
-        const userAccessToken = localStorage.getItem("userAccessToken");
-        fetch(`${urls.api.booking}/interval?startTime=${startTime}&endTime=${endTime}&access_token=${userAccessToken}`)
-            .then(function (response) {
-                return response.json();
-            }).then(function (data) {
+        fetch(`${urls.api.booking}/interval?startTime=${startTime}&endTime=${endTime}`, {
+            credentials: 'include'
+        }).then(function (response) {
+            return response.json();
+        }).then(function (data) {
             dispatch(receiveBookings(data));
         });
     }
@@ -91,13 +92,13 @@ export function fetchBookings(startTime, endTime) {
 
 export function deleteBooking(id) {
     return function (dispatch) {
-        const userAccessToken = localStorage.getItem("userAccessToken");
-        fetch(`${urls.api.booking}?access_token=${userAccessToken}`, {
+        fetch(urls.api.booking, {
             method: 'DELETE',
             body: `id=${id}`,
             headers: new Headers({
                 'Content-Type': 'application/x-www-form-urlencoded'
-            })
+            }),
+            credentials: 'include'
         }).then(function () {
             dispatch(endEditBookingFlow());
             dispatch(removeBooking(id));

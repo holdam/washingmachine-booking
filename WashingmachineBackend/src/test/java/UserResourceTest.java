@@ -54,7 +54,7 @@ public class UserResourceTest {
     public void userFromUserAccessTokenShouldWork() {
         when(userTokenDAO.getUsernameFromToken("token")).thenReturn("user");
         when(userDAO.getUser("user")).thenReturn(new User("user", RoleHelper.ROLE_DEFAULT));
-        User user = userResource.userFromUserAccessToken("token");
+        User user = userResource.userFromUserAccessToken(null);
         assertEquals("user", user.getName());
         assertEquals(RoleHelper.ROLE_DEFAULT, user.getRole());
     }
