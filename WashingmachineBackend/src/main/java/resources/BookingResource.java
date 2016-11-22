@@ -90,7 +90,7 @@ public class BookingResource {
         Date endDate = Util.convertMillisToDateAndFloorToNearest5Minutes(endTime);
         List<BookingDTO> overlappingBookingDTOs = bookingDAO.getBookingsOverlappingInterval(startDate, endDate);
 
-        if (overlappingBookingDTOs.size() > 0 ) {
+        if (overlappingBookingDTOs.size() > 0 || startDate.before(new Date())) {
             throw new ValidationErrorException();
         }
 
@@ -111,7 +111,6 @@ public class BookingResource {
         if (startDate.after(endDate) ||
                 (endDateCalendar.get(Calendar.HOUR_OF_DAY) < 8 || (endDateCalendar.get(Calendar.HOUR_OF_DAY) >= 22 && endDateCalendar.get(Calendar.MINUTE) > 0)) ||
                 (startDateCalendar.get(Calendar.HOUR_OF_DAY) < 8 || (startDateCalendar.get(Calendar.HOUR_OF_DAY) >= 22 && startDateCalendar.get(Calendar.MINUTE) > 0)) ||
-                startDate.before(new Date()) ||
                 !timeDifferenceGreaterThan30Minutes ||
                 (numberOfTumbleDryUses <= 0 && numberOfWashingMachineUses <= 0)) {
             throw new ValidationErrorException();

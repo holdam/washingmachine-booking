@@ -4,6 +4,7 @@ import './Day.css'
 
 export class Day extends React.Component {
     render() {
+        // Add appropriate calsses
         let today = new Date();
         let classes = "col-md-1 day ";
         if (this.props.offMonthDay === true) {
@@ -12,6 +13,11 @@ export class Day extends React.Component {
 
         if (this.props.date.getFullYear() === today.getFullYear() && this.props.date.getMonth() === today.getMonth() && this.props.date.getDate() === today.getDate()) {
             classes += "today "
+        }
+
+        let weekendDayValues = {0: '', 6: ''};
+        if (this.props.date.getDay() in weekendDayValues) {
+            classes += "weekend "
         }
 
         // Get events for the day

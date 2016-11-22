@@ -113,7 +113,7 @@ class CalendarAndUsage extends React.Component {
                                   onCancelEditBookingCreation={this.props.onCancelEditBookingCreation}
                                   isLoggedIn={this.props.isLoggedIn}
                                   isEditMode={this.props.isEditMode}
-                                  editBookingInformation={this.props.editBookingInformation}
+                                  editBookingProps={this.props.editBookingProps}
                                   onEditBooking={this.props.onEditBooking}
                                   onDeleteBooking={this.props.onDeleteBooking}
                         />

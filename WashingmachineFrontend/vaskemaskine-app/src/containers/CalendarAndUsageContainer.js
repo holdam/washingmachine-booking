@@ -13,7 +13,7 @@ const mapStateToProps = (state, ownProps) => {
         bookings: state.bookings.bookings,
         isLoggedIn: !!state.login.username,
         isEditMode: !!state.editBookingFlow.date,
-        editBookingInformation: {
+        editBookingProps: {
             id: state.editBookingFlow.id,
             startTime: state.editBookingFlow.startTime,
             endTime: state.editBookingFlow.endTime,

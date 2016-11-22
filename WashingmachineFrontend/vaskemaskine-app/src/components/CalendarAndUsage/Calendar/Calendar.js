@@ -26,7 +26,7 @@ class Calendar extends React.Component {
                               isLoggedIn={this.props.isLoggedIn}
                               onCancelEditBookingCreation={this.props.onCancelEditBookingCreation}
                               isEditMode={this.props.isEditMode}
-                              editBookingInformation={this.props.editBookingInformation}
+                              editBookingProps={this.props.editBookingProps}
                               onEditBooking={this.props.onEditBooking}
                               onDeleteBooking={this.props.onDeleteBooking}
                 />

@@ -28,10 +28,10 @@ export default App;
 
 
 
-// TODO lad folk redigere bagud i tiden
 // TODO giv overblik over dagen når man booker eller redigerer
 
-// TODO evt. farv lørdag/søndag i en anden farve
+// TODO s i backenden
+
 // TODO reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
 // TODO https
 // TODO teting + proptypes

@@ -18,38 +18,34 @@ class BookingModal extends React.Component {
         this.handleCreateBooking = this.handleCreateBooking.bind(this);
         this.handleEditBooking = this.handleEditBooking.bind(this);
         this.cancelBooking = this.cancelBooking.bind(this);
-        this.validations = this.validations.bind(this);
+        this.commonValidations = this.commonValidations.bind(this);
         this.handleDeleteBooking = this.handleDeleteBooking.bind(this);
         this.resetState = this.resetState.bind(this);
 
         this.state = {
-            id: -1,
             startHour: 8,
             startMinutes: 0,
             endHours: 8,
             endMinutes: 0,
             numberOfWashingMachineUses: 0,
             numberOfTumbleDryUses: 0,
-            errorMessages: [],
-            isEditMode: false
+            errorMessages: []
         }
     }
 
     componentWillReceiveProps(nextProps) {
         // Load values if passed
         if (nextProps.isEditMode) {
-            let startDate = new Date(nextProps.editBookingInformation.startTime);
-            let endDate = new Date(nextProps.editBookingInformation.endTime);
+            let startDate = new Date(nextProps.editBookingProps.startTime);
+            let endDate = new Date(nextProps.editBookingProps.endTime);
 
             this.setState({
-                id: nextProps.editBookingInformation.id,
                 startHour: startDate.getHours(),
                 startMinutes: startDate.getMinutes(),
                 endHours: endDate.getHours(),
                 endMinutes: endDate.getMinutes(),
-                numberOfWashingMachineUses: nextProps.editBookingInformation.numberOfWashingMachineUses,
-                numberOfTumbleDryUses: nextProps.editBookingInformation.numberOfTumbleDryUses,
-                isEditMode: true
+                numberOfWashingMachineUses: nextProps.editBookingProps.numberOfWashingMachineUses,
+                numberOfTumbleDryUses: nextProps.editBookingProps.numberOfTumbleDryUses
             });
         }
     }
@@ -79,21 +75,25 @@ class BookingModal extends React.Component {
     }
 
     handleCreateBooking() {
-        let errorMessages = this.validations();
+        let errorMessages = this.commonValidations();
+
+        if (this.props.bookingDate < new Date()) {
+            errorMessages.push(strings.createBookingModal.errorsMessages.dayIsBeforeToday);
+        }
 
         this.setState({
             errorMessages
         });
 
-        let startTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
-        startTimeOfNewBooking.setHours(this.state.startHour);
-        startTimeOfNewBooking.setMinutes(this.state.startMinutes);
-
-        let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
-        endTimeOfNewBooking.setHours(this.state.endHours);
-        endTimeOfNewBooking.setMinutes(this.state.endMinutes);
-
         if (errorMessages.length === 0) {
+            let startTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+            startTimeOfNewBooking.setHours(this.state.startHour);
+            startTimeOfNewBooking.setMinutes(this.state.startMinutes);
+
+            let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+            endTimeOfNewBooking.setHours(this.state.endHours);
+            endTimeOfNewBooking.setMinutes(this.state.endMinutes);
+
             this.resetState();
             this.props.onCreateBooking(startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
                 this.state.numberOfWashingMachineUses, this.state.numberOfTumbleDryUses);
@@ -101,23 +101,23 @@ class BookingModal extends React.Component {
     }
 
     handleEditBooking() {
-        let errorMessages = this.validations();
+        let errorMessages = this.commonValidations();
 
         this.setState({
             errorMessages
         });
 
-        let startTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
-        startTimeOfNewBooking.setHours(this.state.startHour);
-        startTimeOfNewBooking.setMinutes(this.state.startMinutes);
-
-        let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
-        endTimeOfNewBooking.setHours(this.state.endHours);
-        endTimeOfNewBooking.setMinutes(this.state.endMinutes);
-
         if (errorMessages.length === 0) {
+            let startTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+            startTimeOfNewBooking.setHours(this.state.startHour);
+            startTimeOfNewBooking.setMinutes(this.state.startMinutes);
+
+            let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
+            endTimeOfNewBooking.setHours(this.state.endHours);
+            endTimeOfNewBooking.setMinutes(this.state.endMinutes);
+
             this.resetState();
-            this.props.onEditBooking(this.state.id, startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
+            this.props.onEditBooking(this.props.editBookingProps.id, startTimeOfNewBooking.getTime(), endTimeOfNewBooking.getTime(),
                 this.state.numberOfWashingMachineUses, this.state.numberOfTumbleDryUses);
         }
     }
@@ -126,17 +126,13 @@ class BookingModal extends React.Component {
         let confirmation = window.confirm(strings.createBookingModal.confirmDeletion);
         if (confirmation) {
             this.resetState();
-            this.props.onDeleteBooking(this.state.id);
+            this.props.onDeleteBooking(this.props.editBookingProps.id);
         }
     }
 
-    validations() {
+    commonValidations() {
         // Validations
         let errorMessages = [];
-
-        if (this.props.bookingDate < new Date()) {
-            errorMessages.push(strings.createBookingModal.errorsMessages.dayIsBeforeToday);
-        }
 
         if (this.state.endHours >= 22 && this.state.endMinutes > 0) {
             errorMessages.push(strings.createBookingModal.errorsMessages.mustEndBefore22);
@@ -163,7 +159,7 @@ class BookingModal extends React.Component {
         endTimeOfNewBooking.setMinutes(this.state.endMinutes);
 
         for (let booking of this.props.bookings) {
-            if (booking.startTime < endTimeOfNewBooking.getTime() && booking.endTime > startTimeOfNewBooking.getTime() && booking.id !== this.state.id) {
+            if (booking.startTime < endTimeOfNewBooking.getTime() && booking.endTime > startTimeOfNewBooking.getTime() && booking.id !== this.props.editBookingProps.id) {
                 errorMessages.push(strings.createBookingModal.errorsMessages.bookingIsClashing);
             }
         }
@@ -177,21 +173,18 @@ class BookingModal extends React.Component {
 
     resetState() {
         this.setState({
-            id: -1,
             startHour: 8,
             startMinutes: 0,
             endHours: 8,
             endMinutes: 0,
             numberOfWashingMachineUses: 0,
             numberOfTumbleDryUses: 0,
-            errorMessages: [],
-            isEditMode: false
+            errorMessages: []
         });
     }
 
     cancelBooking() {
         this.resetState();
-
         this.props.onCancelBookingCreation();
         this.props.onCancelEditBookingCreation();
     }
@@ -200,6 +193,8 @@ class BookingModal extends React.Component {
         let createOrEditButton = (this.props.isEditMode)
             ? <EditButton handleClick={this.handleEditBooking} />
             : <CreateButton handleClick={this.handleCreateBooking} />;
+
+        console.log(this.state.bookings)
 
         return (
             <Modal show={this.props.showModal} onHide={this.cancelBooking}>
@@ -267,17 +262,17 @@ class BookingModal extends React.Component {
     }
 }
 
-function CreateButton(props) {
+const CreateButton = (props) => {
     return (
         <Button onClick={props.handleClick} bsStyle="primary">{strings.createBookingModal.save}</Button>
     )
-}
+};
 
-function EditButton(props) {
+const EditButton = (props) => {
     return (
         <Button onClick={props.handleClick} bsStyle="primary">{strings.createBookingModal.confirmEdit}</Button>
     )
-}
+};
 
 class HourTimePicker extends React.Component {
     render() {

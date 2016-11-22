@@ -11,6 +11,10 @@
     margin-bottom: -1px;
 }
 
+.weekend {
+    background: #f9f9f9;
+}
+
 .day:hover {
     background: #ececec;
     cursor: pointer;
