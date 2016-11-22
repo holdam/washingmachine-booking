@@ -11,7 +11,7 @@ class LoginLogout extends React.Component {
 
     render() {
         let panel = null;
-        if (!!this.props.isLoggedIn) {
+        if (this.props.isLoggedIn) {
             panel = <Logout
                 onLogout={this.props.onLogout}
                 username={this.props.username}
@@ -25,7 +25,7 @@ class LoginLogout extends React.Component {
                 onCreateUser={this.props.onCreateUser}
                 hasLoginFailed={this.props.hasLoginFailed}
                 onLoginFailed={this.props.onLoginFailed}
-            />
+            />;
         }
 
         return (

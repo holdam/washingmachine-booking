@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch';
 import urls from '../../commons/urls';
 import {endCreateBookingFlow} from './createBookingFlow';
 import {endEditBookingFlow} from './editBookingFlow';
+import {properModulo} from '../../commons/util';
 
 export const INSERT_BOOKING = 'INSERT_BOOKING';
 export function insertBooking(id, startTime, endTime, owner, numberOfWashingMachineUses, numberOfTumbleDryUses) {
@@ -46,9 +47,9 @@ export function createBooking(startTime, endTime, numberOfWashingMachineUses, nu
                 'Content-Type': 'application/x-www-form-urlencoded'
             }),
             credentials: 'include'
-        }).then(function (response) {
+        }).then((response) => {
             return response.json();
-        }).then(function (data) {
+        }).then((data) => {
             dispatch(endCreateBookingFlow());
             dispatch(insertBooking(data.id, data.startTime, data.endTime, data.owner, data.numberOfWashingMachineUses, data.numberOfTumbleDryUses));
         });
@@ -64,9 +65,9 @@ export function editBooking(id, startTime, endTime, numberOfWashingMachineUses, 
                 'Content-Type': 'application/x-www-form-urlencoded'
             }),
             credentials: 'include'
-        }).then(function (response) {
+        }).then((response) => {
             return response.json();
-        }).then(function (data) {
+        }).then((data) => {
             dispatch(endEditBookingFlow());
             dispatch(removeBooking(data.id));
             dispatch(insertBooking(data.id, data.startTime, data.endTime, data.owner, data.numberOfWashingMachineUses, data.numberOfTumbleDryUses));
@@ -74,16 +75,30 @@ export function editBooking(id, startTime, endTime, numberOfWashingMachineUses, 
     }
 }
 
-export function fetchBookings(startTime, endTime) {
+export function fetchBookingsForMonth(year, month) {
     return function (dispatch) {
         dispatch(requestBookings());
 
-        // If we're logged in, we need more detailed information
-        fetch(`${urls.api.booking}/interval?startTime=${startTime}&endTime=${endTime}`, {
+        let firstDayOfMonth = new Date(year, month, 1);
+        let lastDayOfMonth = new Date(year, month + 1, 0);
+
+        // Ugly logic to have here
+        let numberOfDaysBeforeFirstDayInMonth = properModulo(firstDayOfMonth.getDay() - 1, 7);
+        let startDateToFetchFor = new Date(year, month, firstDayOfMonth.getDate() - numberOfDaysBeforeFirstDayInMonth);
+        startDateToFetchFor.setHours(0);
+        startDateToFetchFor.setMinutes(0);
+
+        // Letting 42 staying as a magic variable for teh lulz
+        let numberOfDaysAfterLastDayInMonth = 42 - numberOfDaysBeforeFirstDayInMonth - lastDayOfMonth.getDate();
+        let endDateToFetchFor = new Date(year, month, lastDayOfMonth.getDate() + numberOfDaysAfterLastDayInMonth);
+        endDateToFetchFor.setHours(23);
+        endDateToFetchFor.setMinutes(59);
+
+        fetch(`${urls.api.booking}/interval?startTime=${startDateToFetchFor.getTime()}&endTime=${endDateToFetchFor.getTime()}`, {
             credentials: 'include'
-        }).then(function (response) {
+        }).then((response) => {
             return response.json();
-        }).then(function (data) {
+        }).then((data) => {
             dispatch(receiveBookings(data));
         });
     }
@@ -98,7 +113,7 @@ export function deleteBooking(id) {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }),
             credentials: 'include'
-        }).then(function () {
+        }).then(() => {
             dispatch(endEditBookingFlow());
             dispatch(removeBooking(id));
         });

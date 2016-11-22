@@ -3,8 +3,14 @@ import {getPrettyStartEndHoursAndMinutesFromBooking, getBookingsOfDate} from '..
 import './Day.css'
 
 export class Day extends React.Component {
+    constructor(props) {
+        super(props);
+        this.handleOnDayClick = this.handleOnDayClick.bind(this);
+        this.handleBookingClick = this.handleBookingClick.bind(this);
+    }
+
     render() {
-        // Add appropriate calsses
+        // Add appropriate classes
         let today = new Date();
         let classes = "col-md-1 day ";
         if (this.props.offMonthDay === true) {
@@ -29,21 +35,7 @@ export class Day extends React.Component {
             const ownOrOthersBookingClass = (booking.owner === this.props.username) ? 'own-booking' : 'others-booking';
 
             return (
-                <div onClick={
-                    // If owner of event open editing menu, otherwise do nothing
-                    (booking.owner === this.props.username) ?
-                        ((e) => {e.stopPropagation();
-                            this.props.onBookingClick(
-                                booking.id,
-                                booking.owner,
-                                booking.startTime,
-                                booking.endTime,
-                                booking.numberOfWashingMachineUses,
-                                booking.numberOfTumbleDryUses,
-                                this.props.date
-                            )}) :
-                        ((e) => {e.stopPropagation();})
-                } key={booking.id} className={ownOrOthersBookingClass}>
+                <div onClick={(e) => this.handleBookingClick(e, booking)} key={booking.id} className={ownOrOthersBookingClass}>
                     <div>{booking.owner}</div>
                     <div>{`${startHour}:${startMinutes} - ${endHour}:${endMinutes}`}</div>
                 </div>
@@ -51,12 +43,35 @@ export class Day extends React.Component {
         });
 
         return (
-            <div onClick={() => { if(this.props.isLoggedIn) this.props.onClick(this.props.date)}} className={classes}>
+            <div onClick={this.handleOnDayClick} className={classes}>
                 {this.props.children}
                 {bookingsAsNodes}
             </div>
         )
+    }
 
+    handleBookingClick(event, booking) {
+        event.stopPropagation();
+        // If owner of booking open editing menu, otherwise do nothing
+        if (booking.owner === this.props.username) {
+            this.props.onBookingClick(
+                booking.id,
+                booking.owner,
+                booking.startTime,
+                booking.endTime,
+                booking.numberOfWashingMachineUses,
+                booking.numberOfTumbleDryUses,
+                this.props.date
+            )
+        }
+    }
+
+    handleOnDayClick() {
+        if (this.props.isLoggedIn) {
+            this.props.onClick(this.props.date)
+        } else {
+
+        }
     }
 }
 

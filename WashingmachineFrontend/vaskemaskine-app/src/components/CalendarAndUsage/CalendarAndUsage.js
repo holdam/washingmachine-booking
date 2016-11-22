@@ -14,24 +14,14 @@ class WeekRepresentation {
 class CalendarAndUsage extends React.Component {
     constructor(props) {
         super(props);
-        this.fetchBookings = this.fetchBookings.bind(this);
-        this.fetchBookings(props.selectedMonth.getFullYear(), props.selectedMonth.getMonth());
+        this.props.fetchBookingsForMonth(props.selectedMonth.getFullYear(), props.selectedMonth.getMonth());
     }
 
     componentWillReceiveProps(nextProps) {
         // Fetch data if we are in a new month
         if (this.props.selectedMonth.getMonth() !== nextProps.selectedMonth.getMonth()) {
-            this.fetchBookings(nextProps.selectedMonth.getFullYear(), nextProps.selectedMonth.getMonth());
+            this.props.fetchBookingsForMonth(nextProps.selectedMonth.getFullYear(), nextProps.selectedMonth.getMonth());
         }
-    }
-
-    fetchBookings(year, month) {
-        let weeks = this.getWeeksOfMonth(year, month);
-        let firstDayOfWeeks = weeks[0].days[0];
-        let lastDayOfWeeks = weeks[5].days[6];
-        lastDayOfWeeks.setHours(23);
-        lastDayOfWeeks.setMinutes(59);
-        this.props.fetchBookings(firstDayOfWeeks.getTime(), lastDayOfWeeks.getTime());
     }
 
     getWeeksOfMonth(year, month) {

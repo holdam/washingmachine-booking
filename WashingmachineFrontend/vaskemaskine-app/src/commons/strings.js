@@ -14,6 +14,7 @@ var strings = {
         numberOfTumbleDries: 'Antal tørretumblinger (3 kr)',
         confirmDeletion: 'Er du sikker på du vil slette reservationen?',
         daysCurrentBookings: 'Nuværende bookinger på dagen',
+        noBookingsAsOfYet: 'N/A',
         errorsMessages: {
             mustEndBefore22: 'Reservationen skal slutte senest kl. 22.00',
             mustReserveAtLeast30Minutes: 'Du skal mindst reservere en halv time',

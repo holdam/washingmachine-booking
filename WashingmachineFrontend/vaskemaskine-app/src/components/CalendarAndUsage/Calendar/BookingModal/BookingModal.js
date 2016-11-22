@@ -276,12 +276,23 @@ const CurrentBookingOverview = (props) => {
         )
     });
 
-    return (
-        <div className="current-bookings">
-            <h4>{strings.bookingModal.daysCurrentBookings}</h4>
+    let bookingsForInsertion;
+    if (props.bookings.length > 0) {
+        bookingsForInsertion = (
             <div className="list-of-bookings">
                 {bookings}
             </div>
+        )
+    } else {
+        bookingsForInsertion = (
+            <p>{strings.bookingModal.noBookingsAsOfYet}</p>
+        )
+    }
+
+    return (
+        <div className="current-bookings">
+            <h4>{strings.bookingModal.daysCurrentBookings}</h4>
+            {bookingsForInsertion}
         </div>
     )
 };

@@ -1,7 +1,7 @@
 import {connect} from 'react-redux';
 import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
 import {endCreateBookingFlow} from '../state/actions/createBookingFlow';
-import {createBooking, fetchBookings, editBooking, deleteBooking} from '../state/actions/bookings';
+import {createBooking, fetchBookingsForMonth, editBooking, deleteBooking} from '../state/actions/bookings';
 import {endEditBookingFlow} from '../state/actions/editBookingFlow';
 
 const mapStateToProps = (state, ownProps) => {
@@ -31,8 +31,8 @@ const mapDispatchToProps = (dispatch) => {
         onCancelBookingCreation: () => {
             dispatch(endCreateBookingFlow());
         },
-        fetchBookings: (startTime, endTime) => {
-            dispatch(fetchBookings(startTime, endTime))
+        fetchBookingsForMonth: (year, month) => {
+            dispatch(fetchBookingsForMonth(year, month))
         },
         onCancelEditBookingCreation: () => {
             dispatch(endEditBookingFlow());

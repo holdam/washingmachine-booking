@@ -77,7 +77,6 @@ public class AuthResource {
 
     private Response createResponseFromToken(UserTokenDTO userTokenDTO) {
         long timeLeftToken = (userTokenDTO.getLifetimeEnds().getTime() - Calendar.getInstance().getTime().getTime()) / 1000;
-        // TODO safe token
         return Response.ok()
                 .cookie(
                         new NewCookie(

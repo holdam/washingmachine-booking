@@ -43,3 +43,7 @@ export function getPrettyStartEndHoursAndMinutesFromBooking(booking) {
     let endMinutes = (endTime.getMinutes() < 10) ? `0${endTime.getMinutes()}` : endTime.getMinutes();
     return {startHour, startMinutes, endHour, endMinutes};
 }
+
+export function properModulo(a, b) {
+    return ((a % b) + b) % b;
+}

@@ -28,11 +28,11 @@ export default App;
 
 
 // TODO final features i den her "release"
-// TODOS i backend
-// flash login mislykkedes
 // ikke finger cursor når ikke logget ind (elt evt. lad den åbne lav bruger modal)
 // rev tabel til bookings
 // proptypes
+// flash login mislykkedes
+// websockets til at hente ting live ?
 
 // TODO næste release
 // admin/kasser panel/forbrug
@@ -45,6 +45,8 @@ export default App;
 // reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
 // find ud af hvornår der skal slettes og kunne redigeres
 // may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...
+// update password and that kind of shit
+// avoid spam and probably better password creation (more restrict than just nonempty passwords)
 
 // TODO når prod:
 // https + safe cookie
