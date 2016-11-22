@@ -5,6 +5,7 @@ import {monthNames} from '../../../../commons/util';
 import './BookingModal.css';
 import {ControlLabel, Form, FormGroup, Col} from "react-bootstrap";
 import ErrorMessages from '../../../../commons/ErrorMessages';
+import {getBookingsOfDate, getPrettyStartEndHoursAndMinutesFromBooking} from '../../../../commons/util'
 
 class BookingModal extends React.Component {
     constructor(props) {
@@ -78,7 +79,7 @@ class BookingModal extends React.Component {
         let errorMessages = this.commonValidations();
 
         if (this.props.bookingDate < new Date()) {
-            errorMessages.push(strings.createBookingModal.errorsMessages.dayIsBeforeToday);
+            errorMessages.push(strings.bookingModal.errorsMessages.dayIsBeforeToday);
         }
 
         this.setState({
@@ -123,7 +124,7 @@ class BookingModal extends React.Component {
     }
 
     handleDeleteBooking() {
-        let confirmation = window.confirm(strings.createBookingModal.confirmDeletion);
+        let confirmation = window.confirm(strings.bookingModal.confirmDeletion);
         if (confirmation) {
             this.resetState();
             this.props.onDeleteBooking(this.props.editBookingProps.id);
@@ -135,7 +136,7 @@ class BookingModal extends React.Component {
         let errorMessages = [];
 
         if (this.state.endHours >= 22 && this.state.endMinutes > 0) {
-            errorMessages.push(strings.createBookingModal.errorsMessages.mustEndBefore22);
+            errorMessages.push(strings.bookingModal.errorsMessages.mustEndBefore22);
         }
 
         let timeDifference = (this.state.endMinutes - this.state.startMinutes >= 0)
@@ -143,11 +144,11 @@ class BookingModal extends React.Component {
             : {hour: (this.state.endHours - this.state.startHour - 1), minutes: (60 - (this.state.startMinutes + this.state.endMinutes))};
 
         if (timeDifference.hour < 0 || (timeDifference.hour <= 0 && timeDifference.minutes < 30)) {
-            errorMessages.push(strings.createBookingModal.errorsMessages.mustReserveAtLeast30Minutes);
+            errorMessages.push(strings.bookingModal.errorsMessages.mustReserveAtLeast30Minutes);
         }
 
         if (this.state.numberOfWashingMachineUses <= 0 && this.state.numberOfTumbleDryUses <= 0) {
-            errorMessages.push(strings.createBookingModal.errorsMessages.mustReserveEitherTumbleDrierOrWashingMachine);
+            errorMessages.push(strings.bookingModal.errorsMessages.mustReserveEitherTumbleDrierOrWashingMachine);
         }
 
         let startTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
@@ -160,12 +161,12 @@ class BookingModal extends React.Component {
 
         for (let booking of this.props.bookings) {
             if (booking.startTime < endTimeOfNewBooking.getTime() && booking.endTime > startTimeOfNewBooking.getTime() && booking.id !== this.props.editBookingProps.id) {
-                errorMessages.push(strings.createBookingModal.errorsMessages.bookingIsClashing);
+                errorMessages.push(strings.bookingModal.errorsMessages.bookingIsClashing);
             }
         }
 
         if (!this.props.isLoggedIn) {
-            errorMessages.push(strings.createBookingModal.errorsMessages.mustBeLoggedIn);
+            errorMessages.push(strings.bookingModal.errorsMessages.mustBeLoggedIn);
         }
 
         return errorMessages;
@@ -190,17 +191,17 @@ class BookingModal extends React.Component {
     }
 
     render() {
-        let createOrEditButton = (this.props.isEditMode)
+        const createOrEditButton = (this.props.isEditMode)
             ? <EditButton handleClick={this.handleEditBooking} />
             : <CreateButton handleClick={this.handleCreateBooking} />;
 
-        console.log(this.state.bookings)
+        const title = `${this.props.isEditMode ? strings.bookingModal.titleEdit : strings.bookingModal.titleCreate} ${this.convertDateToString((this.props.bookingDate || new Date()))}`;
 
         return (
             <Modal show={this.props.showModal} onHide={this.cancelBooking}>
                 <Modal.Header closeButton>
                     <Modal.Title>
-                        {`${this.props.isEditMode ? strings.createBookingModal.titleEdit : strings.createBookingModal.titleCreate} ${this.convertDateToString((this.props.bookingDate || new Date()))}`}
+                        {title}
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
@@ -210,7 +211,7 @@ class BookingModal extends React.Component {
                     <Form horizontal>
                         <FormGroup controlId="formStartTime">
                             <Col componentClass={ControlLabel} sm={5}>
-                                {strings.createBookingModal.startTime}
+                                {strings.bookingModal.startTime}
                             </Col>
                             <Col sm={7}>
                                 <div>
@@ -221,7 +222,7 @@ class BookingModal extends React.Component {
                         </FormGroup>
                         <FormGroup controlId="formEndTime">
                             <Col componentClass={ControlLabel} sm={5}>
-                                {strings.createBookingModal.endTime}
+                                {strings.bookingModal.endTime}
                             </Col>
                             <Col sm={7}>
                                 <div>
@@ -232,7 +233,7 @@ class BookingModal extends React.Component {
                         </FormGroup>
                         <FormGroup>
                             <Col componentClass={ControlLabel} sm={5}>
-                                {strings.createBookingModal.numberOfWashes}
+                                {strings.bookingModal.numberOfWashes}
                             </Col>
                             <Col sm={7}>
                                 <input onChange={this.handleNumberOfWashingsChange} className="numberOfWashingsPicker" value={this.state.numberOfWashingMachineUses} type="number" min="0" />
@@ -240,17 +241,18 @@ class BookingModal extends React.Component {
                         </FormGroup>
                         <FormGroup>
                             <Col componentClass={ControlLabel} sm={5}>
-                                {strings.createBookingModal.numberOfTumbleDries}
+                                {strings.bookingModal.numberOfTumbleDries}
                             </Col>
                             <Col sm={7}>
                                 <input onChange={this.handleNumberOfTumbleDriesChange} className="numberOfTumbleDryPicker" value={this.state.numberOfTumbleDryUses} type="number" min="0" />
                             </Col>
                         </FormGroup>
                     </Form>
+                    <CurrentBookingOverview bookings={getBookingsOfDate(this.props.bookings, this.props.bookingDate)} />
                 </Modal.Body>
                 <Modal.Footer>
-                    {this.props.isEditMode ? <Button className="deleteButton" bsStyle="danger" onClick={this.handleDeleteBooking}>{strings.createBookingModal.delete}</Button> : null}
-                    <Button onClick={this.cancelBooking}>{strings.createBookingModal.cancel}</Button>
+                    {this.props.isEditMode ? <Button className="deleteButton" bsStyle="danger" onClick={this.handleDeleteBooking}>{strings.bookingModal.delete}</Button> : null}
+                    <Button onClick={this.cancelBooking}>{strings.bookingModal.cancel}</Button>
                     {createOrEditButton}
                 </Modal.Footer>
             </Modal>
@@ -262,50 +264,69 @@ class BookingModal extends React.Component {
     }
 }
 
+const CurrentBookingOverview = (props) => {
+    const bookings = props.bookings.map((booking) => {
+        let startHour, startMinutes, endHour, endMinutes;
+        ({startHour, startMinutes, endHour, endMinutes} = getPrettyStartEndHoursAndMinutesFromBooking(booking));
+        return (
+            <div className="booking-of-selected-day" key={`${startHour}${startMinutes}`}>
+                <span>{booking.owner}: </span>
+                <span>{`${startHour}:${startMinutes} - ${endHour}:${endMinutes}`}</span>
+            </div>
+        )
+    });
+
+    return (
+        <div className="current-bookings">
+            <h4>{strings.bookingModal.daysCurrentBookings}</h4>
+            <div className="list-of-bookings">
+                {bookings}
+            </div>
+        </div>
+    )
+};
+
 const CreateButton = (props) => {
     return (
-        <Button onClick={props.handleClick} bsStyle="primary">{strings.createBookingModal.save}</Button>
+        <Button onClick={props.handleClick} bsStyle="primary">{strings.bookingModal.save}</Button>
     )
 };
 
 const EditButton = (props) => {
     return (
-        <Button onClick={props.handleClick} bsStyle="primary">{strings.createBookingModal.confirmEdit}</Button>
+        <Button onClick={props.handleClick} bsStyle="primary">{strings.bookingModal.confirmEdit}</Button>
     )
 };
 
-class HourTimePicker extends React.Component {
-    render() {
-        let hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
-        let selectOptions = hours.map((hour) => {
-            return (
-                <option key={hour} value={hour}>{(hour >= 10) ? hour : '0' + hour}</option>
-            )
-        });
-
+const HourTimePicker = (props) => {
+    const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22];
+    const selectOptions = hours.map((hour) => {
         return (
-            <select className="hourPicker" value={this.props.hour} onChange={this.props.handleChange}>
-                {selectOptions}
-            </select>
+            <option key={hour} value={hour}>{(hour >= 10) ? hour : '0' + hour}</option>
         )
-    }
-}
+    });
 
-class MinuteTimePicker extends React.Component {
-    render() {
-        let minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-        let selectOptions = minutes.map((minute) => {
-            return (
-                <option key={minute} value={minute}>{(minute >= 10) ? minute : '0' + minute}</option>
-            )
-        });
+    return (
+        <select className="hourPicker" value={props.hour} onChange={props.handleChange}>
+            {selectOptions}
+        </select>
+    )
+};
+
+const MinuteTimePicker = (props) => {
+
+    const minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+    const selectOptions = minutes.map((minute) => {
         return (
-            <select className="minutePicker" value={this.props.minutes} onChange={this.props.handleChange}>
-                {selectOptions}
-            </select>
+            <option key={minute} value={minute}>{(minute >= 10) ? minute : '0' + minute}</option>
         )
-    }
-}
+    });
+    return (
+        <select className="minutePicker" value={props.minutes} onChange={props.handleChange}>
+            {selectOptions}
+        </select>
+    )
+};
 
 
 export default BookingModal;

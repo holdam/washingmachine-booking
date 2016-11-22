@@ -1,6 +1,6 @@
 var strings = {
     frontpageTitle: 'Vaskerumsbooking',
-    createBookingModal: {
+    bookingModal: {
         titleCreate: 'Opret reservation',
         titleEdit: 'Rediger reservation',
         body: 'todo',
@@ -13,6 +13,7 @@ var strings = {
         numberOfWashes: 'Antal vaskninger (4 kr)',
         numberOfTumbleDries: 'Antal tørretumblinger (3 kr)',
         confirmDeletion: 'Er du sikker på du vil slette reservationen?',
+        daysCurrentBookings: 'Nuværende bookinger på dagen',
         errorsMessages: {
             mustEndBefore22: 'Reservationen skal slutte senest kl. 22.00',
             mustReserveAtLeast30Minutes: 'Du skal mindst reservere en halv time',

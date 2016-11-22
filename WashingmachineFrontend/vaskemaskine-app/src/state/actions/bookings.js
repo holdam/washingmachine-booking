@@ -2,7 +2,6 @@ import fetch from 'isomorphic-fetch';
 import urls from '../../commons/urls';
 import {endCreateBookingFlow} from './createBookingFlow';
 import {endEditBookingFlow} from './editBookingFlow';
-import {getCookieValueFromName} from '../../commons/util';
 
 export const INSERT_BOOKING = 'INSERT_BOOKING';
 export function insertBooking(id, startTime, endTime, owner, numberOfWashingMachineUses, numberOfTumbleDryUses) {

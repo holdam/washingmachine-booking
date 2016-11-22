@@ -27,17 +27,23 @@ export default App;
 
 
 
+// TODO final features i den her "release"
+// TODOS i backend
+// ikke finger cursor når ikke logget ind (elt evt. lad den åbne lav bruger modal)
+// rev tabel til bookings
+// proptypes
 
-// TODO giv overblik over dagen når man booker eller redigerer
+// TODO næste release
+// admin/kasser panel/forbrug
+// vis forbrug evt. for forskellige længder af perioder?
+// landing apage
 
-// TODO s i backenden
 
-// TODO reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
-// TODO https
-// TODO teting + proptypes
-// TODO may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...
-// TODO might not want to let people delete in all cases....
-// TODO admin/kasser panel/forbrug
-// TODO vis forbrug evt. for forskellige længder af perioder?
-// TODO s i backend
-// TODO rev tabel til bookings
+
+// TODO EVT:
+// reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
+// find ud af hvornår der skal slettes og kunne redigeres
+// may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...
+
+// TODO når prod:
+// https

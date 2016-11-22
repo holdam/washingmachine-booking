@@ -11,3 +11,16 @@
 .deleteButton {
     float: left;
 }
+
+.booking-of-selected-day {
+    background: #ececec;
+    padding: 5px;
+}
+
+.current-bookings {
+    margin-top: 35px;
+}
+
+.list-of-bookings {
+    border: 2px #b8b8b8 solid;
+}

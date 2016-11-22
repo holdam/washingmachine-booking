@@ -1,5 +1,5 @@
 import React from 'react';
-import {getStartAndEndDayMillisFromDate} from '../../../../commons/util';
+import {getPrettyStartEndHoursAndMinutesFromBooking, getBookingsOfDate} from '../../../../commons/util';
 import './Day.css'
 
 export class Day extends React.Component {
@@ -20,32 +20,13 @@ export class Day extends React.Component {
             classes += "weekend "
         }
 
-        // Get events for the day
-        let startOfTodayInMillis, endOfTodayInMillis;
-        ({startOfTodayInMillis, endOfTodayInMillis} = getStartAndEndDayMillisFromDate(this.props.date));
-
-        // Filter out the ones not residing in this day
-        let bookingsOfTheDay = this.props.bookings.filter((booking) => {
-            return booking.startTime >= startOfTodayInMillis && booking.endTime <= endOfTodayInMillis;
-        });
-
-        // Sort bookings by time
-        bookingsOfTheDay = bookingsOfTheDay.sort((booking, booking2) => {
-            if (booking.startTime < booking2.startTime) {
-                return -1;
-            }
-            return 1;
-        });
+        let bookingsOfTheDay = getBookingsOfDate(this.props.bookings, this.props.date);
 
         // Turn into nice html
         let bookingsAsNodes = bookingsOfTheDay.map((booking) => {
-            let startTime = new Date(booking.startTime);
-            let endTime = new Date(booking.endTime);
-            let startHour = (startTime.getHours() < 10) ? `0${startTime.getHours()}` : startTime.getHours();
-            let startMinutes = (startTime.getMinutes() < 10) ? `0${startTime.getMinutes()}` : startTime.getMinutes();
-            let endHour = (endTime.getHours() < 10) ? `0${endTime.getHours()}` : endTime.getHours();
-            let endMinutes = (endTime.getMinutes() < 10) ? `0${endTime.getMinutes()}` : endTime.getMinutes();
-            let ownOrOthersBookingClass = (booking.owner === this.props.username) ? 'own-booking' : 'others-booking';
+            let startHour, startMinutes, endHour, endMinutes;
+            ({startHour, startMinutes, endHour, endMinutes} = getPrettyStartEndHoursAndMinutesFromBooking(booking));
+            const ownOrOthersBookingClass = (booking.owner === this.props.username) ? 'own-booking' : 'others-booking';
 
             return (
                 <div onClick={

@@ -98,8 +98,8 @@ class CreateUserModal extends React.Component {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button onClick={this.cancelCreateUser}>{strings.createBookingModal.cancel}</Button>
-                    <Button onClick={this.handleCreateUser} bsStyle="primary">{strings.createBookingModal.save}</Button>
+                    <Button onClick={this.cancelCreateUser}>{strings.bookingModal.cancel}</Button>
+                    <Button onClick={this.handleCreateUser} bsStyle="primary">{strings.bookingModal.save}</Button>
                 </Modal.Footer>
             </Modal>
         )
