@@ -44,7 +44,7 @@ public class AuthResourceTest {
         when(userDAO.getUser(USERNAME)).thenReturn(new User(USERNAME, 0));
         when(userDAO.getSaltForUser(USERNAME)).thenReturn(SALT);
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(PASSWORD, SALT);
-        when(userDAO.authenticateUser(USERNAME, hashedAndSaltedPassword)).thenReturn(1);
+        when(userDAO.authenticateUser(USERNAME, hashedAndSaltedPassword)).thenReturn(true);
         Response signedInUserToken = authResource.signIn(USERNAME, PASSWORD);
         assertNotNull(signedInUserToken.getCookies().get("userAccessToken").getValue());
     }
@@ -54,7 +54,7 @@ public class AuthResourceTest {
         when(userDAO.getUser(USERNAME)).thenReturn(new User(USERNAME, 0));
         when(userDAO.getSaltForUser(USERNAME)).thenReturn(SALT);
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword("wrong_password", SALT);
-        when(userDAO.authenticateUser(USERNAME, hashedAndSaltedPassword)).thenReturn(1);
+        when(userDAO.authenticateUser(USERNAME, hashedAndSaltedPassword)).thenReturn(true);
         authResource.signIn(USERNAME, PASSWORD);
     }
 
@@ -65,7 +65,7 @@ public class AuthResourceTest {
         when(userTokenDAO.getUserTokenFromUsername(USERNAME)).thenReturn(new UserTokenDTO(USERNAME, TOKEN, calendar.getTime(), UserTokenDTO.Status.VALID));
 
         when(userDAO.getUser(USERNAME)).thenReturn(new User(USERNAME, RoleHelper.ROLE_DEFAULT));
-        when(userDAO.authenticateUser(Mockito.contains(USERNAME), Mockito.anyString())).thenReturn(1);
+        when(userDAO.authenticateUser(Mockito.contains(USERNAME), Mockito.anyString())).thenReturn(true);
         Response signedInUserToken = authResource.signIn(USERNAME, PASSWORD);
         assertEquals(TOKEN, signedInUserToken.getCookies().get("userAccessToken").getValue());
     }
@@ -77,7 +77,7 @@ public class AuthResourceTest {
         when(userTokenDAO.getUserTokenFromUsername(USERNAME)).thenReturn(new UserTokenDTO(USERNAME, TOKEN, calendar.getTime(), UserTokenDTO.Status.VALID));
 
         when(userDAO.getUser(USERNAME)).thenReturn(new User(USERNAME, RoleHelper.ROLE_DEFAULT));
-        when(userDAO.authenticateUser(Mockito.contains(USERNAME), Mockito.anyString())).thenReturn(1);
+        when(userDAO.authenticateUser(Mockito.contains(USERNAME), Mockito.anyString())).thenReturn(true);
         Response signedInUserToken = authResource.signIn(USERNAME, PASSWORD);
         assertNotEquals(TOKEN, signedInUserToken.getCookies().get("userAccessToken").getValue());
     }

@@ -29,6 +29,7 @@ export default App;
 
 // TODO final features i den her "release"
 // TODOS i backend
+// flash login mislykkedes
 // ikke finger cursor når ikke logget ind (elt evt. lad den åbne lav bruger modal)
 // rev tabel til bookings
 // proptypes
@@ -46,4 +47,4 @@ export default App;
 // may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...
 
 // TODO når prod:
-// https
+// https + safe cookie

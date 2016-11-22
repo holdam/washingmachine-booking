@@ -37,7 +37,7 @@ public interface UserDAO {
 
     @SqlQuery("SELECT CASE WHEN COUNT(users.id) > 0 THEN 1 ELSE 0 END " +
             "FROM users WHERE username = :username AND password = :password")
-    int authenticateUser(@Bind("username") String username, @Bind("password") String password);
+    boolean authenticateUser(@Bind("username") String username, @Bind("password") String password);
 
 
     @SqlQuery("SELECT username, role from users where upper(username) = upper(:username)")

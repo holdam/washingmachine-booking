@@ -9,6 +9,8 @@ import org.skife.jdbi.v2.DBI;
 import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class UserDAOTest {
     private BookingDAO bookingDAO;
@@ -47,10 +49,10 @@ public class UserDAOTest {
     @Test
     public void authenticateUserShouldWork() {
         insertUser1();
-        int login = userDAO.authenticateUser(USERNAME_1, USER_1_PASSWORD);
-        assertEquals(1, login);
+        boolean login = userDAO.authenticateUser(USERNAME_1, USER_1_PASSWORD);
+        assertTrue(login);
         login = userDAO.authenticateUser(USERNAME_2, USER_1_PASSWORD);
-        assertEquals(0, login);
+        assertFalse(login);
     }
 
     @Test

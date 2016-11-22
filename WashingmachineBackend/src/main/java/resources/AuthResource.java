@@ -13,6 +13,8 @@ import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.NewCookie;
 import javax.ws.rs.core.Response;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.Calendar;
 import java.util.UUID;
 
@@ -41,7 +43,7 @@ public class AuthResource {
         }
 
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, userDAO.getSaltForUser(username));
-        if (userDAO.authenticateUser(username, hashedAndSaltedPassword) > 0) {
+        if (userDAO.authenticateUser(username, hashedAndSaltedPassword)) {
             // If token doesn't exist yet, we create one.
             UserTokenDTO userTokenDTO = userTokenDAO.getUserTokenFromUsername(username);
             if (userTokenDTO == null) {
@@ -86,12 +88,16 @@ public class AuthResource {
 
 
     private UserTokenDTO createTokenForUser(String username) {
-        // TODO may want to use more secure randomized string
+        // Generate 128-bit random token
+        byte[] bytes = new byte[17];
+        SecureRandom secureRandom = new SecureRandom();
+        secureRandom.nextBytes(bytes);
+        bytes[0] = 0;
+        String token = new BigInteger(bytes).toString();
 
-        String uuid = UUID.randomUUID().toString();
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, tokenLifetime);
-        UserTokenDTO userTokenDTOToInsert = new UserTokenDTO(username, uuid, calendar.getTime(), UserTokenDTO.Status.VALID);
+        UserTokenDTO userTokenDTOToInsert = new UserTokenDTO(username, token, calendar.getTime(), UserTokenDTO.Status.VALID);
         userTokenDAO.createUserToken(userTokenDTOToInsert);
         return userTokenDTOToInsert;
     }
