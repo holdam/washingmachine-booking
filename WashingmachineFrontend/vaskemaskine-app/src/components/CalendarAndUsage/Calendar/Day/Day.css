@@ -17,6 +17,9 @@
 
 .day:hover {
     background: #ececec;
+}
+
+.day.is-logged-in {
     cursor: pointer;
 }
 

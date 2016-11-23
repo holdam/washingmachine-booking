@@ -9,7 +9,8 @@ const mapStateToProps = (state) => {
         isLoggedIn: !!state.login.username,
         showCreateUserModal: state.createUserFlow.showCreateUserModal,
         hasLoginFailed: state.login.hasLoginFailed,
-        selectedMonthAsDate: state.calendar.selectedMonthAsDate
+        selectedMonthAsDate: state.calendar.selectedMonthAsDate,
+        loginInProgress: state.login.loginInProgress
     }
 };
 

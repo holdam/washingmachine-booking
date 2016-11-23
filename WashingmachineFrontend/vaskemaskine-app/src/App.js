@@ -27,13 +27,6 @@ export default App;
 
 
 
-// TODO final features i den her "release"
-// ikke finger cursor når ikke logget ind (elt evt. lad den åbne lav bruger modal)
-// rev tabel til bookings
-// proptypes
-// flash login mislykkedes / gør den "grå når den loader" samme med kalender?
-// få usage ned i bunden
-// common testing stuff move out
 
 // TODO næste release
 // admin/kasser panel/forbrug

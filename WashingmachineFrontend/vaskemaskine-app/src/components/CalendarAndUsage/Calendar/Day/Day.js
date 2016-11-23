@@ -26,6 +26,10 @@ export class Day extends React.Component {
             classes += "weekend "
         }
 
+        if (this.props.isLoggedIn) {
+            classes += "is-logged-in "
+        }
+
         let bookingsOfTheDay = getBookingsOfDate(this.props.bookings, this.props.date);
 
         // Turn into nice html

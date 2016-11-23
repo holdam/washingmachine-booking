@@ -28,7 +28,6 @@ class Login extends React.Component {
 
     login() {
         if (!!this.state.username && !!this.state.password) {
-            // TODO selectedYear, selectedMonth
             this.props.onLogin(this.state.username, this.state.password,
                 this.props.selectedMonthAsDate.getFullYear(), this.props.selectedMonthAsDate.getMonth());
         } else {
@@ -50,17 +49,25 @@ class Login extends React.Component {
             <div className="login">
                 <Form inline>
                     <FormGroup validationState={usernameIsValidState} controlId="loginFormUsername">
-                        <FormControl onKeyPress={this.handleKeyPress} onChange={this.handleUsernameChange} type="text" placeholder={strings.login.username} />
+                        <FormControl
+                            onKeyPress={this.handleKeyPress}
+                            onChange={this.handleUsernameChange}
+                            type="text"
+                            placeholder={strings.login.username} />
                     </FormGroup>
                     {' '}
                     <FormGroup validationState={passwordIsValidState} controlId="loginFormPassword">
-                        <FormControl onKeyPress={this.handleKeyPress} onChange={this.handlePasswordChange} type="password" placeholder={strings.login.password} />
+                        <FormControl
+                            onKeyPress={this.handleKeyPress}
+                            onChange={this.handlePasswordChange}
+                            type="password"
+                            placeholder={strings.login.password} />
                     </FormGroup>
                     {' '}
                     <Button bsStyle="primary" onClick={this.login}>{strings.login.login}</Button>
                     {' '}
                     <Button onClick={this.props.onStartCreateUserFlow}>{strings.login.createUser}</Button>
-                    {this.props.hasLoginFailed ? <LoginFailed/> : null}
+                    {this.props.hasLoginFailed && !this.props.loginInProgress ? <LoginFailed/> : null}
                 </Form>
                 <CreateUserModal
                     showModal={this.props.showCreateUserModal}
