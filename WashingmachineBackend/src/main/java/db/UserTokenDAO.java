@@ -25,11 +25,18 @@ public interface UserTokenDAO {
             ");")
     void createUserTokenTable();
 
-    @SqlUpdate("INSERT INTO user_tokens (username, token, lifetime_ends, status) " +
-            "VALUES (:userTokenDTO.username, :userTokenDTO.token, :userTokenDTO.lifetimeEnds, :userTokenDTO.status)")
+    @SqlUpdate("INSERT INTO user_tokens " +
+            "(" +
+            "username, " +
+            "token, " +
+            "lifetime_ends, " +
+            "status" +
+            ") " +
+            "SELECT username, :userTokenDTO.token, :userTokenDTO.lifetimeEnds, :userTokenDTO.status " +
+            "FROM users WHERE upper(username) = upper(:userTokenDTO.username)")
     int createUserToken(@BindBean("userTokenDTO") UserTokenDTO userTokenDTO);
 
-    @SqlQuery("SELECT * FROM user_tokens WHERE username = :username")
+    @SqlQuery("SELECT * FROM user_tokens WHERE upper(username) = upper(:username)")
     UserTokenDTO getUserTokenFromUsername(@Bind("username") String username);
 
     @SqlQuery("SELECT * FROM user_tokens WHERE token = :userToken")
@@ -38,7 +45,7 @@ public interface UserTokenDAO {
     @SqlQuery("SELECT username FROM user_tokens WHERE token = :token")
     String getUsernameFromToken(@Bind("token") String token);
 
-    @SqlUpdate("DELETE FROM user_tokens WHERE username = :username")
+    @SqlUpdate("DELETE FROM user_tokens WHERE upper(username) = upper(:username)")
     int deleteUserTokenFromUsername(@Bind("username") String username);
 
     @SqlUpdate("TRUNCATE TABLE user_tokens")

@@ -59,7 +59,7 @@ export function fetchUsernameIfUserAccessTokenIsPresent() {
     }
 }
 
-export function createUser(username, password) {
+export function createUser(username, password, selectedYear, selectedMonth) {
     return function(dispatch) {
         fetch(`${urls.api.user}/create_user`, {
             method: 'POST',
@@ -68,7 +68,7 @@ export function createUser(username, password) {
                 'Content-Type': 'application/x-www-form-urlencoded'
             })
         }).then(() => {
-            dispatch(login(username, password));
+            dispatch(login(username, password, selectedYear, selectedMonth));
         });
     };
 }
@@ -86,10 +86,12 @@ export function login(username, password, selectedYear, selectedMonth) {
         }).then((response) => {
             if (response.status !== 200) {
                 dispatch(loginFailed());
-            } else {
-                dispatch(loginSuccessful(username));
-                dispatch(fetchBookingsForMonth(selectedYear, selectedMonth));
+                throw new Error("Log in failed");
             }
-        })
+            return response.json();
+        }).then((data) => {
+            dispatch(loginSuccessful(data.username));
+            dispatch(fetchBookingsForMonth(selectedYear, selectedMonth));
+        });
     }
 }

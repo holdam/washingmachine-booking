@@ -25,7 +25,9 @@ class LoginLogout extends React.Component {
                 onCreateUser={this.props.onCreateUser}
                 hasLoginFailed={this.props.hasLoginFailed}
                 onLoginFailed={this.props.onLoginFailed}
-            />;
+                selectedMonthAsDate={this.props.selectedMonthAsDate}
+
+                    />;
         }
 
         return (

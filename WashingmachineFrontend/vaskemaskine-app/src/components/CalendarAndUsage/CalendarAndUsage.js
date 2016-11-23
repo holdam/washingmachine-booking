@@ -17,20 +17,16 @@ class CalendarAndUsage extends React.Component {
     }
 
 
-    componentWillReceiveProps(nextProps) {
-        let selectedMonthAsDate = new Date(nextProps.params.year, nextProps.params.month);
+    componentDidUpdate() {
+        let selectedMonthAsDate = new Date(this.props.params.year, this.props.params.month);
 
         if (selectedMonthAsDate === undefined || isNaN(selectedMonthAsDate.getTime()) || !this.props.selectedMonthAsDate) {
             return;
         }
 
         // Fetch data if we are in a new month
-        // TODO we need to handle that this method gets called more than once and selectedMonthAsDate may not have changed yet
         if (this.props.selectedMonthAsDate.getMonth() !== selectedMonthAsDate.getMonth()) {
-
-            console.log(this.props.selectedMonthAsDate.getMonth())
-            console.log(nextProps.params.month)
-            //this.props.changeMonth(selectedMonthAsDate);
+            this.props.changeMonth(selectedMonthAsDate);
         }
     }
 

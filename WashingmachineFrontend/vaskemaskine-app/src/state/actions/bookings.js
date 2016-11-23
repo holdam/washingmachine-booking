@@ -82,7 +82,6 @@ export function fetchBookingsForMonth(year, month) {
         let firstDayOfMonth = new Date(year, month, 1);
         let lastDayOfMonth = new Date(year, month + 1, 0);
 
-        // Ugly logic to have here
         let numberOfDaysBeforeFirstDayInMonth = properModulo(firstDayOfMonth.getDay() - 1, 7);
         let startDateToFetchFor = new Date(year, month, firstDayOfMonth.getDate() - numberOfDaysBeforeFirstDayInMonth);
         startDateToFetchFor.setHours(0);

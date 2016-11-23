@@ -8,14 +8,15 @@ const mapStateToProps = (state) => {
         username: state.login.username,
         isLoggedIn: !!state.login.username,
         showCreateUserModal: state.createUserFlow.showCreateUserModal,
-        hasLoginFailed: state.login.hasLoginFailed
+        hasLoginFailed: state.login.hasLoginFailed,
+        selectedMonthAsDate: state.calendar.selectedMonthAsDate
     }
 };
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        onLogin: (username, password) => {
-            dispatch(login(username, password));
+        onLogin: (username, password, selectedYear, selectedMonth) => {
+            dispatch(login(username, password, selectedYear, selectedMonth));
         },
         onLogout: () => {
             dispatch(logout());
@@ -32,9 +33,9 @@ const mapDispatchToProps = (dispatch) => {
         onEndCreateUserFlow: () => {
             dispatch(endCreateUserFlow());
         },
-        onCreateUser: (username, password) => {
+        onCreateUser: (username, password, selectedYear, selectedMonth) => {
             dispatch(endCreateUserFlow());
-            dispatch(createUser(username, password));
+            dispatch(createUser(username, password, selectedYear, selectedMonth));
         }
     }
 };

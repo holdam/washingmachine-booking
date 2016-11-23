@@ -28,7 +28,9 @@ class Login extends React.Component {
 
     login() {
         if (!!this.state.username && !!this.state.password) {
-            this.props.onLogin(this.state.username, this.state.password);
+            // TODO selectedYear, selectedMonth
+            this.props.onLogin(this.state.username, this.state.password,
+                this.props.selectedMonthAsDate.getFullYear(), this.props.selectedMonthAsDate.getMonth());
         } else {
             this.props.onLoginFailed('Username or password missing');
         }
@@ -64,6 +66,7 @@ class Login extends React.Component {
                     showModal={this.props.showCreateUserModal}
                     onCancelCreateUser={this.props.onEndCreateUserFlow}
                     onCreateUser={this.props.onCreateUser}
+                    selectedMonthAsDate={this.props.selectedMonthAsDate}
                 />
             </div>
         )

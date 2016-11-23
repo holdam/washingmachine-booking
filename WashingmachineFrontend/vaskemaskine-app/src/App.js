@@ -31,10 +31,9 @@ export default App;
 // ikke finger cursor når ikke logget ind (elt evt. lad den åbne lav bruger modal)
 // rev tabel til bookings
 // proptypes
-// flash login mislykkedes
-// websockets til at hente ting live ?
+// flash login mislykkedes / gør den "grå når den loader" samme med kalender?
 // få usage ned i bunden
-// refetch bookings efter logge ind
+// common testing stuff move out
 
 // TODO næste release
 // admin/kasser panel/forbrug
@@ -49,6 +48,7 @@ export default App;
 // may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...
 // update password and that kind of shit
 // avoid spam and probably better password creation (more restrict than just nonempty passwords)
+// websockets til at hente ting live ?
 
 // TODO når prod:
 // https + safe cookie

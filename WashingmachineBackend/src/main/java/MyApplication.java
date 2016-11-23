@@ -5,6 +5,7 @@ import core.User;
 import db.BookingDAO;
 import db.UserDAO;
 import db.UserTokenDAO;
+import filters.NoCacheFilter;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
@@ -52,6 +53,7 @@ public class MyApplication extends Application<MyConfiguration> {
 
         // Filters
         environment.jersey().register(new CSRFFilter(config.getTargetsOrigin()));
+        environment.jersey().register(new NoCacheFilter());
 
         // Resources
         environment.jersey().register(new BookingResource(bookingDAO, userTokenDAO));

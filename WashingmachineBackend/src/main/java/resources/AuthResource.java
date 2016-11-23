@@ -16,6 +16,7 @@ import javax.ws.rs.core.Response;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.UUID;
 
 @Path("/auth")
@@ -25,6 +26,7 @@ public class AuthResource {
     private UserDAO userDAO;
     private int tokenLifetime;
     private String domain;
+    private final String USER_ACCESS_TOKEN = "userAccessToken";
 
     public AuthResource(UserTokenDAO userTokenDAO, UserDAO userDAO, int tokenLifetime, String domain) {
         this.userTokenDAO = userTokenDAO;
@@ -69,9 +71,9 @@ public class AuthResource {
 
     @POST
     @Path("/sign_out")
-    public Response signOut(@CookieParam("userAccessToken") Cookie userAccessToken) {
+    public Response signOut(@CookieParam(USER_ACCESS_TOKEN) Cookie userAccessToken) {
         return Response.ok()
-                .cookie(new NewCookie(userAccessToken, null, 0, false))
+                .header("Set-Cookie", USER_ACCESS_TOKEN + "=deleted;Domain=" + domain + ";Path=/;Expires=Thu, 01-Jan-1970 00:00:01 GMT")
                 .build();
     }
 
@@ -80,9 +82,10 @@ public class AuthResource {
         return Response.ok()
                 .cookie(
                         new NewCookie(
-                                "userAccessToken", userTokenDTO.getToken(), "/", domain,
-                                "", Math.toIntExact(timeLeftToken), false)
-                ).build();
+                                USER_ACCESS_TOKEN, userTokenDTO.getToken(), "/", domain,
+                                "", Math.toIntExact(timeLeftToken), false))
+                .entity(userTokenDTO)
+                .build();
     }
 
 

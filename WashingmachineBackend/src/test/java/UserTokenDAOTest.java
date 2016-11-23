@@ -19,6 +19,7 @@ public class UserTokenDAOTest {
     private UserDAO userDAO;
     private UserTokenDAO userTokenDAO;
     private final String USERNAME_1 = "user";
+    private final String USERNAME_1_ALTERNATIVE = "UsEr";
     private final String USERNAME_2 = "user2";
     private final String USER_1_PASSWORD = "password_that_should_have_been_hashed_and_salted";
     private final String USER_1_SALT = "salt";
@@ -105,6 +106,20 @@ public class UserTokenDAOTest {
         insertUserTokenForUser1();
         String username = userTokenDAO.getUsernameFromToken(USER_1_TOKEN);
         assertEquals(USERNAME_1, username);
+    }
+
+    @Test
+    public void usernameCasingForGetUserTokenFromUsernameShouldNotMatter() {
+        insertUserTokenForUser1();
+        UserTokenDTO token = userTokenDAO.getUserTokenFromUsername(USERNAME_1_ALTERNATIVE);
+        assertEquals(USER_1_TOKEN, token.getToken());
+    }
+
+    @Test
+    public void usernameCasingForDeleteUserTokenFromUsernameShouldNotMatter() {
+        insertUserTokenForUser1();
+        int rowsDeleted = userTokenDAO.deleteUserTokenFromUsername(USERNAME_1_ALTERNATIVE);
+        assertEquals(1, rowsDeleted);
     }
 
 

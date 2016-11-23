@@ -16,6 +16,7 @@ public class UserDAOTest {
     private BookingDAO bookingDAO;
     private UserDAO userDAO;
     private final String USERNAME_1 = "user";
+    private final String USERNAME_1_ALTERNATIVE = "UsEr";
     private final String USERNAME_2 = "user2";
     private final String USER_1_PASSWORD = "password_that_should_have_been_hashed_and_salted";
     private final String USER_1_SALT = "salt";
@@ -74,6 +75,20 @@ public class UserDAOTest {
 
         salt = userDAO.getSaltForUser(USERNAME_2);
         assertEquals(null, salt);
+    }
+
+    @Test
+    public void usernameCasingShouldNotMatterForAuthentication() {
+        insertUser1();
+        boolean login = userDAO.authenticateUser(USERNAME_1_ALTERNATIVE, USER_1_PASSWORD);
+        assertTrue(login);
+    }
+
+    @Test
+    public void usernameCasingShouldNotMatterForGettingSalt() {
+        insertUser1();
+        String salt = userDAO.getSaltForUser(USERNAME_1_ALTERNATIVE);
+        assertEquals(USER_1_SALT, salt);
     }
 
     private void insertUser1() {

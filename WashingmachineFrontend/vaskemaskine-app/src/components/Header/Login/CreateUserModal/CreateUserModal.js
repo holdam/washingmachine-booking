@@ -52,7 +52,9 @@ class CreateUserModal extends React.Component {
                 this.setState({errorMessages: errorMessages});
 
                 if (errorMessages.length === 0) {
-                    this.props.onCreateUser(this.state.username, this.state.password);
+                    // TODO selectedYear, selectedMonth
+                    this.props.onCreateUser(this.state.username, this.state.password,
+                        this.props.selectedMonthAsDate.getFullYear(), this.props.selectedMonthAsDate.getMonth());
                 }
             }.bind(this));
     }

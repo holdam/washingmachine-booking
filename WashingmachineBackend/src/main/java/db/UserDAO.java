@@ -32,18 +32,19 @@ public interface UserDAO {
             "INSERT INTO roles (id, role_name) VALUES (1, 'default') ON CONFLICT DO NOTHING;")
     void createRoleTable();
 
+    // TODO casing
     @SqlUpdate("INSERT INTO users (username, password, salt, role) VALUES (:username, :password, :salt, :role)")
     int insertUser(@Bind("username") String username, @Bind("password") String password, @Bind("salt") String salt, @Bind("role") int role);
 
     @SqlQuery("SELECT CASE WHEN COUNT(users.id) > 0 THEN 1 ELSE 0 END " +
-            "FROM users WHERE username = :username AND password = :password")
+            "FROM users WHERE upper(username) = upper(:username) AND password = :password")
     boolean authenticateUser(@Bind("username") String username, @Bind("password") String password);
 
 
     @SqlQuery("SELECT username, role from users where upper(username) = upper(:username)")
     User getUser(@Bind("username") String username);
 
-    @SqlQuery("SELECT salt FROM users WHERE username = :username")
+    @SqlQuery("SELECT salt FROM users WHERE upper(username) = upper(:username)")
     String getSaltForUser(@Bind("username") String username);
 
     @SqlUpdate("TRUNCATE TABLE users CASCADE")
