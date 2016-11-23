@@ -1,13 +1,13 @@
 import {connect} from 'react-redux';
 import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
 import {endCreateBookingFlow} from '../state/actions/createBookingFlow';
-import {createBooking, fetchBookingsForMonth, editBooking, deleteBooking} from '../state/actions/bookings';
+import {createBooking, editBooking, deleteBooking} from '../state/actions/bookings';
+import {changeMonth} from '../state/actions/calendar';
 import {endEditBookingFlow} from '../state/actions/editBookingFlow';
 
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
     return {
-        selectedMonth: (ownProps.params.year && ownProps.params.month) ? new Date(ownProps.params.year, ownProps.params.month) : new Date(),
-        currentMonth: new Date(),
+        selectedMonthAsDate: state.calendar.selectedMonthAsDate,
         showBookingModal: state.bookingFlow.showBookingModal || state.editBookingFlow.showBookingModal,
         bookingDate: state.bookingFlow.date || state.editBookingFlow.date,
         bookings: state.bookings.bookings,
@@ -25,14 +25,14 @@ const mapStateToProps = (state, ownProps) => {
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        changeMonth: (selectedMonthAsDate) => {
+            dispatch(changeMonth(selectedMonthAsDate));
+        },
         onCreateBooking: (startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses) => {
             dispatch(createBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses));
         },
         onCancelBookingCreation: () => {
             dispatch(endCreateBookingFlow());
-        },
-        fetchBookingsForMonth: (year, month) => {
-            dispatch(fetchBookingsForMonth(year, month))
         },
         onCancelEditBookingCreation: () => {
             dispatch(endEditBookingFlow());

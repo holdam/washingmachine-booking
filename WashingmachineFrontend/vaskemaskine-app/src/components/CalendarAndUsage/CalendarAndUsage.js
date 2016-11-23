@@ -12,15 +12,25 @@ class WeekRepresentation {
 }
 
 class CalendarAndUsage extends React.Component {
-    constructor(props) {
-        super(props);
-        this.props.fetchBookingsForMonth(props.selectedMonth.getFullYear(), props.selectedMonth.getMonth());
+    componentDidMount() {
+        this.props.changeMonth(new Date());
     }
 
+
     componentWillReceiveProps(nextProps) {
+        let selectedMonthAsDate = new Date(nextProps.params.year, nextProps.params.month);
+
+        if (selectedMonthAsDate === undefined || isNaN(selectedMonthAsDate.getTime()) || !this.props.selectedMonthAsDate) {
+            return;
+        }
+
         // Fetch data if we are in a new month
-        if (this.props.selectedMonth.getMonth() !== nextProps.selectedMonth.getMonth()) {
-            this.props.fetchBookingsForMonth(nextProps.selectedMonth.getFullYear(), nextProps.selectedMonth.getMonth());
+        // TODO we need to handle that this method gets called more than once and selectedMonthAsDate may not have changed yet
+        if (this.props.selectedMonthAsDate.getMonth() !== selectedMonthAsDate.getMonth()) {
+
+            console.log(this.props.selectedMonthAsDate.getMonth())
+            console.log(nextProps.params.month)
+            //this.props.changeMonth(selectedMonthAsDate);
         }
     }
 
@@ -79,21 +89,23 @@ class CalendarAndUsage extends React.Component {
     }
 
     render() {
-        let weeks = this.getWeeksOfMonth(this.props.selectedMonth.getFullYear(), this.props.selectedMonth.getMonth());
+        if (!this.props.selectedMonthAsDate) {
+            return <div></div>
+        }
 
+        let weeks = this.getWeeksOfMonth(this.props.selectedMonthAsDate.getFullYear(), this.props.selectedMonthAsDate.getMonth());
         return (
             <div className="calendarAndUsage">
-                <MonthPicker month={this.props.selectedMonth.getMonth()}
-                             year={this.props.selectedMonth.getFullYear()}
+                <MonthPicker month={this.props.selectedMonthAsDate.getMonth()}
+                             year={this.props.selectedMonthAsDate.getFullYear()}
                              dayRangeStart={weeks[0].days[0]}
                              dayRangeEnd={weeks[5].days[6]}
-                             currentMonth={this.props.currentMonth}
                 />
                 <div className="row">
                     <Usage />
                     <div className="col-md-6">
-                        <Calendar month={this.props.selectedMonth.getMonth()}
-                                  year={this.props.selectedMonth.getFullYear()}
+                        <Calendar month={this.props.selectedMonthAsDate.getMonth()}
+                                  year={this.props.selectedMonthAsDate.getFullYear()}
                                   weeks={weeks}
                                   bookingDate={this.props.bookingDate}
                                   bookings={this.props.bookings}

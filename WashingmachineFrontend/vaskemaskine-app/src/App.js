@@ -33,6 +33,8 @@ export default App;
 // proptypes
 // flash login mislykkedes
 // websockets til at hente ting live ?
+// få usage ned i bunden
+// refetch bookings efter logge ind
 
 // TODO næste release
 // admin/kasser panel/forbrug

@@ -85,6 +85,4 @@ class Week extends React.Component {
 }
 
 
-// TODO push events live :D ? lav en lytter der sidder og kigger hele tiden
-
 export default Calendar;
