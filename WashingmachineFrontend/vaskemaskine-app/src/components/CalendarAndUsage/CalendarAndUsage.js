@@ -1,6 +1,6 @@
 import React from 'react';
 import Calendar from './Calendar/Calendar';
-import Usage from './Usage/Usage';
+import UsageContainer from '../../containers/UsageContainer';
 import MonthPicker from './Monthpicker/Monthpicker';
 import './CalendarAndUsage.css';
 
@@ -98,7 +98,7 @@ class CalendarAndUsage extends React.Component {
                              dayRangeEnd={weeks[5].days[6]}
                 />
                 <div className="row">
-                    <Usage />
+                    <UsageContainer />
                     <div className="col-md-6">
                         <Calendar month={this.props.selectedMonthAsDate.getMonth()}
                                   year={this.props.selectedMonthAsDate.getFullYear()}

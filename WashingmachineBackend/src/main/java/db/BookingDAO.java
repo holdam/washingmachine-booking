@@ -1,7 +1,9 @@
 package db;
 
 import api.BookingDTO;
+import api.Usage;
 import db.mappers.BookingMapper;
+import db.mappers.UsageMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
 import org.skife.jdbi.v2.sqlobject.SqlQuery;
@@ -69,9 +71,9 @@ public interface BookingDAO {
     @SqlUpdate("DELETE FROM bookings WHERE id = :id AND owner = :username")
     int deleteBooking(@Bind("username") String username, @Bind("id") int id);
 
-    @SqlQuery("SELECT * FROM bookings WHERE start_time = :start_time AND end_time = :end_time AND owner = :owner")
-    BookingDTO getBookingFromOwnerAndDates(@Bind("owner") String owner, @Bind("start_time") Date startTime,
-                                           @Bind("end_time") Date endTime);
+    @SqlQuery("SELECT * FROM bookings WHERE start_time = :startTime AND end_time = :endTime AND owner = :owner")
+    BookingDTO getBookingFromOwnerAndDates(@Bind("owner") String owner, @Bind("startTime") Date startTime,
+                                           @Bind("endTime") Date endTime);
 
     @SqlQuery("SELECT * FROM bookings WHERE id = :id AND owner = :username")
     BookingDTO getBookingFromId(@Bind("username") String username, @Bind("id") int id);
@@ -85,6 +87,17 @@ public interface BookingDAO {
                       @Bind("startTime") Date startTime, @Bind("endTime") Date endTime,
                       @Bind("numberOfWashingMachineUses") int numberOfWashingMachineUses,
                       @Bind("numberOfTumbleDryUses") int numberOfTumbleDryUses);
+
+    @RegisterMapper(UsageMapper.class)
+    @SqlQuery("SELECT " +
+            "SUM(number_of_washing_machine_uses) sum_of_washing_machine_uses, " +
+            "SUM(number_of_tumble_dry_uses) sum_of_tumble_dry_uses, " +
+            "MAX(owner) as owner " +
+            "FROM bookings " +
+            "WHERE owner = :username " +
+            "AND start_time >= :startTime " +
+            "AND end_time <= :endTime")
+    Usage getUsageInInterval(@Bind("username") String username, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 
     @SqlUpdate("TRUNCATE TABLE bookings")
     void truncateTable();

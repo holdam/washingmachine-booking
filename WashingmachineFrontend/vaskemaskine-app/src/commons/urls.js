@@ -4,7 +4,8 @@ var urls = {
     api: {
         auth: '/auth',
         booking: '/booking',
-        user: '/user'
+        user: '/user',
+        usage: '/usage'
     }
 };
 export default urls;

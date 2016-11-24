@@ -16,6 +16,7 @@ import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
 import resources.AuthResource;
 import resources.BookingResource;
+import resources.UsageResource;
 import resources.UserResource;
 import filters.CSRFFilter;
 
@@ -59,5 +60,6 @@ public class MyApplication extends Application<MyConfiguration> {
         environment.jersey().register(new BookingResource(bookingDAO, userTokenDAO));
         environment.jersey().register(new UserResource(userDAO, userTokenDAO));
         environment.jersey().register(new AuthResource(userTokenDAO, userDAO, config.getTokenLifetime(), config.getDomain()));
+        environment.jersey().register(new UsageResource(bookingDAO));
     }
 }

@@ -1,4 +1,5 @@
 import api.BookingDTO;
+import api.Usage;
 import core.RoleHelper;
 import db.BookingDAO;
 import db.UserDAO;
@@ -215,5 +216,38 @@ public class BookingDAOTest {
         assertEquals(USERNAME_2, someoneElsesBookingRetrieved.getOwner());
         assertEquals(0, someoneElsesBookingRetrieved.getNumberOfWashingMachineUses());
         assertEquals(0, someoneElsesBookingRetrieved.getNumberOfTumbleDryUses());
+    }
+
+    @Test
+    public void getUsageInIntervalShouldWork() {
+        // Create four bookings, two of owns in different times, 1 outside of interval of own, 1 not owned by self
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 30);
+        BookingDTO firstBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 10, 10);
+        calendar.set(Calendar.HOUR_OF_DAY, 11);
+        BookingDTO secondBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 8, 15);
+        BookingDTO thirdBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_2, 123, 321);
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        BookingDTO fourthBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 30, 30);
+
+        // Insert bookings
+        bookingDAO.insertBooking(firstBooking);
+        bookingDAO.insertBooking(secondBooking);
+        bookingDAO.insertBooking(thirdBooking);
+        bookingDAO.insertBooking(fourthBooking);
+
+        // Setup search dates
+        calendar.set(Calendar.HOUR_OF_DAY, 10);
+        calendar.set(Calendar.MINUTE, 0);
+        Date startSearchDate = calendar.getTime();
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        Date endSearchDate = calendar.getTime();
+
+        Usage usage = bookingDAO.getUsageInInterval(USERNAME_1, startSearchDate, endSearchDate);
+
+        assertEquals(18, usage.getSumOfWashingMachineUses());
+        assertEquals(25, usage.getSumOfTumbleDryUses());
+        assertEquals(USERNAME_1, usage.getOwner());
     }
 }

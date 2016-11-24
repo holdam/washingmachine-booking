@@ -6,6 +6,7 @@ import createUserFlow from './createUserFlow';
 import editBookingFlow from './editBookingFlow'
 import globalErrorMessages from './globalErrorMessages'
 import calendar from './calendar'
+import usage from "./usage";
 
 const washingMachineApp = combineReducers({
     bookings,
@@ -14,7 +15,8 @@ const washingMachineApp = combineReducers({
     createUserFlow,
     editBookingFlow,
     globalErrorMessages,
-    calendar
+    calendar,
+    usage
 });
 
 export default washingMachineApp;

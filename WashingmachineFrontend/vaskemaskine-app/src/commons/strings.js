@@ -1,3 +1,5 @@
+import {COST_OF_TUMBLE_DRY_USE, COST_OF_WASHING_MACHINE_USE} from './util'
+
 var strings = {
     frontpageTitle: 'Vaskerumsbooking',
     bookingModal: {
@@ -10,8 +12,8 @@ var strings = {
         cancel: 'Annuller',
         startTime: 'Starttidspunkt',
         endTime: 'Sluttidspunkt',
-        numberOfWashes: 'Antal vaskninger (4 kr)',
-        numberOfTumbleDries: 'Antal tørretumblinger (3 kr)',
+        numberOfWashes: `Antal vaskninger (${COST_OF_WASHING_MACHINE_USE} kr)`,
+        numberOfTumbleDries: `Antal tørretumblinger (${COST_OF_TUMBLE_DRY_USE} kr)`,
         confirmDeletion: 'Er du sikker på du vil slette reservationen?',
         daysCurrentBookings: 'Nuværende bookinger på dagen',
         noBookingsAsOfYet: 'N/A',
