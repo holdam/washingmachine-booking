@@ -40,4 +40,24 @@
 
 .last-three-months-usage {
     width: 225px;
+    height: 30px;
+}
+
+.washing-machine-used, .tumble-dry-used {
+    float: left;
+    padding-left: 5px;
+}
+
+.washing-machine-used {
+    background: cornflowerblue;
+    border-left: 1px solid gray;
+    border-bottom: 1px solid gray;
+    border-top: 1px solid gray;
+}
+
+.tumble-dry-used {
+    background: lightsalmon;
+    border-right: 1px solid gray;
+    border-bottom: 1px solid gray;
+    border-top: 1px solid gray;
 }

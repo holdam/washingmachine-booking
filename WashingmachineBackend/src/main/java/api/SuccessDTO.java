@@ -2,12 +2,12 @@ package api;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class Success {
+public class SuccessDTO {
     private String error;
 
     private boolean success;
 
-    public Success(String error, boolean success) {
+    public SuccessDTO(String error, boolean success) {
         this.error = error;
         this.success = success;
     }

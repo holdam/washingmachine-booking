@@ -18,10 +18,13 @@ public class CookieCredentialAuthFilter<P extends Principal> extends AuthFilter<
     @Override
     public void filter(ContainerRequestContext containerRequestContext) throws IOException {
         for (Map.Entry<String, Cookie> credential : containerRequestContext.getCookies().entrySet()) {
-            if(!this.authenticate(containerRequestContext, credential.getValue().getValue(), "BASIC")) {
-                throw new WebApplicationException(this.unauthorizedHandler.buildResponse(this.prefix, this.realm));
+            if(this.authenticate(containerRequestContext, credential.getValue().getValue(), "BASIC")) {
+                return;
             }
         }
+
+        throw new WebApplicationException(this.unauthorizedHandler.buildResponse(this.prefix, this.realm));
+
     }
 
     public static class Builder<P extends Principal> extends AuthFilterBuilder<String, P, CookieCredentialAuthFilter<P>> {

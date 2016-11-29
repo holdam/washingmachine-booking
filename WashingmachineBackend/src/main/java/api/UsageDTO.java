@@ -1,30 +1,31 @@
 package api;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
-public class Usage {
-    private String owner;
+public class UsageDTO {
     private int sumOfWashingMachineUses;
     private int sumOfTumbleDryUses;
+    private int month;
+    private int year;
 
-    public Usage(String owner, int sumOfWashingMachineUses, int sumOfTumbleDryUses) {
-        this.owner = owner;
+    public UsageDTO(int sumOfWashingMachineUses, int sumOfTumbleDryUses, int year, int month) {
         this.sumOfWashingMachineUses = sumOfWashingMachineUses;
         this.sumOfTumbleDryUses = sumOfTumbleDryUses;
+        this.year = year;
+        this.month = month;
     }
 
-    @JsonProperty
-    public String getOwner() {
-        return owner;
-    }
-
-    @JsonProperty
     public int getSumOfWashingMachineUses() {
         return sumOfWashingMachineUses;
     }
 
-    @JsonProperty
     public int getSumOfTumbleDryUses() {
         return sumOfTumbleDryUses;
+    }
+
+    public int getMonth() {
+        return month;
+    }
+
+    public int getYear() {
+        return year;
     }
 }

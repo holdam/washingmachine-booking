@@ -1,4 +1,4 @@
-import api.Success;
+import api.SuccessDTO;
 import core.RoleHelper;
 import core.User;
 import db.UserDAO;
@@ -44,7 +44,7 @@ public class UserResourceTest {
 
     @Test
     public void doesUsernameExistAlreadyShouldWork() {
-        Success success = userResource.doesUsernameExistAlready("user");
+        SuccessDTO success = userResource.doesUsernameExistAlready("user");
         assertEquals(true, success.isSuccess());
         when(userDAO.getUser("user")).thenReturn(new User("user", RoleHelper.ROLE_DEFAULT));
         success = userResource.doesUsernameExistAlready("user");

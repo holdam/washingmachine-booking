@@ -5,8 +5,7 @@ import {fetchUsage} from '../state/actions/usage';
 const mapStateToProps = (state) => {
     return {
         sumOfWashingMachineUses: state.usage.sumOfWashingMachineUses,
-        sumOfTumbleDryUses: state.usage.sumOfTumbleDryUses,
-        selectedMonthAsDate: state.calendar.selectedMonthAsDate
+        sumOfTumbleDryUses: state.usage.sumOfTumbleDryUses
     }
 };
 

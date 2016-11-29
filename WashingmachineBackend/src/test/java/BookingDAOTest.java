@@ -1,5 +1,5 @@
 import api.BookingDTO;
-import api.Usage;
+import api.UsageDTO;
 import core.RoleHelper;
 import db.BookingDAO;
 import db.UserDAO;
@@ -9,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -220,34 +219,47 @@ public class BookingDAOTest {
 
     @Test
     public void getUsageInIntervalShouldWork() {
-        // Create four bookings, two of owns in different times, 1 outside of interval of own, 1 not owned by self
+        // Create five bookings, two own in different time slots, 1 in different month, 1 outside of interval of own, 1 not owned by self
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 30);
         BookingDTO firstBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 10, 10);
+        calendar.add(Calendar.MONTH, -1);
+        BookingDTO secondBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 1337, 7331);
+        calendar.add(Calendar.MONTH, 1);
         calendar.set(Calendar.HOUR_OF_DAY, 11);
-        BookingDTO secondBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 8, 15);
-        BookingDTO thirdBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_2, 123, 321);
+        BookingDTO thirdBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 8, 15);
+        BookingDTO fourthBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_2, 123, 321);
         calendar.set(Calendar.HOUR_OF_DAY, 15);
-        BookingDTO fourthBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 30, 30);
+        BookingDTO fifthBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 30, 30);
 
         // Insert bookings
         bookingDAO.insertBooking(firstBooking);
         bookingDAO.insertBooking(secondBooking);
         bookingDAO.insertBooking(thirdBooking);
         bookingDAO.insertBooking(fourthBooking);
+        bookingDAO.insertBooking(fifthBooking);
 
         // Setup search dates
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         calendar.set(Calendar.MINUTE, 0);
+        calendar.add(Calendar.MONTH, -1);
         Date startSearchDate = calendar.getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.add(Calendar.MONTH, 1);
         Date endSearchDate = calendar.getTime();
 
-        Usage usage = bookingDAO.getUsageInInterval(USERNAME_1, startSearchDate, endSearchDate);
+        List<UsageDTO> usage = bookingDAO.getUsageInInterval(USERNAME_1, startSearchDate, endSearchDate);
+        assertEquals(2, usage.size());
 
-        assertEquals(18, usage.getSumOfWashingMachineUses());
-        assertEquals(25, usage.getSumOfTumbleDryUses());
-        assertEquals(USERNAME_1, usage.getOwner());
+        for (UsageDTO usageDTO : usage) {
+            if (calendar.get(Calendar.MONTH) == usageDTO.getMonth()) {
+                assertEquals(18, usageDTO.getSumOfWashingMachineUses());
+                assertEquals(25, usageDTO.getSumOfTumbleDryUses());
+            } else {
+                assertEquals(1337, usageDTO.getSumOfWashingMachineUses());
+                assertEquals(7331, usageDTO.getSumOfTumbleDryUses());
+            }
+        }
     }
 }

@@ -1,7 +1,7 @@
 package db;
 
 import api.BookingDTO;
-import api.Usage;
+import api.UsageDTO;
 import db.mappers.BookingMapper;
 import db.mappers.UsageMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
@@ -90,6 +90,19 @@ public interface BookingDAO {
 
     @RegisterMapper(UsageMapper.class)
     @SqlQuery("SELECT " +
+            "to_char(start_time, 'Mon') as mon, "+
+            "extract(year from start_time) as year, "+
+            "SUM(number_of_washing_machine_uses) sum_of_washing_machine_uses, "+
+            "SUM(number_of_tumble_dry_uses) sum_of_tumble_dry_uses "+
+            "FROM bookings "+
+            "WHERE owner = :username "+
+            "AND start_time >= :startTime "+
+            "AND end_time <= :endTime "+
+            "GROUP BY (1, 2)")
+    List<UsageDTO> getUsageInInterval(@Bind("username") String username, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
+
+    /*
+    @SqlQuery("SELECT " +
             "SUM(number_of_washing_machine_uses) sum_of_washing_machine_uses, " +
             "SUM(number_of_tumble_dry_uses) sum_of_tumble_dry_uses, " +
             "MAX(owner) as owner " +
@@ -97,7 +110,9 @@ public interface BookingDAO {
             "WHERE owner = :username " +
             "AND start_time >= :startTime " +
             "AND end_time <= :endTime")
-    Usage getUsageInInterval(@Bind("username") String username, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
+    UsageDTO getUsageInInterval(@Bind("username") String username, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime); */
+
+
 
     @SqlUpdate("TRUNCATE TABLE bookings")
     void truncateTable();

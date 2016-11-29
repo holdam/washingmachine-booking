@@ -8,9 +8,29 @@ class Usage extends React.Component {
 
         // TODO maybe backend should return per month basis
         // Feed initial usage data
-        let startDateToFetchFor = new Date(this.props.selectedMonthAsDate.getFullYear(), this.props.selectedMonthAsDate.getMonth() - 2, 1);
-        let endDateToFetchFor = new Date(this.props.selectedMonthAsDate.getFullYear(), this.props.selectedMonthAsDate.getMonth() + 1, 0, 23, 59);
+        let today = new Date();
+        let startDateToFetchFor = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+        let endDateToFetchFor = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59);
         this.props.fetchUsage(startDateToFetchFor, endDateToFetchFor);
+    }
+
+    getRatioInPercentageBetweenNumbers(a, b) {
+        let ratioAB, ratioBA;
+
+        if (a === 0 && b === 0) {
+            ratioAB = 0.5;
+            ratioBA = 0.5;
+        } else if (a === 0) {
+            ratioAB = 1;
+            ratioBA = 0;
+        } else if (b === 0) {
+            ratioBA = 1;
+            ratioAB = 0;
+        } else {
+            ratioAB = a / (a + b);
+            ratioBA = (1 - ratioAB);
+        }
+        return [ratioAB, ratioBA];
     }
 
     render() {
@@ -18,17 +38,15 @@ class Usage extends React.Component {
         let lastThreeMonthsTumbleDryPrice = this.props.sumOfTumbleDryUses * COST_OF_TUMBLE_DRY_USE;
 
         let lastThreeMonthsWashingMachinePercentage, lastThreeMonthsTumbleDryPercentage;
-        if (lastThreeMonthsTumbleDryPrice === 0 && lastThreeMonthsWashingMachinePrice === 0) {
-            lastThreeMonthsWashingMachinePercentage = 0.5;
-            lastThreeMonthsTumbleDryPercentage = 0.5;
-        } else if(lastThreeMonthsTumbleDryPrice === 0) {
-            lastThreeMonthsWashingMachinePercentage = 1;
-        } else if(lastThreeMonthsWashingMachinePrice === 0) {
-            lastThreeMonthsTumbleDryPercentage = 1;
-        } else {
-            lastThreeMonthsWashingMachinePercentage = lastThreeMonthsWashingMachinePrice / lastThreeMonthsTumbleDryPrice;
-            lastThreeMonthsTumbleDryPercentage = (1 - lastThreeMonthsWashingMachinePercentage) * 100 + '%';
-        }
+        [lastThreeMonthsWashingMachinePercentage, lastThreeMonthsTumbleDryPercentage] =
+            this.getRatioInPercentageBetweenNumbers(lastThreeMonthsWashingMachinePrice, lastThreeMonthsTumbleDryPrice);
+
+
+        console.log(lastThreeMonthsWashingMachinePercentage, lastThreeMonthsTumbleDryPercentage);
+
+        lastThreeMonthsTumbleDryPercentage = (lastThreeMonthsTumbleDryPercentage * 100) + '%';
+        lastThreeMonthsWashingMachinePercentage = (lastThreeMonthsWashingMachinePercentage * 100) + '%';
+
 
         // TODO
 
@@ -43,8 +61,12 @@ class Usage extends React.Component {
                 <p className="total-price">30 kroner</p>
                 <p>Sidste 3 måneder (sep-nov)</p>
                 <div className="last-three-months-usage">
-                    <span style={{width: lastThreeMonthsWashingMachinePercentage}} className="washing-machine-used">{4 * this.props.sumOfWashingMachineUses}</span>
-                    <span style={{width: lastThreeMonthsTumbleDryPercentage}} className="tumble-dry-used">{3 * this.props.sumOfTumbleDryUses}</span>
+                    <div style={{width: lastThreeMonthsWashingMachinePercentage}} className="washing-machine-used">
+                        {COST_OF_WASHING_MACHINE_USE * this.props.sumOfWashingMachineUses} kr
+                    </div>
+                    <div style={{width: lastThreeMonthsTumbleDryPercentage}} className="tumble-dry-used">
+                        {COST_OF_TUMBLE_DRY_USE * this.props.sumOfTumbleDryUses} kr
+                    </div>
                 </div>
 
 

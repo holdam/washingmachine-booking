@@ -11,6 +11,8 @@ import org.skife.jdbi.v2.sqlobject.customizers.RegisterMapper;
 @RegisterMapper(UserMapper.class)
 public interface UserDAO {
 
+    // TODO lejlighed + navn?
+
     @SqlUpdate("CREATE TABLE IF NOT EXISTS users (" +
             "id SERIAL," +
             "username varchar(100) NOT NULL," +
@@ -32,7 +34,6 @@ public interface UserDAO {
             "INSERT INTO roles (id, role_name) VALUES (1, 'default') ON CONFLICT DO NOTHING;")
     void createRoleTable();
 
-    // TODO casing
     @SqlUpdate("INSERT INTO users (username, password, salt, role) VALUES (:username, :password, :salt, :role)")
     int insertUser(@Bind("username") String username, @Bind("password") String password, @Bind("salt") String salt, @Bind("role") int role);
 

@@ -1,24 +1,18 @@
 package resources;
 
-import api.Success;
-import com.sun.org.apache.xerces.internal.impl.dv.util.HexBin;
+import api.SuccessDTO;
 import core.RoleHelper;
 import core.User;
 import core.Util;
 import db.UserDAO;
 import db.UserTokenDAO;
-import exceptions.ValidationErrorException;
 import org.apache.commons.lang3.RandomStringUtils;
 
 import javax.naming.AuthenticationException;
-import javax.validation.ValidationException;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
-import javax.ws.rs.core.Response;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
@@ -48,13 +42,13 @@ public class UserResource {
 
     @GET
     @Path("/username_exists")
-    public Success doesUsernameExistAlready(@QueryParam("username") String username) {
+    public SuccessDTO doesUsernameExistAlready(@QueryParam("username") String username) {
         User user = userDAO.getUser(username);
         if (user == null) {
-            return new Success("", true);
+            return new SuccessDTO("", true);
         }
 
-        return new Success("Username already exist", false);
+        return new SuccessDTO("Username already exist", false);
     }
 
     @GET
