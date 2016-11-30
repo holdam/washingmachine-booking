@@ -1,4 +1,5 @@
 import api.BookingDTO;
+import core.BookingServiceImpl;
 import core.RoleHelper;
 import core.User;
 import db.BookingDAO;
@@ -28,7 +29,7 @@ public class BookingResourceTest {
     public void setup() {
         bookingDAO = mock(BookingDAO.class);
         userTokenDAO = mock(UserTokenDAO.class);
-        bookingResource = new BookingResource(bookingDAO, userTokenDAO);
+        bookingResource = new BookingResource(bookingDAO, userTokenDAO, new BookingServiceImpl(bookingDAO));
         calendar = Calendar.getInstance();
     }
 

@@ -1,6 +1,8 @@
 import auth.CookieCredentialAuthFilter;
 import auth.MyAuthenticator;
 import com.codahale.metrics.MetricRegistry;
+import core.BookingService;
+import core.BookingServiceImpl;
 import core.User;
 import db.BookingDAO;
 import db.UserDAO;
@@ -32,6 +34,7 @@ public class MyApplication extends Application<MyConfiguration> {
         final BookingDAO bookingDAO = jdbi.onDemand(BookingDAO.class);
         final UserDAO userDAO = jdbi.onDemand(UserDAO.class);
         final UserTokenDAO userTokenDAO = jdbi.onDemand(UserTokenDAO.class);
+        final BookingService bookingService = new BookingServiceImpl(bookingDAO);
 
         // Sets up tables if they don't exist
         userDAO.createRoleTable();
@@ -57,9 +60,9 @@ public class MyApplication extends Application<MyConfiguration> {
         environment.jersey().register(new NoCacheFilter());
 
         // Resources
-        environment.jersey().register(new BookingResource(bookingDAO, userTokenDAO));
+        environment.jersey().register(new BookingResource(bookingDAO, userTokenDAO, bookingService));
         environment.jersey().register(new UserResource(userDAO, userTokenDAO));
         environment.jersey().register(new AuthResource(userTokenDAO, userDAO, config.getTokenLifetime(), config.getDomain()));
-        environment.jersey().register(new UsageResource(bookingDAO));
+        environment.jersey().register(new UsageResource(bookingDAO, userTokenDAO));
     }
 }
