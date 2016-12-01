@@ -38,9 +38,10 @@
     margin-left: 17px;
 }
 
-.last-three-months-usage {
+.usage-bar {
     width: 225px;
     height: 30px;
+    margin-bottom: 30px;
 }
 
 .washing-machine-used, .tumble-dry-used {

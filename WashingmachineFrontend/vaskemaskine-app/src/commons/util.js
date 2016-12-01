@@ -7,7 +7,7 @@ export const COST_OF_TUMBLE_DRY_USE = 4;
 export function getCookieValueFromName(name) {
     let cookies = document.cookie.split(";");
     let cookie = cookies.filter((cookie) => {
-        return cookie.indexOf(name) !== -1;
+        return cookie.includes(name);
     });
     if (cookie.length === 0) return null;
     return cookie[0].substring(name.length + 1, cookie[0].length)

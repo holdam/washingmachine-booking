@@ -1,11 +1,10 @@
 import urls from '../../commons/urls';
 
 export const RECEIVE_USAGE = 'RETRIEVE_USAGE';
-function receiveUsage(sumOfWashingMachineUses, sumOfTumbleDryUses) {
+function receiveUsage(usage) {
     return {
         type: RECEIVE_USAGE,
-        sumOfWashingMachineUses,
-        sumOfTumbleDryUses
+        usage
     }
 }
 
@@ -16,7 +15,7 @@ export function fetchUsage(startDateToFetchFor, endDateToFetchFor) {
         }).then((response) => {
             return response.json();
         }).then((data) => {
-            dispatch(receiveUsage(data.sumOfWashingMachineUses, data.sumOfTumbleDryUses));
+            dispatch(receiveUsage(data));
         });
     }
 }

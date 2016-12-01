@@ -46,6 +46,11 @@ var strings = {
         globalErrorMessages: {
             error: 'Fejl!'
         }
+    },
+    usage: {
+        usage: 'Forbrug',
+        lastThreeMonths: 'Sidste 3 måneder',
+        thisMonth: 'Denne måned'
     }
 };
 

@@ -4,8 +4,7 @@ import {fetchUsage} from '../state/actions/usage';
 
 const mapStateToProps = (state) => {
     return {
-        sumOfWashingMachineUses: state.usage.sumOfWashingMachineUses,
-        sumOfTumbleDryUses: state.usage.sumOfTumbleDryUses
+        usage: state.usage.usage
     }
 };
 

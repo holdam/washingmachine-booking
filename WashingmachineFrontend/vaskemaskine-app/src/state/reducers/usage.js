@@ -1,11 +1,10 @@
 import {RECEIVE_USAGE} from '../actions/usage';
 
-function usage(state = {sumOfWashingMachineUses: 0, sumOfTumbleDryUses: 0}, action) {
+function usage(state = {usage: []}, action) {
     switch (action.type) {
         case RECEIVE_USAGE:
             return Object.assign({}, state, {
-                sumOfWashingMachineUses: action.sumOfWashingMachineUses,
-                sumOfTumbleDryUses: action.sumOfTumbleDryUses
+                usage: action.usage
             });
         default:
             return state;
