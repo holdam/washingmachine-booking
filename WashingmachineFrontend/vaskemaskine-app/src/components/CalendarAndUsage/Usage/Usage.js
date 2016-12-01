@@ -28,11 +28,11 @@ class Usage extends React.Component {
             ratioAB = 0.5;
             ratioBA = 0.5;
         } else if (a === 0) {
+            ratioAB = 0;
+            ratioBA = 1;
+        } else if (b === 0) {
             ratioAB = 1;
             ratioBA = 0;
-        } else if (b === 0) {
-            ratioBA = 1;
-            ratioAB = 0;
         } else {
             ratioAB = a / (a + b);
             ratioBA = (1 - ratioAB);
@@ -41,6 +41,12 @@ class Usage extends React.Component {
     }
 
     convertRatiosToPercentageForCSS(a, b) {
+        // Default to at least 25%
+        a = Math.max(a, 0.25);
+        b = 1 - a;
+        b = Math.max(b, 0.25);
+        a = 1 - b;
+
         return [
             (a * 100) + '%',
             (b * 100) + '%'
@@ -51,52 +57,57 @@ class Usage extends React.Component {
     render() {
         // Allows us to use shorter more readable syntax
         let usage = this.props.usage;
-        let lastThreeMonthsWashingMachinePrice = 0, lastThreeMonthsTumbleDryPrice = 0,
-            thisMonthsWashingMachinePrice = 0, thisMonthsTumbleDryPrice = 0;
+        let thisMonthsWashingMachineUsage = 0;
+        let thisMonthsTumbleDryUsage = 0;
+        let lastThreeMonthsTumbleDryUsage = 0;
+        let lastThreeMonthsWashingMachineUsage = 0;
 
         // Calculate last 3 months and last months of usage
         for (let i = 0; i < usage.length; i++) {
-            lastThreeMonthsWashingMachinePrice += (usage[i].sumOfWashingMachineUses * COST_OF_WASHING_MACHINE_USE);
-            lastThreeMonthsTumbleDryPrice += (usage[i].sumOfTumbleDryUses * COST_OF_TUMBLE_DRY_USE);
+            lastThreeMonthsWashingMachineUsage += usage[i].sumOfWashingMachineUses;
+            lastThreeMonthsTumbleDryUsage += usage[i].sumOfTumbleDryUses;
 
             if (this.state.today.getMonth() === usage[i].month) {
-                thisMonthsWashingMachinePrice = usage[i].sumOfWashingMachineUses * COST_OF_WASHING_MACHINE_USE;
-                thisMonthsTumbleDryPrice = usage[i].sumOfTumbleDryUses * COST_OF_TUMBLE_DRY_USE;
+                thisMonthsWashingMachineUsage = usage[i].sumOfWashingMachineUses;
+                thisMonthsTumbleDryUsage = usage[i].sumOfTumbleDryUses;
             }
         }
 
-        let lastThreeMonthsWashingMachinePercentage, lastThreeMonthsTumbleDryPercentage,
-            thisMonthsWashingMachinePercentage, thisMonthsTumbleDryPercentage;
+        let thisMonthsWashingMachinePercentage, thisMonthsTumbleDryPercentage,
+            lastThreeMonthsWashingMachinePercentage, lastThreeMonthsTumbleDryPercentage;
 
-
-        [lastThreeMonthsWashingMachinePercentage, lastThreeMonthsTumbleDryPercentage] =
-            this.convertRatiosToPercentageForCSS(
-                ...this.getRatioInPercentageBetweenNumbers(lastThreeMonthsWashingMachinePrice, lastThreeMonthsTumbleDryPrice)
-            );
 
         [thisMonthsWashingMachinePercentage, thisMonthsTumbleDryPercentage] =
             this.convertRatiosToPercentageForCSS(
-                ...this.getRatioInPercentageBetweenNumbers(thisMonthsWashingMachinePrice, thisMonthsTumbleDryPrice)
+                ...this.getRatioInPercentageBetweenNumbers(
+                    thisMonthsWashingMachineUsage * COST_OF_WASHING_MACHINE_USE,
+                    thisMonthsTumbleDryUsage * COST_OF_TUMBLE_DRY_USE)
+            );
+        [lastThreeMonthsWashingMachinePercentage, lastThreeMonthsTumbleDryPercentage] =
+            this.convertRatiosToPercentageForCSS(
+                ...this.getRatioInPercentageBetweenNumbers(
+                    lastThreeMonthsWashingMachineUsage * COST_OF_WASHING_MACHINE_USE,
+                    lastThreeMonthsTumbleDryUsage * COST_OF_TUMBLE_DRY_USE)
             );
 
 
-        let lastThreeMonthsText = `${strings.usage.lastThreeMonths} (${monthNamesShort[this.state.startMonth]}-${monthNamesShort[this.state.endMonth]})`;
+        let lastThreeMonthsText = `${strings.usage.lastThreeMonths}, ${monthNamesShort[this.state.startMonth]}-${monthNamesShort[this.state.endMonth]}`;
 
         return (
             <div className="usage">
-                <h3>Forbrug</h3>
+                <h3>{strings.usage.usage}</h3>
                 <UsageBar
                     widthMachineUsage={thisMonthsWashingMachinePercentage}
                     widthTumbleDryUsage={thisMonthsTumbleDryPercentage}
-                    washingMachineUsage={thisMonthsWashingMachinePrice}
-                    tumbleDryUsage={thisMonthsTumbleDryPrice}
+                    washingMachineUsage={thisMonthsWashingMachineUsage}
+                    tumbleDryUsage={thisMonthsTumbleDryUsage}
                     headerText={strings.usage.thisMonth}
                 />
                 <UsageBar
                     widthMachineUsage={lastThreeMonthsWashingMachinePercentage}
                     widthTumbleDryUsage={lastThreeMonthsTumbleDryPercentage}
-                    washingMachineUsage={lastThreeMonthsWashingMachinePrice}
-                    tumbleDryUsage={lastThreeMonthsTumbleDryPrice}
+                    washingMachineUsage={lastThreeMonthsWashingMachineUsage}
+                    tumbleDryUsage={lastThreeMonthsTumbleDryUsage}
                     headerText={lastThreeMonthsText}
                 />
                 <div className="icon">
@@ -117,18 +128,16 @@ const UsageBar = (props) => {
         <div>
             <p>{props.headerText}</p>
             <div className="usage-bar">
-                <div style={{width: props.widthMachineUsage}} className="washing-machine-used">
-                    {props.washingMachineUsage} kr
+                <div style={{width: props.widthMachineUsage}} className="washing-machine-usage">
+                    {props.washingMachineUsage} ({props.washingMachineUsage * COST_OF_WASHING_MACHINE_USE} {strings.misc.currencyShort})
                 </div>
-                <div style={{width: props.widthTumbleDryUsage}} className="tumble-dry-used">
-                    {props.tumbleDryUsage} kr
+                <div style={{width: props.widthTumbleDryUsage}} className="tumble-dry-usage">
+                    {props.tumbleDryUsage} ({props.tumbleDryUsage * COST_OF_TUMBLE_DRY_USE} {strings.misc.currencyShort})
                 </div>
             </div>
         </div>
     )
 };
-
-
 
 
 export default Usage;

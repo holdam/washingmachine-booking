@@ -44,19 +44,19 @@
     margin-bottom: 30px;
 }
 
-.washing-machine-used, .tumble-dry-used {
+.washing-machine-usage, .tumble-dry-usage {
     float: left;
     padding-left: 5px;
 }
 
-.washing-machine-used {
+.washing-machine-usage {
     background: cornflowerblue;
     border-left: 1px solid gray;
     border-bottom: 1px solid gray;
     border-top: 1px solid gray;
 }
 
-.tumble-dry-used {
+.tumble-dry-usage {
     background: lightsalmon;
     border-right: 1px solid gray;
     border-bottom: 1px solid gray;

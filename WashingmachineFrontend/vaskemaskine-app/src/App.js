@@ -28,10 +28,12 @@ export default App;
 
 
 
+// TODO nuværende release
+// lad folk have et "navn" + lejlighed?
+
 // TODO næste release
-// admin/kasser panel/forbrug
-// vis forbrug evt. for forskellige længder af perioder?
 // landing apage
+// admin/kasser panel
 
 
 

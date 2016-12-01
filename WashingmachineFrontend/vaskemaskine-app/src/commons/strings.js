@@ -38,18 +38,22 @@ var strings = {
             errorsMessages: {
                 passwordCantBeEmpty: 'Dit password kan ikke være tomt',
                 usernameCantBeEmpty: 'Dit brugernavn kan ikke være tomt',
-                usernameTaken: 'Dit brugernavn er allerede taget'
-            }
+                usernameTaken: 'Dit brugernavn er allerede taget',
+                nameCantBeEmpty: 'Du skal angive et navn'
+            },
+            realName: 'Navn',
+            apartment: 'Lejlighed'
         }
     },
     misc: {
         globalErrorMessages: {
             error: 'Fejl!'
-        }
+        },
+        currencyShort: 'kr.'
     },
     usage: {
-        usage: 'Forbrug',
-        lastThreeMonths: 'Sidste 3 måneder',
+        usage: 'Dit forbrug',
+        lastThreeMonths: 'De seneste 3 måneder',
         thisMonth: 'Denne måned'
     }
 };
