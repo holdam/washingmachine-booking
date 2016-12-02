@@ -5,8 +5,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
 
 public class Util {
     public static String getHashedAndSaltedPassword(String password, String salt) {

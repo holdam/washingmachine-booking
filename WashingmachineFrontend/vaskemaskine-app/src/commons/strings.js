@@ -1,6 +1,6 @@
 import {COST_OF_TUMBLE_DRY_USE, COST_OF_WASHING_MACHINE_USE} from './util'
 
-var strings = {
+const strings = {
     frontpageTitle: 'Vaskerumsbooking',
     bookingModal: {
         titleCreate: 'Opret reservation',

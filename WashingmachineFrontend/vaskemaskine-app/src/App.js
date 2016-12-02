@@ -29,7 +29,9 @@ export default App;
 
 
 // TODO nuværende release
-// lad folk have et "navn" + lejlighed?
+// brug navn og lejlighed til visning af reservationer + det navn der står i toppen
+// csv fil med reservatoner
+// erstat for loops
 
 // TODO næste release
 // landing apage

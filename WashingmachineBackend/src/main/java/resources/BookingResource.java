@@ -75,7 +75,8 @@ public class BookingResource {
     }
 
     @DELETE
-    public void deleteBooking(@Auth UserDTO userDTO, @FormParam("id") @NotNull int id) {
+    public void deleteBooking(@Auth UserDTO userDTO,
+                              @FormParam("id") @NotNull int id) {
         bookingDAO.deleteBooking(userDTO.getName(), id);
     }
 }

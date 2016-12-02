@@ -13,10 +13,16 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
+    private final List<String> allowedApartments = new ArrayList<>(
+            Arrays.asList("st.v.", "st.h.", "1.tv.", "1.th.", "2.", "3.tv.", "3.th.", "4.")
+    );
     private UserDAO userDAO;
     private UserTokenDAO userTokenDAO;
 
@@ -32,7 +38,7 @@ public class UserResource {
                               @FormParam("name") @NotNull String name,
                               @FormParam("apartment") @NotNull String apartment) throws AuthenticationException {
         // Validations
-        if (username.isEmpty() || password.isEmpty() || name.isEmpty() || apartment.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty() || name.isEmpty() || !allowedApartments.contains(apartment)) {
             throw new AuthenticationException();
         }
 

@@ -21,7 +21,7 @@ public class UserResourceTest {
     private final String USERNAME_1 = "username";
     private final String PASSWORD_1 = "password";
     private final String NAME_1 = "name";
-    private final String APARTMENT_1 = "apartment";
+    private final String APARTMENT_1 = "1.tv.";
 
     @Before
     public void setup() {
@@ -31,23 +31,23 @@ public class UserResourceTest {
     }
 
     @Test(expected = AuthenticationException.class)
-    public void passwordCannotBeEmpty() throws AuthenticationException {
-        userResource.createUser(USERNAME_1, "", "bogus", "bogus");
+    public void usernameCannotBeEmpty() throws AuthenticationException {
+        userResource.createUser("", PASSWORD_1, NAME_1, APARTMENT_1);
     }
 
     @Test(expected = AuthenticationException.class)
-    public void usernameCannotBeEmpty() throws AuthenticationException {
-        userResource.createUser("", PASSWORD_1, "bogus", "bogus");
+    public void passwordCannotBeEmpty() throws AuthenticationException {
+        userResource.createUser(USERNAME_1, "", NAME_1, APARTMENT_1);
     }
 
     @Test(expected = AuthenticationException.class)
     public void nameCannotBeEmpty() throws AuthenticationException {
-        userResource.createUser("bogus", "bogus", "", "bogus");
+        userResource.createUser(USERNAME_1, PASSWORD_1, "", APARTMENT_1);
     }
 
     @Test(expected = AuthenticationException.class)
-    public void apartmentCannotBeEmpty() throws AuthenticationException {
-        userResource.createUser("bogus", "bogus", "bogus", "");
+    public void shouldNotAllowApartmentNotInApartmentSet() throws AuthenticationException {
+        userResource.createUser(USERNAME_1, PASSWORD_1, NAME_1, "---");
     }
 
     @Test

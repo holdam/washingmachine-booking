@@ -35,7 +35,8 @@ public class AuthResource {
 
     @POST
     @Path("/sign_in")
-    public Response signIn(@FormParam("username") @NotNull String username, @NotNull @FormParam("password") String password) throws AuthenticationException {
+    public Response signIn(@FormParam("username") @NotNull String username,
+                           @NotNull @FormParam("password") String password) throws AuthenticationException {
         UserDTO userDTO = userDAO.getUser(username);
 
         if (userDTO == null) {

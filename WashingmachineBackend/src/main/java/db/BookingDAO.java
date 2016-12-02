@@ -1,8 +1,10 @@
 package db;
 
 import api.BookingDTO;
+import api.UsageAdminExportDTO;
 import api.UsageDTO;
 import db.mappers.BookingMapper;
+import db.mappers.UsageAdminExportMapper;
 import db.mappers.UsageMapper;
 import org.skife.jdbi.v2.sqlobject.Bind;
 import org.skife.jdbi.v2.sqlobject.BindBean;
@@ -101,18 +103,34 @@ public interface BookingDAO {
             "GROUP BY (1, 2)")
     List<UsageDTO> getUsageInInterval(@Bind("username") String username, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 
-    /*
+    /**
+     *
+     * @param startTime The starting point of where to retrieve usage for
+     * @param endTime The end point of where to retrieve usage for
+     * @return usage for every user in the interval together with their real name and apartment
+     */
+    @RegisterMapper(UsageAdminExportMapper.class)
     @SqlQuery("SELECT " +
+            "name, " +
+            "apartment, " +
+            "mon, " +
+            "year, " +
+            "sum_of_washing_machine_uses, " +
+            "sum_of_tumble_dry_uses " +
+            "FROM users " +
+            "JOIN " +
+            "(SELECT " +
+            "to_char(start_time, 'Mon') as mon, " +
+            "extract(year from start_time) as year, " +
+            "owner as username, " +
             "SUM(number_of_washing_machine_uses) sum_of_washing_machine_uses, " +
-            "SUM(number_of_tumble_dry_uses) sum_of_tumble_dry_uses, " +
-            "MAX(owner) as owner " +
+            "SUM(number_of_tumble_dry_uses) sum_of_tumble_dry_uses " +
             "FROM bookings " +
-            "WHERE owner = :username " +
-            "AND start_time >= :startTime " +
-            "AND end_time <= :endTime")
-    UsageDTO getUsageInInterval(@Bind("username") String username, @Bind("startTime") Date startTime, @Bind("endTime") Date endTime); */
-
-
+            "WHERE start_time >= :startTime " +
+            "AND end_time <= :endTime " +
+            "GROUP BY (1, 2, 3)) usage " +
+            "ON usage.username = users.username")
+    List<UsageAdminExportDTO> getUsageInIntervalAdmin(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 
     @SqlUpdate("TRUNCATE TABLE bookings")
     void truncateTable();
