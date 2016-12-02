@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import Day from '../components/CalendarAndUsage/Calendar/Day/Day';
+import Day from '../components/CalendarView/Calendar/Day/Day';
 import {startCreateBookingFlow} from '../state/actions/createBookingFlow';
 import {startEditBookingFlow} from '../state/actions/editBookingFlow';
 

@@ -7,7 +7,7 @@ import {Navbar, Nav} from 'react-bootstrap';
 class Header extends React.Component {
     render() {
         return (
-            <div className="App">
+            <div>
                 <Navbar>
                     <Navbar.Header>
                         <Navbar.Brand>
@@ -19,7 +19,6 @@ class Header extends React.Component {
                         <LoginContainer />
                     </Nav>
                 </Navbar>
-                {this.props.children}
             </div>
         )
     }

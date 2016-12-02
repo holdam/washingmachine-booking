@@ -1,0 +1,14 @@
+@media (max-width: 1000px) {
+    .sidebar {
+        display: none;
+    }
+}
+
+.sidebar {
+    background: #eaeaea;
+    width: 350px;
+    float: left;
+    height: calc(100vh - 60px);
+    padding-left: 20px;
+    text-align: left;
+}

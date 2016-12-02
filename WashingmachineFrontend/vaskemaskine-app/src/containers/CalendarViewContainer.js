@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import CalendarAndUsage from '../components/CalendarAndUsage/CalendarAndUsage';
+import CalendarView from '../components/CalendarView/CalendarView';
 import {endCreateBookingFlow} from '../state/actions/createBookingFlow';
 import {createBooking, editBooking, deleteBooking} from '../state/actions/bookings';
 import {changeMonth} from '../state/actions/calendar';
@@ -46,9 +46,9 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-const CalendarAndUsageContainer = connect(
+const CalendarViewContainer = connect(
     mapStateToProps,
     mapDispatchToProps
-)(CalendarAndUsage);
+)(CalendarView);
 
-export default CalendarAndUsageContainer;
+export default CalendarViewContainer;

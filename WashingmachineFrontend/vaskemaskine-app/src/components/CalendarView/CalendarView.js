@@ -1,8 +1,7 @@
 import React from 'react';
 import Calendar from './Calendar/Calendar';
-import UsageContainer from '../../containers/UsageContainer';
 import MonthPicker from './Monthpicker/Monthpicker';
-import './CalendarAndUsage.css';
+import './CalendarView.css';
 
 class WeekRepresentation {
     constructor(days, weekOfCalendar) {
@@ -11,7 +10,7 @@ class WeekRepresentation {
     }
 }
 
-class CalendarAndUsage extends React.Component {
+class CalendarView extends React.Component {
     componentDidMount() {
         this.props.changeMonth(new Date());
     }
@@ -91,35 +90,30 @@ class CalendarAndUsage extends React.Component {
 
         let weeks = this.getWeeksOfMonth(this.props.selectedMonthAsDate.getFullYear(), this.props.selectedMonthAsDate.getMonth());
         return (
-            <div className="calendarAndUsage">
+            <div>
                 <MonthPicker month={this.props.selectedMonthAsDate.getMonth()}
                              year={this.props.selectedMonthAsDate.getFullYear()}
                              dayRangeStart={weeks[0].days[0]}
                              dayRangeEnd={weeks[5].days[6]}
                 />
-                <div className="row">
-                    <UsageContainer />
-                    <div className="col-md-6">
-                        <Calendar month={this.props.selectedMonthAsDate.getMonth()}
-                                  year={this.props.selectedMonthAsDate.getFullYear()}
-                                  weeks={weeks}
-                                  bookingDate={this.props.bookingDate}
-                                  bookings={this.props.bookings}
-                                  showBookingModal={this.props.showBookingModal}
-                                  onCreateBooking={this.props.onCreateBooking}
-                                  onCancelBookingCreation={this.props.onCancelBookingCreation}
-                                  onCancelEditBookingCreation={this.props.onCancelEditBookingCreation}
-                                  isLoggedIn={this.props.isLoggedIn}
-                                  isEditMode={this.props.isEditMode}
-                                  editBookingProps={this.props.editBookingProps}
-                                  onEditBooking={this.props.onEditBooking}
-                                  onDeleteBooking={this.props.onDeleteBooking}
-                        />
-                    </div>
-                </div>
+                <Calendar month={this.props.selectedMonthAsDate.getMonth()}
+                          year={this.props.selectedMonthAsDate.getFullYear()}
+                          weeks={weeks}
+                          bookingDate={this.props.bookingDate}
+                          bookings={this.props.bookings}
+                          showBookingModal={this.props.showBookingModal}
+                          onCreateBooking={this.props.onCreateBooking}
+                          onCancelBookingCreation={this.props.onCancelBookingCreation}
+                          onCancelEditBookingCreation={this.props.onCancelEditBookingCreation}
+                          isLoggedIn={this.props.isLoggedIn}
+                          isEditMode={this.props.isEditMode}
+                          editBookingProps={this.props.editBookingProps}
+                          onEditBooking={this.props.onEditBooking}
+                          onDeleteBooking={this.props.onDeleteBooking}
+                />
             </div>
         )
     }
 }
 
-export default CalendarAndUsage;
+export default CalendarView;

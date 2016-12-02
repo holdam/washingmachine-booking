@@ -1,23 +1,19 @@
 import React from 'react';
 import './App.css';
-import CalendarAndUsageContainer from './containers/CalendarAndUsageContainer';
-import {Router, Route, browserHistory, IndexRoute} from 'react-router'
-import {Provider} from 'react-redux';
 import Header from './components/Header/Header'
-import getStore from './state/stores/store'
+import UsageContainer from './containers/UsageContainer';
+import Sidebar from './components/Sidebar/Sidebar'
 
 class App extends React.Component {
     render() {
-        const store = getStore();
         return (
-            <Provider store={store}>
-                <Router history={browserHistory}>
-                    <Route path="/" component={Header}>
-                        <IndexRoute component={CalendarAndUsageContainer}/>
-                        <Route path="/booking(/:year/:month)" component={CalendarAndUsageContainer} />
-                    </Route>
-                </Router>
-            </Provider>
+            <div className="App">
+                <Header/>
+                <Sidebar>
+                    <UsageContainer />
+                </Sidebar>
+                {this.props.children}
+            </div>
         )
     }
 }
@@ -30,7 +26,7 @@ export default App;
 
 // TODO nuværende release
 // brug navn og lejlighed til visning af reservationer + det navn der står i toppen
-// csv fil med reservatoner
+// csv fil med reservatoner - kasser "panel" i sidebar - omstruktuer det hele
 // erstat for loops
 
 // TODO næste release

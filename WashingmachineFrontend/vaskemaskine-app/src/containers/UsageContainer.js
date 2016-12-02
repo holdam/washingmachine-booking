@@ -1,4 +1,4 @@
-import Usage from "../components/CalendarAndUsage/Usage/Usage";
+import Usage from "../components/Sidebar/Usage/Usage";
 import {connect} from 'react-redux';
 import {fetchUsage} from '../state/actions/usage';
 

@@ -95,7 +95,7 @@ class Usage extends React.Component {
         let lastThreeMonthsText = `${strings.usage.lastThreeMonths}, ${monthNamesShort[this.state.startMonth]}-${monthNamesShort[this.state.endMonth]}`;
 
         return (
-            <div className="usage">
+            <div>
                 <h3>{strings.usage.usage}</h3>
                 <UsageBar
                     widthMachineUsage={thisMonthsWashingMachinePercentage}
