@@ -2,7 +2,7 @@ package resources;
 
 import api.BookingDTO;
 import core.BookingService;
-import core.User;
+import api.UserDTO;
 import core.Util;
 import db.BookingDAO;
 import db.UserTokenDAO;
@@ -14,10 +14,8 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Path("/booking")
 @Produces(MediaType.APPLICATION_JSON)
@@ -33,7 +31,7 @@ public class BookingResource {
     }
 
     @POST
-    public BookingDTO createBooking(@Auth User user,
+    public BookingDTO createBooking(@Auth UserDTO userDTO,
                                     @FormParam("startTime") @NotNull @Min(0) Long startTime,
                                     @FormParam("endTime") @NotNull @Min(0) Long endTime,
                                     @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
@@ -46,13 +44,13 @@ public class BookingResource {
 
         // -1 for now, we will get correct id after insertion
         BookingDTO bookingDTOForInsertion = new BookingDTO(-1, startDate, endDate,
-                user.getName(), numberOfTumbleDryUses, numberOfWashingMachineUses);
+                userDTO.getName(), numberOfTumbleDryUses, numberOfWashingMachineUses);
         bookingDAO.insertBooking(bookingDTOForInsertion);
-        return bookingDAO.getBookingFromOwnerAndDates(user.getName(), startDate, endDate);
+        return bookingDAO.getBookingFromOwnerAndDates(userDTO.getName(), startDate, endDate);
     }
 
     @PUT
-    public BookingDTO editBooking(@Auth User user, @FormParam("id") int id,
+    public BookingDTO editBooking(@Auth UserDTO userDTO, @FormParam("id") int id,
                                   @FormParam("startTime") @NotNull @Min(0) Long startTime,
                                   @FormParam("endTime") @NotNull @Min(0) Long endTime,
                                   @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
@@ -60,9 +58,9 @@ public class BookingResource {
         if (!bookingService.validateEditBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses, id)) {
             throw new ValidationErrorException("Input parameters were not valid for the chosen period and id");
         }
-        bookingDAO.updateBooking(user.getName(), id, Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),
+        bookingDAO.updateBooking(userDTO.getName(), id, Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),
                 Util.convertMillisToDateAndFloorToNearest5Minutes(endTime), numberOfWashingMachineUses, numberOfTumbleDryUses);
-        return bookingDAO.getBookingFromId(user.getName(), id);
+        return bookingDAO.getBookingFromId(userDTO.getName(), id);
     }
 
     @GET
@@ -77,7 +75,7 @@ public class BookingResource {
     }
 
     @DELETE
-    public void deleteBooking(@Auth User user, @FormParam("id") @NotNull int id) {
-        bookingDAO.deleteBooking(user.getName(), id);
+    public void deleteBooking(@Auth UserDTO userDTO, @FormParam("id") @NotNull int id) {
+        bookingDAO.deleteBooking(userDTO.getName(), id);
     }
 }

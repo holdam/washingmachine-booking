@@ -3,7 +3,7 @@ import auth.MyAuthenticator;
 import com.codahale.metrics.MetricRegistry;
 import core.BookingService;
 import core.BookingServiceImpl;
-import core.User;
+import api.UserDTO;
 import db.BookingDAO;
 import db.UserDAO;
 import db.UserTokenDAO;
@@ -12,7 +12,6 @@ import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.CachingAuthenticator;
-import io.dropwizard.auth.oauth.OAuthCredentialAuthFilter;
 import io.dropwizard.jdbi.DBIFactory;
 import io.dropwizard.setup.Environment;
 import org.skife.jdbi.v2.DBI;
@@ -44,16 +43,16 @@ public class MyApplication extends Application<MyConfiguration> {
 
 
         // Authorization with caching
-        CachingAuthenticator<String, User> cachingAuthenticator = new CachingAuthenticator<>(
+        CachingAuthenticator<String, UserDTO> cachingAuthenticator = new CachingAuthenticator<>(
                 new MetricRegistry(),
                 new MyAuthenticator(userTokenDAO, userDAO, config.getTokenLifetime()),
                 config.getAuthenticationCachePolicy()
         );
         environment.jersey().register(new AuthDynamicFeature(
-                new CookieCredentialAuthFilter.Builder<User>()
+                new CookieCredentialAuthFilter.Builder<UserDTO>()
                         .setAuthenticator(cachingAuthenticator)
                         .buildAuthFilter()));
-        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(User.class));
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(UserDTO.class));
 
         // Filters
         environment.jersey().register(new CSRFFilter(config.getTargetsOrigin()));

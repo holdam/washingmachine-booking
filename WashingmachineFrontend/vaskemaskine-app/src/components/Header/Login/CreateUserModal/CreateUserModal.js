@@ -13,7 +13,7 @@ class CreateUserModal extends React.Component {
             username: '',
             password: '',
             name: '',
-            apartment: '',
+            apartment: '---',
             errorMessages: []
         };
 
@@ -22,6 +22,8 @@ class CreateUserModal extends React.Component {
         this.handleCreateUser = this.handleCreateUser.bind(this);
         this.cancelCreateUser = this.cancelCreateUser.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
+        this.handleNameChange = this.handleNameChange.bind(this);
+        this.handleApartmentChange = this.handleApartmentChange.bind(this);
     }
 
     // TODO update this, backend (tables and shit) and reducer/actions
@@ -47,6 +49,8 @@ class CreateUserModal extends React.Component {
         const username = this.state.username;
         const password = this.state.password;
         const name = this.state.name;
+        const apartment = this.state.apartment;
+
         if (!username) {
             errorMessages.push(strings.login.createUserModal.errorsMessages.usernameCantBeEmpty);
         }
@@ -59,7 +63,9 @@ class CreateUserModal extends React.Component {
             errorMessages.push(strings.login.createUserModal.errorsMessages.nameCantBeEmpty);
         }
 
-        // TODO apartment
+        if (apartment === '---') {
+            errorMessages.push(strings.login.createUserModal.errorsMessages.mustChooseApartment);
+        }
 
         fetch(`${urls.api.user}/username_exists?username=${username}`)
             .then(function (response) {
@@ -73,8 +79,12 @@ class CreateUserModal extends React.Component {
 
                 if (errorMessages.length === 0) {
                     this.props.onCreateUser(
-                        this.state.username, this.state.password,
-                        this.props.selectedMonthAsDate.getFullYear(), this.props.selectedMonthAsDate.getMonth()
+                        this.state.username,
+                        this.state.password,
+                        this.state.name,
+                        this.state.apartment,
+                        this.props.selectedMonthAsDate.getFullYear(),
+                        this.props.selectedMonthAsDate.getMonth()
                     );
                 }
             }.bind(this));
@@ -131,9 +141,7 @@ class CreateUserModal extends React.Component {
                                 {strings.login.createUserModal.apartment}
                             </Col>
                             <Col sm={8}>
-                                <select onChange={this.handleApartmentChange}>
-                                    <option>----</option>
-                                </select>
+                                <ApartmentPicker onChange={this.handleApartmentChange} />
                             </Col>
                         </FormGroup>
                     </Form>
@@ -146,5 +154,20 @@ class CreateUserModal extends React.Component {
         )
     }
 }
+
+const ApartmentPicker = (props) => {
+    let apartments = ['---', 'st.v.', 'st.h.', '1.tv.', '1.th.', '2.', '3.tv.', '3.th.', '4.'];
+    let apartmentOptions = apartments.map((apartment) => {
+        return (
+            <option key={apartment} value={apartment}>{apartment}</option>
+        )
+    });
+
+    return (
+        <select className="apartment-picker" onChange={props.onChange}>
+            {apartmentOptions}
+        </select>
+    )
+};
 
 export default CreateUserModal;

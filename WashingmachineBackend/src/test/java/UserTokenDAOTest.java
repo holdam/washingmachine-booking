@@ -1,14 +1,11 @@
 import api.UserTokenDTO;
 import core.RoleHelper;
-import core.User;
-import db.BookingDAO;
 import db.UserDAO;
 import db.UserTokenDAO;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.skife.jdbi.v2.DBI;
-import org.skife.jdbi.v2.exceptions.UnableToExecuteStatementException;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -34,8 +31,8 @@ public class UserTokenDAOTest {
         userDAO.createRoleTable();
         userDAO.createUsersTable();
         userTokenDAO.createUserTokenTable();
-        userDAO.insertUser(USERNAME_1, USER_1_PASSWORD, USER_1_SALT, RoleHelper.ROLE_DEFAULT);
-        userDAO.insertUser(USERNAME_2, USER_1_PASSWORD, USER_1_SALT, RoleHelper.ROLE_DEFAULT);
+        userDAO.insertUser(USERNAME_1, USER_1_PASSWORD, USER_1_SALT, "name1", "apartment1", RoleHelper.ROLE_DEFAULT);
+        userDAO.insertUser(USERNAME_2, USER_1_PASSWORD, USER_1_SALT, "name2", "apartment2", RoleHelper.ROLE_DEFAULT);
     }
 
     @After

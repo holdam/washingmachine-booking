@@ -34,9 +34,9 @@ const mapDispatchToProps = (dispatch) => {
         onEndCreateUserFlow: () => {
             dispatch(endCreateUserFlow());
         },
-        onCreateUser: (username, password, selectedYear, selectedMonth) => {
+        onCreateUser: (username, password, name, apartment, selectedYear, selectedMonth) => {
             dispatch(endCreateUserFlow());
-            dispatch(createUser(username, password, selectedYear, selectedMonth));
+            dispatch(createUser(username, password, name, apartment, selectedYear, selectedMonth));
         }
     }
 };

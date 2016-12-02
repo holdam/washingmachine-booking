@@ -1,7 +1,7 @@
 package resources;
 
 import api.UserTokenDTO;
-import core.User;
+import api.UserDTO;
 import core.Util;
 import db.UserDAO;
 import db.UserTokenDAO;
@@ -16,8 +16,6 @@ import javax.ws.rs.core.Response;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
 
 @Path("/auth")
 @Produces(MediaType.APPLICATION_JSON)
@@ -38,10 +36,10 @@ public class AuthResource {
     @POST
     @Path("/sign_in")
     public Response signIn(@FormParam("username") @NotNull String username, @NotNull @FormParam("password") String password) throws AuthenticationException {
-        User user = userDAO.getUser(username);
+        UserDTO userDTO = userDAO.getUser(username);
 
-        if (user == null) {
-            throw new AuthenticationException("User does not exist");
+        if (userDTO == null) {
+            throw new AuthenticationException("UserDTO does not exist");
         }
 
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, userDAO.getSaltForUser(username));
@@ -53,7 +51,7 @@ public class AuthResource {
                 return createResponseFromToken(userTokenDTO);
             }
 
-            // Create new token for user if old one has about one day left on it
+            // Create new token for userDTO if old one has about one day left on it
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.DAY_OF_YEAR, 1);
             if (calendar.getTime().after(userTokenDTO.getLifetimeEnds())) {
@@ -66,7 +64,7 @@ public class AuthResource {
             }
         }
 
-        throw new AuthenticationException("User not authenticated");
+        throw new AuthenticationException("UserDTO not authenticated");
     }
 
     @POST

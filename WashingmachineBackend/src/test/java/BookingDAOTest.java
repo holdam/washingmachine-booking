@@ -30,8 +30,8 @@ public class BookingDAOTest {
         userDAO.createRoleTable();
         userDAO.createUsersTable();
         bookingDAO.createBookingTable();
-        userDAO.insertUser(USERNAME_1, "password_that_should_have_been_hashed_and_salted", "bogus", RoleHelper.ROLE_DEFAULT);
-        userDAO.insertUser(USERNAME_2, "password_that_should_have_been_hashed_and_salted", "bogus", RoleHelper.ROLE_DEFAULT);
+        userDAO.insertUser(USERNAME_1, "password_that_should_have_been_hashed_and_salted", "bogus", "name1", "apartment1", RoleHelper.ROLE_DEFAULT);
+        userDAO.insertUser(USERNAME_2, "password_that_should_have_been_hashed_and_salted", "bogus", "name1", "apartment2", RoleHelper.ROLE_DEFAULT);
     }
 
     @After

@@ -1,6 +1,6 @@
 import api.SuccessDTO;
+import api.UserDTO;
 import core.RoleHelper;
-import core.User;
 import db.UserDAO;
 import db.UserTokenDAO;
 import org.junit.Before;
@@ -18,6 +18,10 @@ public class UserResourceTest {
     UserResource userResource;
     UserDAO userDAO;
     UserTokenDAO userTokenDAO;
+    private final String USERNAME_1 = "username";
+    private final String PASSWORD_1 = "password";
+    private final String NAME_1 = "name";
+    private final String APARTMENT_1 = "apartment";
 
     @Before
     public void setup() {
@@ -28,35 +32,47 @@ public class UserResourceTest {
 
     @Test(expected = AuthenticationException.class)
     public void passwordCannotBeEmpty() throws AuthenticationException {
-        userResource.createUser("user", "");
+        userResource.createUser(USERNAME_1, "", "bogus", "bogus");
     }
 
     @Test(expected = AuthenticationException.class)
     public void usernameCannotBeEmpty() throws AuthenticationException {
-        userResource.createUser("", "password");
+        userResource.createUser("", PASSWORD_1, "bogus", "bogus");
+    }
+
+    @Test(expected = AuthenticationException.class)
+    public void nameCannotBeEmpty() throws AuthenticationException {
+        userResource.createUser("bogus", "bogus", "", "bogus");
+    }
+
+    @Test(expected = AuthenticationException.class)
+    public void apartmentCannotBeEmpty() throws AuthenticationException {
+        userResource.createUser("bogus", "bogus", "bogus", "");
     }
 
     @Test
     public void shouldBeAbleToCreateUser() throws AuthenticationException {
-        User user = userResource.createUser("username", "password");
-        assertEquals("username", user.getName());
+        UserDTO userDTO = userResource.createUser(USERNAME_1, PASSWORD_1, NAME_1, APARTMENT_1);
+        assertEquals(USERNAME_1, userDTO.getName());
+        assertEquals(APARTMENT_1, userDTO.getApartment());
+        assertEquals(NAME_1, userDTO.getRealName());
     }
 
     @Test
     public void doesUsernameExistAlreadyShouldWork() {
-        SuccessDTO success = userResource.doesUsernameExistAlready("user");
+        SuccessDTO success = userResource.doesUsernameExistAlready(USERNAME_1);
         assertEquals(true, success.isSuccess());
-        when(userDAO.getUser("user")).thenReturn(new User("user", RoleHelper.ROLE_DEFAULT));
-        success = userResource.doesUsernameExistAlready("user");
+        when(userDAO.getUser(USERNAME_1)).thenReturn(new UserDTO(USERNAME_1, RoleHelper.ROLE_DEFAULT, NAME_1, APARTMENT_1));
+        success = userResource.doesUsernameExistAlready(USERNAME_1);
         assertEquals(false, success.isSuccess());
     }
 
     @Test
     public void userFromUserAccessTokenShouldWork() {
-        when(userTokenDAO.getUsernameFromToken("token")).thenReturn("user");
-        when(userDAO.getUser("user")).thenReturn(new User("user", RoleHelper.ROLE_DEFAULT));
-        User user = userResource.userFromUserAccessToken(new Cookie("token", "token"));
-        assertEquals("user", user.getName());
-        assertEquals(RoleHelper.ROLE_DEFAULT, user.getRole());
+        when(userTokenDAO.getUsernameFromToken("token")).thenReturn(USERNAME_1);
+        when(userDAO.getUser(USERNAME_1)).thenReturn(new UserDTO(USERNAME_1, RoleHelper.ROLE_DEFAULT, NAME_1, APARTMENT_1));
+        UserDTO userDTO = userResource.userFromUserAccessToken(new Cookie("token", "token"));
+        assertEquals(USERNAME_1, userDTO.getName());
+        assertEquals(RoleHelper.ROLE_DEFAULT, userDTO.getRole());
     }
 }

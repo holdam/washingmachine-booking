@@ -39,7 +39,8 @@ var strings = {
                 passwordCantBeEmpty: 'Dit password kan ikke være tomt',
                 usernameCantBeEmpty: 'Dit brugernavn kan ikke være tomt',
                 usernameTaken: 'Dit brugernavn er allerede taget',
-                nameCantBeEmpty: 'Du skal angive et navn'
+                nameCantBeEmpty: 'Du skal angive et navn',
+                mustChooseApartment: 'Du skal vælge en lejlighed'
             },
             realName: 'Navn',
             apartment: 'Lejlighed'

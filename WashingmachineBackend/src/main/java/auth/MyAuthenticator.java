@@ -1,7 +1,7 @@
 package auth;
 
+import api.UserDTO;
 import api.UserTokenDTO;
-import core.User;
 import db.UserDAO;
 import db.UserTokenDAO;
 import io.dropwizard.auth.AuthenticationException;
@@ -11,7 +11,7 @@ import io.dropwizard.auth.Authenticator;
 import java.util.Calendar;
 import java.util.Optional;
 
-public class MyAuthenticator implements Authenticator<String, User> {
+public class MyAuthenticator implements Authenticator<String, UserDTO> {
     private UserTokenDAO userTokenDAO;
     private UserDAO userDAO;
     private int tokenLifetime;
@@ -22,7 +22,7 @@ public class MyAuthenticator implements Authenticator<String, User> {
         this.tokenLifetime = tokenLifetime;
     }
 
-    public Optional<User> authenticate(String token) throws AuthenticationException {
+    public Optional<UserDTO> authenticate(String token) throws AuthenticationException {
         UserTokenDTO userTokenDTO = userTokenDAO.getUserTokenFromToken(token);
         Calendar calendar = Calendar.getInstance();
         if (userTokenDTO == null) {

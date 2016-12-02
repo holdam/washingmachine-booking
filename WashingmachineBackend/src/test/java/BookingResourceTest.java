@@ -1,7 +1,7 @@
 import api.BookingDTO;
 import core.BookingServiceImpl;
 import core.RoleHelper;
-import core.User;
+import api.UserDTO;
 import db.BookingDAO;
 import db.UserTokenDAO;
 import exceptions.ValidationErrorException;
@@ -24,6 +24,8 @@ public class BookingResourceTest {
     private UserTokenDAO userTokenDAO;
     private Calendar calendar;
     private final String USERNAME_1 = "user";
+    private final String NAME_1 = "name";
+    private final String APARTMENT_1 = "apartment";
 
     @Before
     public void setup() {
@@ -142,7 +144,7 @@ public class BookingResourceTest {
         Date endTime = calendar.getTime();
         when(bookingDAO.getBookingFromOwnerAndDates(USERNAME_1, startTime, endTime)).
                 thenReturn(new BookingDTO(1337, startTime, endTime, USERNAME_1, 1, 0));
-        BookingDTO bookingDTO = bookingResource.createBooking(new User(USERNAME_1, RoleHelper.ROLE_DEFAULT), startTime.getTime(), endTime.getTime(), 1, 0);
+        BookingDTO bookingDTO = bookingResource.createBooking(new UserDTO(USERNAME_1, RoleHelper.ROLE_DEFAULT, NAME_1, APARTMENT_1), startTime.getTime(), endTime.getTime(), 1, 0);
         assert(bookingDTO.getId() == 1337);
     }
 
@@ -166,7 +168,7 @@ public class BookingResourceTest {
         bookingsInInterval.add(new BookingDTO(123, endDateNotWithinBounds, startDateNotWithinBounds, USERNAME_1, 1, 1));
         when(bookingDAO.getBookingsOverlappingInterval(startTime, endTime)).thenReturn(bookingsInInterval);
         when(bookingDAO.getBookingFromId(USERNAME_1, 1)).thenReturn(new BookingDTO(1, startTime, endTime, USERNAME_1, 1, 1));
-        BookingDTO bookingDTO = bookingResource.editBooking(new User(USERNAME_1, RoleHelper.ROLE_DEFAULT), 1, startTime.getTime(), endTime.getTime(),
+        BookingDTO bookingDTO = bookingResource.editBooking(new UserDTO(USERNAME_1, RoleHelper.ROLE_DEFAULT, NAME_1, APARTMENT_1), 1, startTime.getTime(), endTime.getTime(),
                 123, 321);
 
         Assert.assertEquals(1, bookingDTO.getId());
@@ -189,7 +191,7 @@ public class BookingResourceTest {
         ArrayList<BookingDTO> bookingsInInterval = new ArrayList<>();
         bookingsInInterval.add(new BookingDTO(234, startTime, endTime, USERNAME_1, 1, 2));
         when(bookingDAO.getBookingsOverlappingInterval(startTime, endTime)).thenReturn(bookingsInInterval);
-        bookingResource.editBooking(new User(USERNAME_1, RoleHelper.ROLE_DEFAULT), 1, startTime.getTime(), endTime.getTime(),
+        bookingResource.editBooking(new UserDTO(USERNAME_1, RoleHelper.ROLE_DEFAULT, NAME_1, APARTMENT_1), 1, startTime.getTime(), endTime.getTime(),
                 123, 321);
     }
 }

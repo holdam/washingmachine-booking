@@ -59,11 +59,11 @@ export function fetchUsernameIfUserAccessTokenIsPresent() {
     }
 }
 
-export function createUser(username, password, selectedYear, selectedMonth) {
+export function createUser(username, password, name, apartment, selectedYear, selectedMonth) {
     return function(dispatch) {
         fetch(`${urls.api.user}/create_user`, {
             method: 'POST',
-            body: `username=${username}&password=${password}`,
+            body: `username=${username}&password=${password}&name=${name}&apartment=${apartment}`,
             headers: new Headers({
                 'Content-Type': 'application/x-www-form-urlencoded'
             })
@@ -89,6 +89,7 @@ export function login(username, password, selectedYear, selectedMonth) {
             }
             return response.json();
         }).then((data) => {
+            console.log(data)
             dispatch(loginSuccessful(data.username));
             dispatch(fetchBookingsForMonth(selectedYear, selectedMonth));
         });

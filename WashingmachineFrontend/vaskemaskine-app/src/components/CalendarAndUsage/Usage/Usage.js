@@ -41,10 +41,11 @@ class Usage extends React.Component {
     }
 
     convertRatiosToPercentageForCSS(a, b) {
-        // Default to at least 25%
-        a = Math.max(a, 0.25);
+        // Default to at least 30%
+        // TODO should do something smarter than this
+        a = Math.max(a, 0.30);
         b = 1 - a;
-        b = Math.max(b, 0.25);
+        b = Math.max(b, 0.30);
         a = 1 - b;
 
         return [

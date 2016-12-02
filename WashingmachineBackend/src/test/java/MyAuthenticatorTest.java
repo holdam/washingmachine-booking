@@ -1,14 +1,13 @@
+import api.UserDTO;
 import api.UserTokenDTO;
 import auth.MyAuthenticator;
-import core.User;
+import core.RoleHelper;
 import db.UserDAO;
 import db.UserTokenDAO;
 import io.dropwizard.auth.AuthenticationException;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.Mockito;
 import java.util.Calendar;
 import java.util.Date;
@@ -23,6 +22,9 @@ public class MyAuthenticatorTest {
     private UserDAO userDAO;
     private UserTokenDAO userTokenDAO;
     private int tokenLifeTime;
+    private final String USERNAME = "username";
+    private final String NAME = "name";
+    private final String APARTMENT = "apartment";
 
     @Before
     public void setup() {
@@ -30,7 +32,7 @@ public class MyAuthenticatorTest {
         userTokenDAO = Mockito.mock(UserTokenDAO.class);
         userDAO = Mockito.mock(UserDAO.class);
         myAuthenticator = new MyAuthenticator(userTokenDAO, userDAO, tokenLifeTime);
-        when(userDAO.getUser("user")).thenReturn(new User("user", 0));
+        when(userDAO.getUser(USERNAME)).thenReturn(new UserDTO(USERNAME, RoleHelper.ROLE_DEFAULT, NAME, APARTMENT));
     }
 
     @Test(expected = AuthenticationException.class)
@@ -57,16 +59,16 @@ public class MyAuthenticatorTest {
     public void correctTokenShouldReturnUser() throws AuthenticationException {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DAY_OF_YEAR, 1);
-        when(userTokenDAO.getUserTokenFromToken("key")).thenReturn(new UserTokenDTO("user", "key", calendar.getTime(), UserTokenDTO.Status.VALID));
-        Optional<User> user = myAuthenticator.authenticate("key");
-        assertEquals("user", user.get().getName());
+        when(userTokenDAO.getUserTokenFromToken("key")).thenReturn(new UserTokenDTO(USERNAME, "key", calendar.getTime(), UserTokenDTO.Status.VALID));
+        Optional<UserDTO> user = myAuthenticator.authenticate("key");
+        assertEquals(USERNAME, user.get().getName());
     }
 
     @Test
     public void shouldUpdateTokenIfAboutToRunOut() throws AuthenticationException {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR_OF_DAY, 12);
-        when(userTokenDAO.getUserTokenFromToken("token")).thenReturn(new UserTokenDTO("user", "token", calendar.getTime(), UserTokenDTO.Status.VALID));
+        when(userTokenDAO.getUserTokenFromToken("token")).thenReturn(new UserTokenDTO(USERNAME, "token", calendar.getTime(), UserTokenDTO.Status.VALID));
         myAuthenticator.authenticate("token");
 
         ArgumentCaptor<Date> dateCaptor = ArgumentCaptor.forClass(Date.class);

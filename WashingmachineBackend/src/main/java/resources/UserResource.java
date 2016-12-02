@@ -1,8 +1,8 @@
 package resources;
 
 import api.SuccessDTO;
+import api.UserDTO;
 import core.RoleHelper;
-import core.User;
 import core.Util;
 import db.UserDAO;
 import db.UserTokenDAO;
@@ -27,24 +27,27 @@ public class UserResource {
 
     @POST
     @Path("/create_user")
-    public User createUser(@FormParam("username") @NotNull String username, @FormParam("password") @NotNull String password) throws AuthenticationException {
+    public UserDTO createUser(@FormParam("username") @NotNull String username,
+                              @FormParam("password") @NotNull String password,
+                              @FormParam("name") @NotNull String name,
+                              @FormParam("apartment") @NotNull String apartment) throws AuthenticationException {
         // Validations
-        if (username.isEmpty() || password.isEmpty()) {
+        if (username.isEmpty() || password.isEmpty() || name.isEmpty() || apartment.isEmpty()) {
             throw new AuthenticationException();
         }
 
         String salt = RandomStringUtils.randomAlphanumeric(50);
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, salt);
 
-        userDAO.insertUser(username, hashedAndSaltedPassword, salt, RoleHelper.ROLE_DEFAULT);
-        return new User(username, RoleHelper.ROLE_DEFAULT);
+        userDAO.insertUser(username, hashedAndSaltedPassword, salt, name, apartment, RoleHelper.ROLE_DEFAULT);
+        return new UserDTO(username, RoleHelper.ROLE_DEFAULT, name, apartment);
     }
 
     @GET
     @Path("/username_exists")
     public SuccessDTO doesUsernameExistAlready(@QueryParam("username") String username) {
-        User user = userDAO.getUser(username);
-        if (user == null) {
+        UserDTO userDTO = userDAO.getUser(username);
+        if (userDTO == null) {
             return new SuccessDTO("", true);
         }
 
@@ -53,7 +56,7 @@ public class UserResource {
 
     @GET
     @Path("/user_from_user_access_token")
-    public User userFromUserAccessToken(@CookieParam("userAccessToken") Cookie userAccessToken) {
+    public UserDTO userFromUserAccessToken(@CookieParam("userAccessToken") Cookie userAccessToken) {
         String username = userTokenDAO.getUsernameFromToken(userAccessToken.getValue());
         return userDAO.getUser(username);
     }

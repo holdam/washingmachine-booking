@@ -1,5 +1,5 @@
 import core.RoleHelper;
-import core.User;
+import api.UserDTO;
 import db.BookingDAO;
 import db.UserDAO;
 import org.junit.After;
@@ -20,6 +20,8 @@ public class UserDAOTest {
     private final String USERNAME_2 = "user2";
     private final String USER_1_PASSWORD = "password_that_should_have_been_hashed_and_salted";
     private final String USER_1_SALT = "salt";
+    private final String APARTMENT_1 = "apartment";
+    private final String NAME_1 = "name";
 
     @Before
     public void setup() {
@@ -37,7 +39,7 @@ public class UserDAOTest {
 
     @Test
     public void insertUserShouldWork() {
-        int numberInserted = userDAO.insertUser(USERNAME_1, USER_1_PASSWORD, USER_1_SALT, RoleHelper.ROLE_DEFAULT);
+        int numberInserted = userDAO.insertUser(USERNAME_1, USER_1_PASSWORD, USER_1_SALT, NAME_1, APARTMENT_1, RoleHelper.ROLE_DEFAULT);
         assertEquals(1, numberInserted);
     }
 
@@ -59,12 +61,13 @@ public class UserDAOTest {
     @Test
     public void getUserShouldWork() {
         insertUser1();
-        User user = userDAO.getUser(USERNAME_1);
-        assertEquals(USERNAME_1, user.getName());
-        assertEquals(RoleHelper.ROLE_DEFAULT, user.getRole());
-
-        user = userDAO.getUser(USERNAME_2);
-        assertEquals(null, user);
+        UserDTO userDTO = userDAO.getUser(USERNAME_1);
+        assertEquals(USERNAME_1, userDTO.getName());
+        assertEquals(RoleHelper.ROLE_DEFAULT, userDTO.getRole());
+        assertEquals(APARTMENT_1, userDTO.getApartment());
+        assertEquals(NAME_1, userDTO.getRealName());
+        userDTO = userDAO.getUser(USERNAME_2);
+        assertEquals(null, userDTO);
     }
 
     @Test
@@ -92,7 +95,6 @@ public class UserDAOTest {
     }
 
     private void insertUser1() {
-        userDAO.insertUser(USERNAME_1, USER_1_PASSWORD, USER_1_SALT, RoleHelper.ROLE_DEFAULT);
-
+        userDAO.insertUser(USERNAME_1, USER_1_PASSWORD, USER_1_SALT, NAME_1, APARTMENT_1, RoleHelper.ROLE_DEFAULT);
     }
 }
