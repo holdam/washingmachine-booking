@@ -36,14 +36,13 @@ public class BookingResource {
                                     @FormParam("endTime") @NotNull @Min(0) Long endTime,
                                     @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
                                     @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
-        if (!bookingService.validateCreateBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses)) {
+        if (! bookingService.validateCreateBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses)) {
             throw new ValidationErrorException("Input parameters were not valid for the chosen period");
         }
         Date startDate = Util.convertMillisToDateAndFloorToNearest5Minutes(startTime);
         Date endDate = Util.convertMillisToDateAndFloorToNearest5Minutes(endTime);
 
-        // -1 for now, we will get correct id after insertion
-        BookingDTO bookingDTOForInsertion = new BookingDTO(-1, startDate, endDate,
+        BookingDTO bookingDTOForInsertion = new BookingDTO(startDate, endDate,
                 userDTO.getName(), numberOfTumbleDryUses, numberOfWashingMachineUses);
         bookingDAO.insertBooking(bookingDTOForInsertion);
         return bookingDAO.getBookingFromOwnerAndDates(userDTO.getName(), startDate, endDate);
@@ -55,7 +54,7 @@ public class BookingResource {
                                   @FormParam("endTime") @NotNull @Min(0) Long endTime,
                                   @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
                                   @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
-        if (!bookingService.validateEditBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses, id)) {
+        if (! bookingService.validateEditBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses, id)) {
             throw new ValidationErrorException("Input parameters were not valid for the chosen period and id");
         }
         bookingDAO.updateBooking(userDTO.getName(), id, Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),

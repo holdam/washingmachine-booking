@@ -9,14 +9,22 @@ public class BookingDTO {
     private Date startTime;
     private Date endTime;
     private String owner;
+    private String apartment;
+    private String realName;
     private int numberOfTumbleDryUses;
     private int numberOfWashingMachineUses;
 
-    public BookingDTO(int id, Date startTime, Date endTime, String owner, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
+    public BookingDTO(Date startTime, Date endTime, String owner, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
+        this(-1, startTime, endTime, owner, "", "", numberOfWashingMachineUses, numberOfTumbleDryUses);
+    }
+
+    public BookingDTO(int id, Date startTime, Date endTime, String owner, String apartment, String realName, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
         this.owner = owner;
+        this.apartment = apartment;
+        this.realName = realName;
         this.numberOfTumbleDryUses = numberOfTumbleDryUses;
         this.numberOfWashingMachineUses = numberOfWashingMachineUses;
     }
@@ -49,5 +57,13 @@ public class BookingDTO {
     @JsonProperty
     public int getId() {
         return id;
+    }
+
+    public String getApartment() {
+        return apartment;
+    }
+
+    public String getRealName() {
+        return realName;
     }
 }

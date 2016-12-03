@@ -16,6 +16,8 @@ public class BookingMapper implements ResultSetMapper<BookingDTO> {
                 new Date(resultSet.getTimestamp("start_time").getTime()),
                 new Date(resultSet.getTimestamp("end_time").getTime()),
                 resultSet.getString("owner"),
+                resultSet.getString("apartment"),
+                resultSet.getString("name"),
                 resultSet.getInt("number_of_washing_machine_uses"),
                 resultSet.getInt("number_of_tumble_dry_uses"));
     }

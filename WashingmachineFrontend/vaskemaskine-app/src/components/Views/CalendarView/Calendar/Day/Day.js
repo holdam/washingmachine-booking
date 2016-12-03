@@ -1,5 +1,5 @@
 import React from 'react';
-import {getPrettyStartEndHoursAndMinutesFromBooking, getBookingsOfDate} from '../../../../commons/util';
+import {getPrettyStartEndHoursAndMinutesFromBooking, getBookingsOfDate} from '../../../../../commons/util';
 import './Day.css'
 
 export class Day extends React.Component {

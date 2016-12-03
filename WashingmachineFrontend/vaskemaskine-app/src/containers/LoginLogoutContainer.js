@@ -1,11 +1,11 @@
 import LoginLogout from "../components/Header/Login/LoginLogout";
 import {connect} from 'react-redux';
-import {login, logout, fetchUsernameIfUserAccessTokenIsPresent, createUser, loginFailed} from '../state/actions/login';
+import {login, logout, fetchUserDataIfTokenIsPresent, createUser, loginFailed} from '../state/actions/login';
 import {startCreateUserFlow, endCreateUserFlow} from '../state/actions/createUserFlow';
 
 const mapStateToProps = (state) => {
     return {
-        username: state.login.username,
+        realName: state.login.realName,
         isLoggedIn: !!state.login.username,
         showCreateUserModal: state.createUserFlow.showCreateUserModal,
         hasLoginFailed: state.login.hasLoginFailed,
@@ -26,7 +26,7 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(loginFailed(error));
         },
         setup: () => {
-            dispatch(fetchUsernameIfUserAccessTokenIsPresent());
+            dispatch(fetchUserDataIfTokenIsPresent());
         },
         onStartCreateUserFlow: () => {
             dispatch(startCreateUserFlow());

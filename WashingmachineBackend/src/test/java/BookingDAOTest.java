@@ -50,10 +50,14 @@ public class BookingDAOTest {
     public void shouldBeAbleToFindBookingAfterItsInsertion() {
         Date startTime = new Date();
         Date endTime = new Date();
-        BookingDTO bookingDTO = new BookingDTO(-1, startTime, endTime, USERNAME_1, 1, 1);
+        BookingDTO bookingDTO = new BookingDTO(startTime, endTime, USERNAME_1, 1, 2);
         bookingDAO.insertBooking(bookingDTO);
         bookingDTO = bookingDAO.getBookingFromOwnerAndDates(USERNAME_1, startTime, endTime);
         assertEquals(USERNAME_1, bookingDTO.getOwner());
+        assertEquals(APARTMENT_1, bookingDTO.getApartment());
+        assertEquals(NAME_1, bookingDTO.getRealName());
+        assertEquals(1, bookingDTO.getNumberOfWashingMachineUses());
+        assertEquals(2, bookingDTO.getNumberOfTumbleDryUses());
     }
 
     @Test
@@ -77,9 +81,9 @@ public class BookingDAOTest {
         calendar.set(Calendar.HOUR_OF_DAY, 16);
         endDate3 = calendar.getTime();
 
-        bookingDAO.insertBooking(new BookingDTO(-1, startDate1, endDate1, USERNAME_1, 0, 1));
-        bookingDAO.insertBooking(new BookingDTO(-1, startDate2, endDate2, USERNAME_2, 0, 1));
-        bookingDAO.insertBooking(new BookingDTO(-1, startDate3, endDate3, USERNAME_1, 123, 321));
+        bookingDAO.insertBooking(new BookingDTO(startDate1, endDate1, USERNAME_1, 0, 1));
+        bookingDAO.insertBooking(new BookingDTO(startDate2, endDate2, USERNAME_2, 0, 1));
+        bookingDAO.insertBooking(new BookingDTO(startDate3, endDate3, USERNAME_1, 123, 321));
 
         calendar.set(Calendar.HOUR_OF_DAY, 9);
         searchDateStart = calendar.getTime();
@@ -99,7 +103,7 @@ public class BookingDAOTest {
     public void shouldBeAbleToUpdateBooking() {
         Date startTime = new Date();
         Date endTime = new Date();
-        bookingDAO.insertBooking(new BookingDTO(-1, startTime, endTime, USERNAME_1, 1, 0));
+        bookingDAO.insertBooking(new BookingDTO(startTime, endTime, USERNAME_1, 1, 0));
         BookingDTO bookingDTO = bookingDAO.getBookingFromOwnerAndDates(USERNAME_1, startTime, endTime);
 
         Date newStartDate = new Date(0);
@@ -119,7 +123,7 @@ public class BookingDAOTest {
     public void shouldOnlyBeAbleToUpdateAndDeleteOwnBookings() {
         Date startTime = new Date();
         Date endTime = new Date();
-        BookingDTO bookingDTO = new BookingDTO(-1, startTime, endTime, USERNAME_2, 1, 1);
+        BookingDTO bookingDTO = new BookingDTO(startTime, endTime, USERNAME_2, 1, 1);
         bookingDAO.insertBooking(bookingDTO);
         BookingDTO insertedBooking = bookingDAO.getBookingFromOwnerAndDates(USERNAME_2, startTime, endTime);
         int numberOfAffectedRows = bookingDAO.updateBooking(USERNAME_1, insertedBooking.getId(), new Date(), new Date(), 1, 2);
@@ -133,7 +137,7 @@ public class BookingDAOTest {
     public void shouldBeAbleToDeleteOwnBookings() {
         Date startTime = new Date();
         Date endTime = new Date();
-        BookingDTO bookingDTO = new BookingDTO(-1, startTime, endTime, USERNAME_1, 1, 1);
+        BookingDTO bookingDTO = new BookingDTO(startTime, endTime, USERNAME_1, 1, 1);
         bookingDAO.insertBooking(bookingDTO);
         BookingDTO insertedBooking = bookingDAO.getBookingFromOwnerAndDates(USERNAME_1, startTime, endTime);
         int numberOfAffectedRows = bookingDAO.deleteBooking(USERNAME_1, insertedBooking.getId());
@@ -164,9 +168,9 @@ public class BookingDAOTest {
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         searchDateEnd = calendar.getTime();
 
-        bookingDAO.insertBooking(new BookingDTO(-1, startDate1, endDate1, USERNAME_1, 1, 2));
-        bookingDAO.insertBooking(new BookingDTO(-1, startDate2, endDate2, USERNAME_2, 2, 2));
-        bookingDAO.insertBooking(new BookingDTO(-1, startDate3, endDate3, USERNAME_1, 3, 2));
+        bookingDAO.insertBooking(new BookingDTO(startDate1, endDate1, USERNAME_1, 1, 2));
+        bookingDAO.insertBooking(new BookingDTO(startDate2, endDate2, USERNAME_2, 2, 2));
+        bookingDAO.insertBooking(new BookingDTO(startDate3, endDate3, USERNAME_1, 3, 2));
 
         // Could probably look at values of the returned values here, but meh
         List<BookingDTO> bookings = bookingDAO.getBookingsOverlappingInterval(searchDateStart, searchDateEnd);
@@ -177,21 +181,25 @@ public class BookingDAOTest {
     public void getBookingFromIdShouldWork() {
         Date startTime = new Date();
         Date endTime = new Date();
-        BookingDTO bookingDTO = new BookingDTO(-1, startTime, endTime, USERNAME_1, 1, 1);
+        BookingDTO bookingDTO = new BookingDTO(startTime, endTime, USERNAME_1, 1, 2);
         bookingDAO.insertBooking(bookingDTO);
         bookingDTO = bookingDAO.getBookingFromOwnerAndDates(USERNAME_1, startTime, endTime);
 
         BookingDTO bookingDTOToTest = bookingDAO.getBookingFromId(USERNAME_2, bookingDTO.getId());
         assertEquals(null, bookingDTOToTest);
         bookingDTOToTest = bookingDAO.getBookingFromId(USERNAME_1, bookingDTO.getId());
-        assertEquals(bookingDTOToTest.getOwner(), USERNAME_1);
+        assertEquals(USERNAME_1, bookingDTOToTest.getOwner());
+        assertEquals(NAME_1, bookingDTOToTest.getRealName());
+        assertEquals(APARTMENT_1, bookingDTOToTest.getApartment());
+        assertEquals(1, bookingDTOToTest.getNumberOfWashingMachineUses());
+        assertEquals(2, bookingDTOToTest.getNumberOfTumbleDryUses());
     }
 
     @Test
     public void getBookingsInIntervalShouldOnlyReturnSensitiveDataOfOwnReservations() {
         Calendar calendar = Calendar.getInstance();
-        BookingDTO ownBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 123, 321);
-        BookingDTO someoneElsesBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_2, 1337, 7331);
+        BookingDTO ownBooking = new BookingDTO(calendar.getTime(), calendar.getTime(), USERNAME_1, 123, 321);
+        BookingDTO someoneElsesBooking = new BookingDTO(calendar.getTime(), calendar.getTime(), USERNAME_2, 1337, 7331);
 
         bookingDAO.insertBooking(ownBooking);
         bookingDAO.insertBooking(someoneElsesBooking);
@@ -209,7 +217,7 @@ public class BookingDAOTest {
         for (BookingDTO booking : bookings) {
             if (booking.getOwner().equals(USERNAME_1)) {
                 ownBookingRetrieved = booking;
-            } else {
+            } else if (booking.getOwner().equals(USERNAME_2)) {
                 someoneElsesBookingRetrieved = booking;
             }
         }
@@ -217,10 +225,14 @@ public class BookingDAOTest {
         assertEquals(USERNAME_1, ownBookingRetrieved.getOwner());
         assertEquals(123, ownBookingRetrieved.getNumberOfWashingMachineUses());
         assertEquals(321, ownBookingRetrieved.getNumberOfTumbleDryUses());
+        assertEquals(NAME_1, ownBookingRetrieved.getRealName());
+        assertEquals(APARTMENT_1, ownBookingRetrieved.getApartment());
 
         assertEquals(USERNAME_2, someoneElsesBookingRetrieved.getOwner());
         assertEquals(0, someoneElsesBookingRetrieved.getNumberOfWashingMachineUses());
         assertEquals(0, someoneElsesBookingRetrieved.getNumberOfTumbleDryUses());
+        assertEquals(NAME_2, someoneElsesBookingRetrieved.getRealName());
+        assertEquals(APARTMENT_2, someoneElsesBookingRetrieved.getApartment());
     }
 
     @Test
@@ -297,18 +309,18 @@ public class BookingDAOTest {
             calendar = Calendar.getInstance();
             calendar.set(Calendar.HOUR_OF_DAY, 10);
             calendar.set(Calendar.MINUTE, 30);
-            BookingDTO firstBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 10, 10);
+            BookingDTO firstBooking = new BookingDTO(calendar.getTime(), calendar.getTime(), USERNAME_1, 10, 10);
 
             calendar.add(Calendar.MONTH, -1);
-            BookingDTO secondBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 1337, 7331);
+            BookingDTO secondBooking = new BookingDTO(calendar.getTime(), calendar.getTime(), USERNAME_1, 1337, 7331);
             calendar.add(Calendar.MONTH, 1);
 
             calendar.set(Calendar.HOUR_OF_DAY, 11);
-            BookingDTO thirdBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 8, 15);
-            BookingDTO fourthBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_2, 123, 321);
+            BookingDTO thirdBooking = new BookingDTO(calendar.getTime(), calendar.getTime(), USERNAME_1, 8, 15);
+            BookingDTO fourthBooking = new BookingDTO(calendar.getTime(), calendar.getTime(), USERNAME_2, 123, 321);
 
             calendar.set(Calendar.HOUR_OF_DAY, 15);
-            BookingDTO fifthBooking = new BookingDTO(123, calendar.getTime(), calendar.getTime(), USERNAME_1, 30, 30);
+            BookingDTO fifthBooking = new BookingDTO(calendar.getTime(), calendar.getTime(), USERNAME_1, 30, 30);
 
             // Insert bookings
             bookingDAO.insertBooking(firstBooking);

@@ -56,7 +56,10 @@ public interface BookingDAO {
      *                 for other bookings only the start and end time and the owner of it will be provided.
      * @return bookings in interval, detailed bookings for the username provided
      */
-    @SqlQuery("SELECT id, start_time, end_time, owner, " +
+    @SqlQuery("SELECT bookings_table.id, start_time, end_time, users.name, users.username as owner, users.apartment, number_of_washing_machine_uses, number_of_tumble_dry_uses " +
+            "FROM users " +
+            "JOIN " +
+            "(SELECT id, start_time, end_time, owner, " +
             "CASE number_of_washing_machine_uses WHEN 0 THEN 0 ELSE 0 END AS number_of_washing_machine_uses, " +
             "CASE number_of_tumble_dry_uses WHEN 0 THEN 0 ELSE 0 END AS number_of_tumble_dry_uses " +
             "FROM bookings " +
@@ -64,20 +67,27 @@ public interface BookingDAO {
             "AND :endTime >= end_time " +
             "AND owner != :username " +
             "UNION " +
-            "SELECT * FROM bookings WHERE start_time >= :startTime AND :endTime >= end_time AND owner = :username")
+            "SELECT * FROM bookings WHERE start_time >= :startTime AND :endTime >= end_time AND owner = :username) bookings_table " +
+            "ON bookings_table.owner = users.username")
     List<BookingDTO> getBookingsInInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime, @Bind("username") String username);
 
-    @SqlQuery("SELECT * FROM bookings WHERE start_time < :endTime AND end_time > :startTime")
+    @SqlQuery("SELECT bookings.id, start_time, end_time, owner, name, apartment, number_of_washing_machine_uses, number_of_tumble_dry_uses " +
+            "FROM bookings JOIN users ON bookings.owner = users.username " +
+            "WHERE start_time < :endTime AND end_time > :startTime")
     List<BookingDTO> getBookingsOverlappingInterval(@Bind("startTime") Date startTime, @Bind("endTime") Date endTime);
 
     @SqlUpdate("DELETE FROM bookings WHERE id = :id AND owner = :username")
     int deleteBooking(@Bind("username") String username, @Bind("id") int id);
 
-    @SqlQuery("SELECT * FROM bookings WHERE start_time = :startTime AND end_time = :endTime AND owner = :owner")
+    @SqlQuery("SELECT bookings.id, start_time, end_time, owner, name, apartment, number_of_washing_machine_uses, number_of_tumble_dry_uses " +
+            "FROM bookings JOIN users ON bookings.owner = users.username " +
+            "WHERE start_time = :startTime AND end_time = :endTime AND owner = :owner")
     BookingDTO getBookingFromOwnerAndDates(@Bind("owner") String owner, @Bind("startTime") Date startTime,
                                            @Bind("endTime") Date endTime);
 
-    @SqlQuery("SELECT * FROM bookings WHERE id = :id AND owner = :username")
+    @SqlQuery("SELECT bookings.id, start_time, end_time, owner, name, apartment, number_of_washing_machine_uses, number_of_tumble_dry_uses " +
+            "FROM bookings JOIN users ON bookings.owner = users.username " +
+            "WHERE bookings.id = :id AND owner = :username")
     BookingDTO getBookingFromId(@Bind("username") String username, @Bind("id") int id);
 
     @SqlUpdate("UPDATE bookings " +
@@ -110,13 +120,7 @@ public interface BookingDAO {
      * @return usage for every user in the interval together with their real name and apartment
      */
     @RegisterMapper(UsageAdminExportMapper.class)
-    @SqlQuery("SELECT " +
-            "name, " +
-            "apartment, " +
-            "mon, " +
-            "year, " +
-            "sum_of_washing_machine_uses, " +
-            "sum_of_tumble_dry_uses " +
+    @SqlQuery("SELECT name, apartment, mon, year, sum_of_washing_machine_uses, sum_of_tumble_dry_uses " +
             "FROM users " +
             "JOIN " +
             "(SELECT " +

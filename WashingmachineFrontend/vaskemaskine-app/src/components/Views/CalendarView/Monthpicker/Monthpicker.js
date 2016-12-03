@@ -1,7 +1,7 @@
 import './Monthpicker.css';
 import {ButtonGroup, Button, Glyphicon} from 'react-bootstrap'
 import * as React from "react";
-import {monthNamesShort, monthNames} from "../../../commons/util";
+import {monthNamesShort, monthNames} from "../../../../commons/util";
 import {LinkContainer} from 'react-router-bootstrap'
 
 class MonthPicker extends React.Component {

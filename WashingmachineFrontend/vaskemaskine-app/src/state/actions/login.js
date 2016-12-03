@@ -5,10 +5,13 @@ import {fetchBookingsForMonth} from './bookings';
 
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-function loginSuccessful(username) {
+function loginSuccessful(username, role, realName, apartment) {
     return {
         type: LOGIN_SUCCESS,
-        username
+        username,
+        role,
+        realName,
+        apartment
     }
 }
 
@@ -34,7 +37,7 @@ function loginInProgress() {
 }
 
 export function logout() {
-    return function (dispatch) {
+    return (dispatch) => {
         fetch(`${urls.api.auth}/sign_out`, {
             method: 'POST',
             credentials: 'include'
@@ -44,7 +47,7 @@ export function logout() {
     }
 }
 
-export function fetchUsernameIfUserAccessTokenIsPresent() {
+export function fetchUserDataIfTokenIsPresent() {
     return function(dispatch) {
         let userAccessToken = getCookieValueFromName('userAccessToken');
         if (userAccessToken === null) return;
@@ -52,15 +55,16 @@ export function fetchUsernameIfUserAccessTokenIsPresent() {
         fetch(`${urls.api.user}/user_from_user_access_token`, {
             credentials: 'include'
         }).then((response) => {
-                return response.json();
-            }).then((data) => {
-            dispatch(loginSuccessful(data.name))
+            return response.json();
+        }).then((data) => {
+            console.log(data);
+            dispatch(loginSuccessful(data.name, data.role, data.realName, data.apartment));
         });
     }
 }
 
 export function createUser(username, password, name, apartment, selectedYear, selectedMonth) {
-    return function(dispatch) {
+    return (dispatch) => {
         fetch(`${urls.api.user}/create_user`, {
             method: 'POST',
             body: `username=${username}&password=${password}&name=${name}&apartment=${apartment}`,
@@ -68,13 +72,14 @@ export function createUser(username, password, name, apartment, selectedYear, se
                 'Content-Type': 'application/x-www-form-urlencoded'
             })
         }).then(() => {
-            dispatch(login(username, password, selectedYear, selectedMonth));
+            dispatch(login(username, password, name, apartment, selectedYear, selectedMonth));
         });
     };
 }
 
-export function login(username, password, selectedYear, selectedMonth) {
-    return function (dispatch) {
+// I hate shit like this
+export function login(username, password, name, apartment, selectedYear, selectedMonth) {
+    return (dispatch) => {
         dispatch(loginInProgress());
         fetch(`${urls.api.auth}/sign_in`, {
             method: 'POST',
@@ -88,9 +93,10 @@ export function login(username, password, selectedYear, selectedMonth) {
                 throw new Error("Log in failed");
             }
             return response.json();
-        }).then((data) => {
-            console.log(data)
-            dispatch(loginSuccessful(data.username));
+        }).then(() => {
+            // Fetch username and role as token is present now
+            // TODO test in prod
+            dispatch(fetchUserDataIfTokenIsPresent);
             dispatch(fetchBookingsForMonth(selectedYear, selectedMonth));
         });
     }

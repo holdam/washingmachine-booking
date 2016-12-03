@@ -39,7 +39,7 @@ function receiveBookings(bookings) {
 }
 
 export function createBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses) {
-    return function (dispatch) {
+    return (dispatch) => {
         fetch(urls.api.booking, {
             method: 'POST',
             body: `startTime=${startTime}&endTime=${endTime}&numberOfWashingMachineUses=${numberOfWashingMachineUses}&numberOfTumbleDryUses=${numberOfTumbleDryUses}`,
@@ -57,7 +57,7 @@ export function createBooking(startTime, endTime, numberOfWashingMachineUses, nu
 }
 
 export function editBooking(id, startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses) {
-    return function (dispatch) {
+    return (dispatch) => {
         fetch(urls.api.booking, {
             method: 'PUT',
             body: `id=${id}&startTime=${startTime}&endTime=${endTime}&numberOfWashingMachineUses=${numberOfWashingMachineUses}&numberOfTumbleDryUses=${numberOfTumbleDryUses}`,
@@ -76,7 +76,7 @@ export function editBooking(id, startTime, endTime, numberOfWashingMachineUses, 
 }
 
 export function fetchBookingsForMonth(year, month) {
-    return function (dispatch) {
+    return (dispatch) => {
         dispatch(requestBookings());
 
         let firstDayOfMonth = new Date(year, month, 1);
@@ -104,7 +104,7 @@ export function fetchBookingsForMonth(year, month) {
 }
 
 export function deleteBooking(id) {
-    return function (dispatch) {
+    return (dispatch) => {
         fetch(urls.api.booking, {
             method: 'DELETE',
             body: `id=${id}`,

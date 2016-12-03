@@ -26,8 +26,6 @@ class CreateUserModal extends React.Component {
         this.handleApartmentChange = this.handleApartmentChange.bind(this);
     }
 
-    // TODO update this, backend (tables and shit) and reducer/actions
-
     handleUsernameChange(event) {
         this.setState({username: event.target.value});
     }

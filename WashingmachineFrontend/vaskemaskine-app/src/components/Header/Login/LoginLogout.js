@@ -14,7 +14,7 @@ class LoginLogout extends React.Component {
         if (this.props.isLoggedIn) {
             panel = <Logout
                 onLogout={this.props.onLogout}
-                username={this.props.username}
+                realName={this.props.realName}
             />;
         } else {
             panel = <Login

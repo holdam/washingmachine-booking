@@ -46,7 +46,7 @@ public class UsageResource {
     public List<UsageAdminExportDTO> getUsageInIntervalAdmin(@Auth UserDTO user,
                                                              @QueryParam("startTime") @Min(0) long startTime,
                                                              @QueryParam("endTime") @Min(0) long endTime) {
-        if (!RoleHelper.isAdmin(user.getRole())) throw new WebApplicationException(Response.Status.FORBIDDEN);
+        if (! RoleHelper.isAdmin(user.getRole())) throw new WebApplicationException(Response.Status.FORBIDDEN);
         return bookingDAO.getUsageInIntervalAdmin(
                 Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),
                 Util.convertMillisToDateAndFloorToNearest5Minutes(endTime)

@@ -26,7 +26,7 @@ public class CSRFFilter implements ContainerRequestFilter {
             }
         }
 
-        if (!targetExists) {
+        if (! targetExists) {
             containerRequestContext.abortWith(Response.status(Response.Status.FORBIDDEN).build());
         }
     }

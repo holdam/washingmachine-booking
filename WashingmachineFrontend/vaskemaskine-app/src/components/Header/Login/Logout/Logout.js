@@ -7,7 +7,7 @@ class Logout extends React.Component {
     render() {
         return (
             <div className="logged-in-menu">
-                <span className="welcome-username">{`${strings.login.welcome}, ${this.props.username}`}</span>
+                <span className="welcome-username">{`${strings.login.welcome}, ${this.props.realName}`}</span>
                 {' '}
                 <Button onClick={this.props.onLogout}>{strings.login.logout}</Button>
             </div>

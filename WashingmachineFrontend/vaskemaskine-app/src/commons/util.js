@@ -49,3 +49,7 @@ export function getPrettyStartEndHoursAndMinutesFromBooking(booking) {
 export function properModulo(a, b) {
     return ((a % b) + b) % b;
 }
+
+export function isAdmin(role) {
+    return role === 0;
+}

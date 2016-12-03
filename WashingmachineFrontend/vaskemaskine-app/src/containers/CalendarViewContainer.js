@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import CalendarView from '../components/CalendarView/CalendarView';
+import CalendarView from '../components/Views/CalendarView/CalendarView';
 import {endCreateBookingFlow} from '../state/actions/createBookingFlow';
 import {createBooking, editBooking, deleteBooking} from '../state/actions/bookings';
 import {changeMonth} from '../state/actions/calendar';

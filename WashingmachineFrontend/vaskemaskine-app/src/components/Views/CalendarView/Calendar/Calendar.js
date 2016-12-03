@@ -1,8 +1,8 @@
 import './Calendar.css';
 import React from 'react';
-import {monthNamesShort, weekdayNames} from '../../../commons/util';
+import {monthNamesShort, weekdayNames} from '../../../../commons/util';
 import BookingModal from './BookingModal/BookingModal';
-import DayContainer from '../../../containers/DayContainer';
+import DayContainer from '../../../../containers/DayContainer';
 
 class Calendar extends React.Component {
     render() {

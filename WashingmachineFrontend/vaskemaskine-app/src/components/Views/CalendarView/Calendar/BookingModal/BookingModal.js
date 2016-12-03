@@ -1,11 +1,11 @@
 import React from 'react';
 import {Modal, Button} from 'react-bootstrap';
-import strings from '../../../../commons/strings';
-import {monthNames} from '../../../../commons/util';
+import strings from '../../../../../commons/strings';
+import {monthNames} from '../../../../../commons/util';
 import './BookingModal.css';
 import {ControlLabel, Form, FormGroup, Col} from "react-bootstrap";
-import ErrorMessages from '../../../../commons/ErrorMessages';
-import {getBookingsOfDate, getPrettyStartEndHoursAndMinutesFromBooking} from '../../../../commons/util'
+import ErrorMessages from '../../../../../commons/ErrorMessages';
+import {getBookingsOfDate, getPrettyStartEndHoursAndMinutesFromBooking} from '../../../../../commons/util'
 
 class BookingModal extends React.Component {
     constructor(props) {

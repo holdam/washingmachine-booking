@@ -1,17 +1,14 @@
 import React from 'react';
 import './App.css';
 import Header from './components/Header/Header'
-import UsageContainer from './containers/UsageContainer';
-import Sidebar from './components/Sidebar/Sidebar'
+import Sidebar from './containers/SidebarContainer'
 
 class App extends React.Component {
     render() {
         return (
             <div className="App">
                 <Header/>
-                <Sidebar>
-                    <UsageContainer />
-                </Sidebar>
+                <Sidebar />
                 {this.props.children}
             </div>
         )
@@ -25,14 +22,12 @@ export default App;
 
 
 // TODO nuværende release
-// brug navn og lejlighed til visning af reservationer + det navn der står i toppen
-// csv fil med reservatoner - kasser "panel" i sidebar - omstruktuer det hele
+// brug navn og lejlighed til visning af reservationer
+// csv fil med reservatoner - kasser "panel" i sidebar
 // erstat for loops
-
-// TODO næste release
-// landing apage
-// admin/kasser panel
-
+// burde nok refetche usage efte rlogin
+// find ud hvordan vi deployer fedest (ikke fordi det er nødvendigt, men fordi det er sjovt) - docker?
+// gå ned til nuværende dag hvis i mobilview
 
 
 // TODO EVT:
