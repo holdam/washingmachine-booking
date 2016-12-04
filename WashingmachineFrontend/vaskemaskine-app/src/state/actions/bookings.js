@@ -5,15 +5,10 @@ import {endEditBookingFlow} from './editBookingFlow';
 import {properModulo} from '../../commons/util';
 
 export const INSERT_BOOKING = 'INSERT_BOOKING';
-export function insertBooking(id, startTime, endTime, owner, numberOfWashingMachineUses, numberOfTumbleDryUses) {
+export function insertBooking(booking) {
     return {
         type: INSERT_BOOKING,
-        id,
-        startTime,
-        endTime,
-        owner,
-        numberOfWashingMachineUses,
-        numberOfTumbleDryUses
+        booking
     }
 }
 
@@ -51,7 +46,7 @@ export function createBooking(startTime, endTime, numberOfWashingMachineUses, nu
             return response.json();
         }).then((data) => {
             dispatch(endCreateBookingFlow());
-            dispatch(insertBooking(data.id, data.startTime, data.endTime, data.owner, data.numberOfWashingMachineUses, data.numberOfTumbleDryUses));
+            dispatch(insertBooking(data));
         });
     }
 }

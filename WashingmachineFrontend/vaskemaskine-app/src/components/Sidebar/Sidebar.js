@@ -1,7 +1,7 @@
 import React from 'react';
 import './Sidebar.css'
-import Usage from './Usage/Usage'
-import Admin from './Admin/Admin'
+import Usage from './Usage/UsagePanel'
+import Admin from './Admin/AdminPanel'
 
 class Sidebar extends React.Component {
     render() {
@@ -11,7 +11,7 @@ class Sidebar extends React.Component {
                     usage={this.props.usage}
                     fetchUsage={this.props.fetchUsage}
                 />
-                {(this.props.isAdmin) ? <Admin/> : null}
+                {(this.props.isAdmin) ? <Admin /> : null}
             </div>
         )
     }

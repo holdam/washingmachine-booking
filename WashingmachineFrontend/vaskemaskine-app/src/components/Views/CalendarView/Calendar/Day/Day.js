@@ -40,7 +40,7 @@ export class Day extends React.Component {
 
             return (
                 <div onClick={(e) => this.handleBookingClick(e, booking)} key={booking.id} className={ownOrOthersBookingClass}>
-                    <div>{booking.owner}</div>
+                    <div>{`${booking.realName}, ${booking.apartment}`}</div>
                     <div>{`${startHour}:${startMinutes} - ${endHour}:${endMinutes}`}</div>
                 </div>
             )

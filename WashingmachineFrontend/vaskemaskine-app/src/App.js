@@ -22,7 +22,6 @@ export default App;
 
 
 // TODO nuværende release
-// brug navn og lejlighed til visning af reservationer
 // csv fil med reservatoner - kasser "panel" i sidebar
 // erstat for loops
 // burde nok refetche usage efte rlogin

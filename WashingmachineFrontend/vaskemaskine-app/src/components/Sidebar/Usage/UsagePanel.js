@@ -1,9 +1,9 @@
 import React from 'react';
-import './Usage.css';
+import './UsagePanel.css';
 import {COST_OF_TUMBLE_DRY_USE, COST_OF_WASHING_MACHINE_USE, monthNamesShort} from '../../../commons/util';
 import strings from '../../../commons/strings';
 
-class Usage extends React.Component {
+class UsagePanel extends React.Component {
     constructor(props) {
         super(props);
 
@@ -141,4 +141,4 @@ const UsageBar = (props) => {
 };
 
 
-export default Usage;
+export default UsagePanel;

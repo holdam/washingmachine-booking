@@ -57,7 +57,6 @@ export function fetchUserDataIfTokenIsPresent() {
         }).then((response) => {
             return response.json();
         }).then((data) => {
-            console.log(data);
             dispatch(loginSuccessful(data.name, data.role, data.realName, data.apartment));
         });
     }
