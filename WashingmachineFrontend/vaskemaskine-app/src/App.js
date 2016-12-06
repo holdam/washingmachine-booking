@@ -22,9 +22,6 @@ export default App;
 
 
 // TODO nuværende release
-// csv fil med reservatoner - kasser "panel" i sidebar
-// erstat for loops
-// burde nok refetche usage efte rlogin
 // find ud hvordan vi deployer fedest (ikke fordi det er nødvendigt, men fordi det er sjovt) - docker?
 // gå ned til nuværende dag hvis i mobilview
 

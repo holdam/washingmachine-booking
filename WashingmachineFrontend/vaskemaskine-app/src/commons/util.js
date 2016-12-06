@@ -2,7 +2,7 @@ export const monthNames = ["Januar", "Februar", "Marts", "April", "Maj", "Juni",
 export const monthNamesShort = ["Jan", "Feb", "Mar", "Apr", "Maj", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dec"];
 export const weekdayNames = ["Man", "Tir", "Ons", "Tor", "Fre", "Lør", "Søn"];
 export const COST_OF_WASHING_MACHINE_USE = 4;
-export const COST_OF_TUMBLE_DRY_USE = 4;
+export const COST_OF_TUMBLE_DRY_USE = 3;
 export const YEAR_PROJECT_ENTERED_PROD = 2016;
 
 export function getCookieValueFromName(name) {

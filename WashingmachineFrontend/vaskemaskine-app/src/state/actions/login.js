@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch';
 import urls from '../../commons/urls';
 import {getCookieValueFromName} from '../../commons/util';
 import {fetchBookingsForMonth} from './bookings';
+import {fetchUsage} from './usage'
 
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -97,6 +98,12 @@ export function login(username, password, name, apartment, selectedYear, selecte
             // TODO test in prod
             dispatch(fetchUserDataIfTokenIsPresent);
             dispatch(fetchBookingsForMonth(selectedYear, selectedMonth));
+
+
+            let today = new Date();
+            let startDateToFetchFor = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+            let endDateToFetchFor = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
+            dispatch(fetchUsage(startDateToFetchFor,endDateToFetchFor))
         });
     }
 }
