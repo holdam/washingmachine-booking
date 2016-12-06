@@ -41,7 +41,7 @@ export default App;
 // SSH to server
 // Update repo on server
 // Build backend JAR: mvn package -DskipTests, then run it: nohup java -jar target/{"NAME OF THE JAR FILE BUILT"} server configuration-prod.yaml &
-// Build frontend: npm install, npm run build, and place it where it should be (data/www)
+// Build frontend: npm install, npm run build, delete old content (rm -r /data/www/*) in (data/www/) and place it where it should be (data/www)
 
 // TODO ret brugeren til så vi bruger ordentligt kode til prod
 
