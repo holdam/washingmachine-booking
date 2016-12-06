@@ -24,7 +24,7 @@ export default App;
 // TODO nuværende release
 // find ud hvordan vi deployer fedest (ikke fordi det er nødvendigt, men fordi det er sjovt) - docker?
 // gå ned til nuværende dag hvis i mobilview
-
+// new icon
 
 // TODO EVT:
 // reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
@@ -36,3 +36,10 @@ export default App;
 
 // TODO når prod:
 // https + safe cookie
+
+
+// SSH to server
+// Update repo on server
+// Build backend JAR: mvn package -DskipTests, then run it: java -jar target/{"NAME OF THE JAR FILE BUILT"} server configuration-prod.yaml
+// Build frontend: npm install, npm run build, and place it where it should be (data/www)
+

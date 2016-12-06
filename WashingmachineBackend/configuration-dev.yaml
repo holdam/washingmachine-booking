@@ -1,5 +1,5 @@
 database:
-  # the username of your JDBC driver
+  # the name of your JDBC driver
     driverClass: org.postgresql.Driver
 
     # the username
@@ -9,7 +9,7 @@ database:
     password: root
 
     # the JDBC URL
-    url: jdbc:postgresql://localhost:5433/dev
+    url: jdbc:postgresql://localhost:5432/dev
 
     # any properties specific to your JDBC driver:
     properties:

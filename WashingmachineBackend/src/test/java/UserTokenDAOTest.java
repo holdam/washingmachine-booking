@@ -25,7 +25,7 @@ public class UserTokenDAOTest {
 
     @Before
     public void setup() {
-        DBI dbi = new DBI("jdbc:postgresql://localhost:5433/test", "postgres", "root");
+        DBI dbi = new DBI("jdbc:postgresql://localhost:5432/test", "postgres", "root");
         userDAO = dbi.onDemand(UserDAO.class);
         userTokenDAO = dbi.onDemand(UserTokenDAO.class);
         userDAO.createRoleTable();

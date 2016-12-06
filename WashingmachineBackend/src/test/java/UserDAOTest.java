@@ -25,7 +25,7 @@ public class UserDAOTest {
 
     @Before
     public void setup() {
-        DBI dbi = new DBI("jdbc:postgresql://localhost:5433/test", "postgres", "root");
+        DBI dbi = new DBI("jdbc:postgresql://localhost:5432/test", "postgres", "root");
         bookingDAO = dbi.onDemand(BookingDAO.class);
         userDAO = dbi.onDemand(UserDAO.class);
         userDAO.createRoleTable();
