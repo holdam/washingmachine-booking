@@ -1,7 +1,7 @@
 // TODO change to https
 let base_url = '';
 if (process.env.NODE_ENV === 'production') {
-    base_url = 'ajax'
+    base_url = 'http://localhost:8080/ajax'
 }
 
 const urls = {

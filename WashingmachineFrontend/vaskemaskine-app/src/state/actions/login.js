@@ -79,7 +79,6 @@ export function createUser(username, password, name, apartment, selectedYear, se
 
 // I hate shit like this
 export function login(username, password, name, apartment, selectedYear, selectedMonth) {
-    console.log(urls);
     return (dispatch) => {
         dispatch(loginInProgress());
         fetch(`${urls.api.auth}/sign_in`, {

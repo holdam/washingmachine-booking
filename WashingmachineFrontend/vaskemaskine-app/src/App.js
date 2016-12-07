@@ -25,11 +25,12 @@ export default App;
 // find ud hvordan vi deployer fedest (ikke fordi det er nødvendigt, men fordi det er sjovt) - docker?
 // gå ned til nuværende dag hvis i mobilview
 // new icon
+// refetch usage når logger ud
 
 // TODO EVT:
 // reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
 // find ud af hvornår der skal slettes og kunne redigeres
-// may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...
+// IMPORTANT: may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...
 // update password and that kind of shit
 // avoid spam and probably better password creation (more restrict than just nonempty passwords)
 // websockets til at hente ting live ?
@@ -38,9 +39,11 @@ export default App;
 // https + safe cookie
 
 
+// HOW TO BUILD SHOULD BE AUTOMATED
+
 // SSH to server
 // Update repo on server
-// Build backend JAR: mvn package -DskipTests, then run it: nohup java -jar target/{"NAME OF THE JAR FILE BUILT"} server configuration-prod.yaml &
+// Build backend JAR: mvn package -DskipTests, shutdown old server, then run it: nohup java -jar target/{"NAME OF THE JAR FILE BUILT"} server configuration-prod.yaml &
 // Build frontend: npm install, npm run build, delete old content (rm -r /data/www/*) in (data/www/) and place it where it should be (data/www)
 
 // TODO ret brugeren til så vi bruger ordentligt kode til prod
