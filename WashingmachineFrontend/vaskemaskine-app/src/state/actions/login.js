@@ -72,13 +72,13 @@ export function createUser(username, password, name, apartment, selectedYear, se
                 'Content-Type': 'application/x-www-form-urlencoded'
             })
         }).then(() => {
-            dispatch(login(username, password, name, apartment, selectedYear, selectedMonth));
+            dispatch(login(username, password, selectedYear, selectedMonth));
         });
     };
 }
 
 // I hate shit like this
-export function login(username, password, name, apartment, selectedYear, selectedMonth) {
+export function login(username, password, selectedYear, selectedMonth) {
     return (dispatch) => {
         dispatch(loginInProgress());
         fetch(`${urls.api.auth}/sign_in`, {
@@ -87,6 +87,7 @@ export function login(username, password, name, apartment, selectedYear, selecte
             headers: new Headers({
                 'Content-Type': 'application/x-www-form-urlencoded'
             }),
+            credentials: 'same-origin'
         }).then((response) => {
             if (response.status !== 200) {
                 dispatch(loginFailed());
@@ -95,10 +96,8 @@ export function login(username, password, name, apartment, selectedYear, selecte
             return response.json();
         }).then(() => {
             // Fetch username and role as token is present now
-            // TODO test in prod
-            dispatch(fetchUserDataIfTokenIsPresent);
+            dispatch(fetchUserDataIfTokenIsPresent());
             dispatch(fetchBookingsForMonth(selectedYear, selectedMonth));
-
 
             let today = new Date();
             let startDateToFetchFor = new Date(today.getFullYear(), today.getMonth() - 2, 1);

@@ -26,6 +26,8 @@ export default App;
 // gå ned til nuværende dag hvis i mobilview
 // new icon
 // refetch usage når logger ud
+// width of calendar?
+// https + safe cookie
 
 // TODO EVT:
 // reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
@@ -43,8 +45,15 @@ export default App;
 
 // SSH to server
 // Update repo on server
-// Build backend JAR: mvn package -DskipTests, shutdown old server, then run it: nohup java -jar target/{"NAME OF THE JAR FILE BUILT"} server configuration-prod.yaml &
-// Build frontend: npm install, npm run build, delete old content (rm -r /data/www/*) in (data/www/) and place it where it should be (data/www)
+// Build backend JAR:
+//   mvn package -DskipTests,
+//   shutdown old server,
+//   then run it: nohup java -jar target/{"NAME OF THE JAR FILE BUILT"} server configuration-prod.yaml &
+// Build frontend:
+//   npm install,
+//   npm run build,
+//   rm -r /data/www/*
+//   mv build/* /data/www/
 
 // TODO ret brugeren til så vi bruger ordentligt kode til prod
 
