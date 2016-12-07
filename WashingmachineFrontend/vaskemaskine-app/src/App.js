@@ -22,12 +22,15 @@ export default App;
 
 
 // TODO nuværende release
-// width of calendar?
-// https + safe cookie
+// width of calendar? (for some reason seven equal rows whatever is not working)
 // find ud hvordan vi deployer fedest (ikke fordi det er nødvendigt, men fordi det er sjovt) - docker?
 // new icon
 // gå ned til nuværende dag hvis i mobilview
 // help function til end of month sart of month days given month
+
+
+// TODO når domæne
+// https + safe cookie
 
 // TODO EVT:
 // reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
@@ -36,9 +39,6 @@ export default App;
 // update password and that kind of shit
 // avoid spam and probably better password creation (more restrict than just nonempty passwords)
 // websockets til at hente ting live ?
-
-// TODO når prod:
-// https + safe cookie
 
 
 // HOW TO BUILD SHOULD BE AUTOMATED
