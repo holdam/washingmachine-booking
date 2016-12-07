@@ -22,12 +22,12 @@ export default App;
 
 
 // TODO nuværende release
-// find ud hvordan vi deployer fedest (ikke fordi det er nødvendigt, men fordi det er sjovt) - docker?
-// gå ned til nuværende dag hvis i mobilview
-// new icon
-// refetch usage når logger ud
 // width of calendar?
 // https + safe cookie
+// find ud hvordan vi deployer fedest (ikke fordi det er nødvendigt, men fordi det er sjovt) - docker?
+// new icon
+// gå ned til nuværende dag hvis i mobilview
+// help function til end of month sart of month days given month
 
 // TODO EVT:
 // reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
@@ -47,7 +47,7 @@ export default App;
 // Update repo on server
 // Build backend JAR:
 //   mvn package -DskipTests,
-//   shutdown old server,
+//   shutdown old server (e.g. using kill PID),
 //   then run it: nohup java -jar target/{"NAME OF THE JAR FILE BUILT"} server configuration-prod.yaml &
 // Build frontend:
 //   npm install,
