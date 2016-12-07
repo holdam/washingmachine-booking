@@ -43,6 +43,8 @@ export function logout() {
             method: 'POST',
             credentials: 'include'
         }).then(() => {
+            // Reset usage when logging out
+            dispatch(fetchUsage(new Date(), new Date()));
             dispatch(logoutSuccessful());
         });
     }
