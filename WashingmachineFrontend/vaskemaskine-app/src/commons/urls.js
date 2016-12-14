@@ -13,6 +13,5 @@ const urls = {
     }
 };
 
-// TODO if prod prepend ajax
 export default urls;
 

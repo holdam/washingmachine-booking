@@ -23,10 +23,10 @@ export default App;
 
 // TODO nuværende release
 // width of calendar? (for some reason seven equal rows whatever is not working)
-// find ud hvordan vi deployer fedest (ikke fordi det er nødvendigt, men fordi det er sjovt) - docker?
 // new icon
 // gå ned til nuværende dag hvis i mobilview
 // help function til end of month sart of month days given month
+// erstat de der skider onchange funktioner  med en enkelt
 
 
 // TODO når domæne

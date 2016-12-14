@@ -63,6 +63,7 @@ class Week extends React.Component {
             // Check if we're in an off-month
             if (this.props.currentlySelectedMonth !== date.getMonth()) {
                 if (date.getDate() === 1) {
+                    // Add month name
                     return <DayContainer key={keyForDate} date={date} offMonthDay={true}>{`${monthNamesShort[date.getMonth()]} ${date.getDate()}`}</DayContainer>
                 }
 
@@ -71,6 +72,7 @@ class Week extends React.Component {
 
             // Else we're in a regular month
             if (date.getDate() === 1) {
+                // Add month name
                 return <DayContainer key={keyForDate} date={date}>{`${monthNamesShort[date.getMonth()]} ${date.getDate()}`}</DayContainer>
             }
             return <DayContainer key={keyForDate} date={date}>{date.getDate()}</DayContainer>

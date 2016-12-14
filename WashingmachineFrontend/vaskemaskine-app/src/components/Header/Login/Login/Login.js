@@ -12,18 +12,13 @@ class Login extends React.Component {
             password: ''
         };
 
-        this.handleUsernameChange = this.handleUsernameChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);;
         this.login = this.login.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
     }
 
-    handleUsernameChange(event) {
-        this.setState({username: event.target.value});
-    }
-
-    handlePasswordChange(event) {
-        this.setState({password: event.target.value});
+    handleChange(event) {
+        this.setState({[event.target.name]: event.target.value});
     }
 
     login() {
@@ -51,7 +46,8 @@ class Login extends React.Component {
                     <FormGroup validationState={usernameIsValidState} controlId="loginFormUsername">
                         <FormControl
                             onKeyPress={this.handleKeyPress}
-                            onChange={this.handleUsernameChange}
+                            onChange={this.handleChange}
+                            name="username"
                             type="text"
                             placeholder={strings.login.username} />
                     </FormGroup>
@@ -59,7 +55,8 @@ class Login extends React.Component {
                     <FormGroup validationState={passwordIsValidState} controlId="loginFormPassword">
                         <FormControl
                             onKeyPress={this.handleKeyPress}
-                            onChange={this.handlePasswordChange}
+                            onChange={this.handleChange}
+                            name="password"
                             type="password"
                             placeholder={strings.login.password} />
                     </FormGroup>

@@ -17,29 +17,14 @@ class CreateUserModal extends React.Component {
             errorMessages: []
         };
 
-        this.handleUsernameChange = this.handleUsernameChange.bind(this);
-        this.handlePasswordChange = this.handlePasswordChange.bind(this);
+        this.handleChange = this.handleChange.bind(this);
         this.handleCreateUser = this.handleCreateUser.bind(this);
         this.cancelCreateUser = this.cancelCreateUser.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
-        this.handleNameChange = this.handleNameChange.bind(this);
-        this.handleApartmentChange = this.handleApartmentChange.bind(this);
     }
 
-    handleUsernameChange(event) {
-        this.setState({username: event.target.value});
-    }
-
-    handlePasswordChange(event) {
-        this.setState({password: event.target.value});
-    }
-
-    handleNameChange(event) {
-        this.setState({name: event.target.value});
-    }
-
-    handleApartmentChange(event) {
-        this.setState({apartment: event.target.value});
+    handleChange(event) {
+        this.setState({[event.target.name]: event.target.value});
     }
 
     handleCreateUser() {
@@ -115,7 +100,12 @@ class CreateUserModal extends React.Component {
                                 {strings.login.username}
                             </Col>
                             <Col sm={8}>
-                                <input autoFocus="true" onKeyPress={this.handleKeyPress} onChange={this.handleUsernameChange} type="text" />
+                                <input autoFocus="true"
+                                       onKeyPress={this.handleKeyPress}
+                                       name="username"
+                                       onChange={this.handleChange}
+                                       type="text"
+                                />
                             </Col>
                         </FormGroup>
                         <FormGroup>
@@ -123,7 +113,11 @@ class CreateUserModal extends React.Component {
                                 {strings.login.password}
                             </Col>
                             <Col sm={8}>
-                                <input onKeyPress={this.handleKeyPress} onChange={this.handlePasswordChange} type="password" />
+                                <input
+                                    onKeyPress={this.handleKeyPress}
+                                    onChange={this.handleChange}
+                                    name="password"
+                                    type="password" />
                             </Col>
                         </FormGroup>
                         <FormGroup>
@@ -131,7 +125,11 @@ class CreateUserModal extends React.Component {
                                 {strings.login.createUserModal.realName}
                             </Col>
                             <Col sm={8}>
-                                <input onKeyPress={this.handleKeyPress} onChange={this.handleNameChange} type="text" />
+                                <input
+                                    onKeyPress={this.handleKeyPress}
+                                    onChange={this.handleChange}
+                                    name="name"
+                                    type="text" />
                             </Col>
                         </FormGroup>
                         <FormGroup>
@@ -139,7 +137,7 @@ class CreateUserModal extends React.Component {
                                 {strings.login.createUserModal.apartment}
                             </Col>
                             <Col sm={8}>
-                                <ApartmentPicker onChange={this.handleApartmentChange} />
+                                <ApartmentPicker onChange={this.handleChange} />
                             </Col>
                         </FormGroup>
                     </Form>
@@ -162,7 +160,7 @@ const ApartmentPicker = (props) => {
     });
 
     return (
-        <select className="apartment-picker" onChange={props.onChange}>
+        <select className="apartment-picker" onChange={props.onChange} name="apartment">
             {apartmentOptions}
         </select>
     )

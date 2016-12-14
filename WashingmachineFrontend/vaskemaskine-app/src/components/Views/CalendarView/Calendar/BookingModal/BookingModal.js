@@ -10,23 +10,18 @@ import {getBookingsOfDate, getPrettyStartEndHoursAndMinutesFromBooking} from '..
 class BookingModal extends React.Component {
     constructor(props) {
         super(props);
-        this.handleHourStartChange = this.handleHourStartChange.bind(this);
-        this.handleMinuteStartChange = this.handleMinuteStartChange.bind(this);
-        this.handleHourEndChange = this.handleHourEndChange.bind(this);
-        this.handleMinuteEndChange = this.handleMinuteEndChange.bind(this);
-        this.handleNumberOfWashingsChange = this.handleNumberOfWashingsChange.bind(this);
-        this.handleNumberOfTumbleDriesChange = this.handleNumberOfTumbleDriesChange.bind(this);
         this.handleCreateBooking = this.handleCreateBooking.bind(this);
         this.handleEditBooking = this.handleEditBooking.bind(this);
         this.cancelBooking = this.cancelBooking.bind(this);
         this.commonValidations = this.commonValidations.bind(this);
         this.handleDeleteBooking = this.handleDeleteBooking.bind(this);
         this.resetState = this.resetState.bind(this);
+        this.handleChange = this.handleChange.bind(this);
 
         this.state = {
             startHour: 8,
             startMinutes: 0,
-            endHours: 8,
+            endHour: 8,
             endMinutes: 0,
             numberOfWashingMachineUses: 0,
             numberOfTumbleDryUses: 0,
@@ -43,7 +38,7 @@ class BookingModal extends React.Component {
             this.setState({
                 startHour: startDate.getHours(),
                 startMinutes: startDate.getMinutes(),
-                endHours: endDate.getHours(),
+                endHour: endDate.getHours(),
                 endMinutes: endDate.getMinutes(),
                 numberOfWashingMachineUses: nextProps.editBookingProps.numberOfWashingMachineUses,
                 numberOfTumbleDryUses: nextProps.editBookingProps.numberOfTumbleDryUses
@@ -51,28 +46,8 @@ class BookingModal extends React.Component {
         }
     }
 
-    handleHourStartChange(event) {
-        this.setState({startHour: event.target.value});
-    }
-
-    handleMinuteStartChange(event) {
-        this.setState({startMinutes: event.target.value});
-    }
-
-    handleHourEndChange(event) {
-        this.setState({endHours: event.target.value});
-    }
-
-    handleMinuteEndChange(event) {
-        this.setState({endMinutes: event.target.value});
-    }
-
-    handleNumberOfWashingsChange(event) {
-        this.setState({numberOfWashingMachineUses: event.target.value});
-    }
-
-    handleNumberOfTumbleDriesChange(event) {
-        this.setState({numberOfTumbleDryUses: event.target.value});
+    handleChange(event) {
+        this.setState({[event.target.name]: event.target.value});
     }
 
     handleCreateBooking() {
@@ -92,7 +67,7 @@ class BookingModal extends React.Component {
             startTimeOfNewBooking.setMinutes(this.state.startMinutes);
 
             let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
-            endTimeOfNewBooking.setHours(this.state.endHours);
+            endTimeOfNewBooking.setHours(this.state.endHour);
             endTimeOfNewBooking.setMinutes(this.state.endMinutes);
 
             this.resetState();
@@ -114,7 +89,7 @@ class BookingModal extends React.Component {
             startTimeOfNewBooking.setMinutes(this.state.startMinutes);
 
             let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
-            endTimeOfNewBooking.setHours(this.state.endHours);
+            endTimeOfNewBooking.setHours(this.state.endHour);
             endTimeOfNewBooking.setMinutes(this.state.endMinutes);
 
             this.resetState();
@@ -135,13 +110,13 @@ class BookingModal extends React.Component {
         // Validations
         let errorMessages = [];
 
-        if (this.state.endHours >= 22 && this.state.endMinutes > 0) {
+        if (this.state.endHour >= 22 && this.state.endMinutes > 0) {
             errorMessages.push(strings.bookingModal.errorsMessages.mustEndBefore22);
         }
 
         let timeDifference = (this.state.endMinutes - this.state.startMinutes >= 0)
-            ? {hour: (this.state.endHours - this.state.startHour), minutes: (this.state.endMinutes - this.state.startMinutes)}
-            : {hour: (this.state.endHours - this.state.startHour - 1), minutes: (60 - (this.state.startMinutes + this.state.endMinutes))};
+            ? {hour: (this.state.endHour - this.state.startHour), minutes: (this.state.endMinutes - this.state.startMinutes)}
+            : {hour: (this.state.endHour - this.state.startHour - 1), minutes: (60 - (this.state.startMinutes + this.state.endMinutes))};
 
         if (timeDifference.hour < 0 || (timeDifference.hour <= 0 && timeDifference.minutes < 30)) {
             errorMessages.push(strings.bookingModal.errorsMessages.mustReserveAtLeast30Minutes);
@@ -156,7 +131,7 @@ class BookingModal extends React.Component {
         startTimeOfNewBooking.setMinutes(this.state.startMinutes);
 
         let endTimeOfNewBooking = new Date(this.props.bookingDate.getTime());
-        endTimeOfNewBooking.setHours(this.state.endHours);
+        endTimeOfNewBooking.setHours(this.state.endHour);
         endTimeOfNewBooking.setMinutes(this.state.endMinutes);
 
         for (let booking of this.props.bookings) {
@@ -176,7 +151,7 @@ class BookingModal extends React.Component {
         this.setState({
             startHour: 8,
             startMinutes: 0,
-            endHours: 8,
+            endHour: 8,
             endMinutes: 0,
             numberOfWashingMachineUses: 0,
             numberOfTumbleDryUses: 0,
@@ -215,8 +190,16 @@ class BookingModal extends React.Component {
                             </Col>
                             <Col sm={7}>
                                 <div>
-                                    <HourTimePicker hour={this.state.startHour} handleChange={this.handleHourStartChange} />
-                                    <MinuteTimePicker minutes={this.state.startMinutes} handleChange={this.handleMinuteStartChange} />
+                                    <HourTimePicker
+                                        hour={this.state.startHour}
+                                        handleChange={this.handleChange}
+                                        name="startHour"
+                                    />
+                                    <MinuteTimePicker
+                                        minutes={this.state.startMinutes}
+                                        handleChange={this.handleChange}
+                                        name="startMinutes"
+                                    />
                                 </div>
                             </Col>
                         </FormGroup>
@@ -226,8 +209,16 @@ class BookingModal extends React.Component {
                             </Col>
                             <Col sm={7}>
                                 <div>
-                                    <HourTimePicker hour={this.state.endHours} handleChange={this.handleHourEndChange} />
-                                    <MinuteTimePicker minutes={this.state.endMinutes} handleChange={this.handleMinuteEndChange} />
+                                    <HourTimePicker
+                                        hour={this.state.endHour}
+                                        handleChange={this.handleChange}
+                                        name="endHour"
+                                    />
+                                    <MinuteTimePicker
+                                        minutes={this.state.endMinutes}
+                                        handleChange={this.handleChange}
+                                        name="endMinutes"
+                                    />
                                 </div>
                             </Col>
                         </FormGroup>
@@ -236,7 +227,14 @@ class BookingModal extends React.Component {
                                 {strings.bookingModal.numberOfWashes}
                             </Col>
                             <Col sm={7}>
-                                <input onChange={this.handleNumberOfWashingsChange} className="numberOfWashingsPicker" value={this.state.numberOfWashingMachineUses} type="number" min="0" />
+                                <input
+                                    onChange={this.handleChange}
+                                    name="numberOfWashingMachineUses"
+                                    className="numberOfWashingsPicker"
+                                    value={this.state.numberOfWashingMachineUses}
+                                    type="number"
+                                    min="0"
+                                />
                             </Col>
                         </FormGroup>
                         <FormGroup>
@@ -244,7 +242,14 @@ class BookingModal extends React.Component {
                                 {strings.bookingModal.numberOfTumbleDries}
                             </Col>
                             <Col sm={7}>
-                                <input onChange={this.handleNumberOfTumbleDriesChange} className="numberOfTumbleDryPicker" value={this.state.numberOfTumbleDryUses} type="number" min="0" />
+                                <input
+                                    onChange={this.handleChange}
+                                    name="numberOfTumbleDryUses"
+                                    className="numberOfTumbleDryPicker"
+                                    value={this.state.numberOfTumbleDryUses}
+                                    type="number"
+                                    min="0"
+                                />
                             </Col>
                         </FormGroup>
                     </Form>
@@ -318,14 +323,13 @@ const HourTimePicker = (props) => {
     });
 
     return (
-        <select className="hourPicker" value={props.hour} onChange={props.handleChange}>
+        <select className="hourPicker" value={props.hour} onChange={props.handleChange} name={props.name}>
             {selectOptions}
         </select>
     )
 };
 
 const MinuteTimePicker = (props) => {
-
     const minutes = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
     const selectOptions = minutes.map((minute) => {
         return (
@@ -333,7 +337,7 @@ const MinuteTimePicker = (props) => {
         )
     });
     return (
-        <select className="minutePicker" value={props.minutes} onChange={props.handleChange}>
+        <select className="minutePicker" value={props.minutes} onChange={props.handleChange} name={props.name}>
             {selectOptions}
         </select>
     )
