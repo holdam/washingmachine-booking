@@ -12,7 +12,7 @@ class Login extends React.Component {
             password: ''
         };
 
-        this.handleChange = this.handleChange.bind(this);;
+        this.handleChange = this.handleChange.bind(this);
         this.login = this.login.bind(this);
         this.handleKeyPress = this.handleKeyPress.bind(this);
     }

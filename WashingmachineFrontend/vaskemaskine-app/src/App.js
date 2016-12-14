@@ -25,8 +25,6 @@ export default App;
 // width of calendar? (for some reason seven equal rows whatever is not working)
 // new icon
 // gå ned til nuværende dag hvis i mobilview
-// help function til end of month sart of month days given month
-// erstat de der skider onchange funktioner  med en enkelt
 
 
 // TODO når domæne

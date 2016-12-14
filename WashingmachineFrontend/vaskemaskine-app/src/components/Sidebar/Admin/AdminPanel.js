@@ -2,7 +2,7 @@ import React from 'react';
 import './AdminPanel.css';
 import fetch from 'isomorphic-fetch';
 import urls from '../../../commons/urls';
-import {monthNamesShort, YEAR_PROJECT_ENTERED_PROD, COST_OF_TUMBLE_DRY_USE, COST_OF_WASHING_MACHINE_USE} from '../../../commons/util';
+import {monthNamesShort, YEAR_PROJECT_ENTERED_PROD, COST_OF_TUMBLE_DRY_USE, COST_OF_WASHING_MACHINE_USE, getFirstDayOfMonth, getLastDayOfMonth} from '../../../commons/util';
 import {Button} from 'react-bootstrap'
 import download from 'downloadjs'
 
@@ -27,8 +27,8 @@ class AdminPanel extends React.Component {
     }
 
     downloadUsageForSelectedPeriod() {
-        let startDateToFetchFor = new Date(this.state.selectedStartDate.getFullYear(), this.state.selectedStartDate.getMonth(), 1);
-        let endDateToFetchFor = new Date(this.state.selectedEndDate.getFullYear(), this.state.selectedEndDate.getMonth() + 1, 0);
+        let startDateToFetchFor = getFirstDayOfMonth(this.state.selectedStartDate.getFullYear(), this.state.selectedStartDate.getMonth());
+        let endDateToFetchFor = getLastDayOfMonth(this.state.selectedEndDate.getFullYear(), this.state.selectedEndDate.getMonth());
 
         fetch(`${urls.api.usage}/admin?startTime=${startDateToFetchFor.getTime()}&endTime=${endDateToFetchFor.getTime()}`, {
             credentials: 'include'

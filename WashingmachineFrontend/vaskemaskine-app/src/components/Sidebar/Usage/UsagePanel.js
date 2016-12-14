@@ -1,6 +1,6 @@
 import React from 'react';
 import './UsagePanel.css';
-import {COST_OF_TUMBLE_DRY_USE, COST_OF_WASHING_MACHINE_USE, monthNamesShort} from '../../../commons/util';
+import {COST_OF_TUMBLE_DRY_USE, COST_OF_WASHING_MACHINE_USE, monthNamesShort, getFirstDayOfMonth, getLastDayOfMonth} from '../../../commons/util';
 import strings from '../../../commons/strings';
 
 class UsagePanel extends React.Component {
@@ -8,8 +8,9 @@ class UsagePanel extends React.Component {
         super(props);
 
         let today = new Date();
-        let startDateToFetchFor = new Date(today.getFullYear(), today.getMonth() - 2, 1);
-        let endDateToFetchFor = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
+        let twoMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+        let startDateToFetchFor = getFirstDayOfMonth(twoMonthsAgo.getFullYear(), twoMonthsAgo.getMonth());
+        let endDateToFetchFor = getLastDayOfMonth(today.getFullYear(), today.getMonth());
 
         this.state = {
             today,

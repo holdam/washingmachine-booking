@@ -2,7 +2,8 @@ import fetch from 'isomorphic-fetch';
 import urls from '../../commons/urls';
 import {getCookieValueFromName} from '../../commons/util';
 import {fetchBookingsForMonth} from './bookings';
-import {fetchUsage} from './usage'
+import {fetchUsage} from './usage';
+import {getFirstDayOfMonth, getLastDayOfMonth} from '../../commons/util';
 
 
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
@@ -101,10 +102,12 @@ export function login(username, password, selectedYear, selectedMonth) {
             dispatch(fetchUserDataIfTokenIsPresent());
             dispatch(fetchBookingsForMonth(selectedYear, selectedMonth));
 
+            // We default to show 3 months of usage
             let today = new Date();
-            let startDateToFetchFor = new Date(today.getFullYear(), today.getMonth() - 2, 1);
-            let endDateToFetchFor = new Date(today.getFullYear(), today.getMonth() + 1, 0, 23, 59, 59);
-            dispatch(fetchUsage(startDateToFetchFor,endDateToFetchFor))
+            let twoMonthsAgo = new Date(today.getFullYear(), today.getMonth() - 2, 1);
+            let startDateToFetchFor = getFirstDayOfMonth(twoMonthsAgo.getFullYear(), twoMonthsAgo.getMonth());
+            let endDateToFetchFor = getLastDayOfMonth(today.getFullYear(), today.getMonth());
+            dispatch(fetchUsage(startDateToFetchFor, endDateToFetchFor))
         });
     }
 }

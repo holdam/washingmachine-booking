@@ -54,3 +54,18 @@ export function properModulo(a, b) {
 export function isAdmin(role) {
     return role === 0;
 }
+
+export function getFirstAndLastDayOfMonth(year, month) {
+    return [
+        getFirstDayOfMonth(year, month),
+        getLastDayOfMonth(year, month)
+    ]
+}
+
+export function getFirstDayOfMonth(year, month) {
+    return new Date(year, month, 1);
+}
+
+export function getLastDayOfMonth(year, month) {
+    return new Date(year, month + 1, 0, 23, 59, 59);
+}
