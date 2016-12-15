@@ -12,7 +12,19 @@ header {
 
 @media (min-width: 992px) {
     .navbar > .container {
-        margin-left: 335px;
-        float: left;
+        padding-left: 350px;
     }
+}
+
+.navbar > .container {
+    float: left;
+    width: 100%
+}
+
+.navbar-toggle {
+    display: none;
+}
+
+.navbar-nav {
+    margin: 0 !important;
 }

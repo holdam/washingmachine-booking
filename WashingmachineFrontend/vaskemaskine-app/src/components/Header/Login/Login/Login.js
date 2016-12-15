@@ -22,7 +22,7 @@ class Login extends React.Component {
     }
 
     login() {
-        if (!!this.state.username && !!this.state.password) {
+        if (!! this.state.username && !! this.state.password) {
             this.props.onLogin(this.state.username, this.state.password,
                 this.props.selectedMonthAsDate.getFullYear(), this.props.selectedMonthAsDate.getMonth());
         } else {
@@ -61,11 +61,11 @@ class Login extends React.Component {
                             placeholder={strings.login.password} />
                     </FormGroup>
                     {' '}
-                    <Button bsStyle="primary" onClick={this.login}>{strings.login.login}</Button>
+                    <Button bsStyle="primary" className="login-button" onClick={this.login}>{strings.login.login}</Button>
                     {' '}
-                    <Button onClick={this.props.onStartCreateUserFlow}>{strings.login.createUser}</Button>
-                    {this.props.hasLoginFailed && !this.props.loginInProgress ? <LoginFailed/> : null}
+                    <Button className="login-button" onClick={this.props.onStartCreateUserFlow}>{strings.login.createUser}</Button>
                 </Form>
+                {this.props.hasLoginFailed && !this.props.loginInProgress ? <LoginFailed/> : null}
                 <CreateUserModal
                     showModal={this.props.showCreateUserModal}
                     onCancelCreateUser={this.props.onEndCreateUserFlow}
@@ -79,7 +79,7 @@ class Login extends React.Component {
 
 function LoginFailed(props) {
     return (
-        <span className="login-failed">{strings.login.loginFailed}</span>
+        <div className="login-failed">{strings.login.loginFailed}</div>
     )
 }
 

@@ -1,6 +1,9 @@
 .welcome-username {
     margin-right: 10px;
 }
-.logged-in-menu {
 
+.logged-in-menu {
+    padding-left: 15px;
+    line-height: 50px;
+    float: left;
 }

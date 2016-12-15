@@ -13,6 +13,9 @@ class WeekRepresentation {
 class CalendarView extends React.Component {
     componentDidMount() {
         this.props.changeMonth(new Date());
+
+        // If on mobile device, we scroll down to the current day
+
     }
 
 
@@ -84,7 +87,7 @@ class CalendarView extends React.Component {
     }
 
     render() {
-        if (!this.props.selectedMonthAsDate) {
+        if (! this.props.selectedMonthAsDate) {
             return <div></div>
         }
 

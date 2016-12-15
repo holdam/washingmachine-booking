@@ -14,10 +14,10 @@ class Header extends React.Component {
                             {strings.frontpageTitle}
                         </Navbar.Brand>
                         <Navbar.Toggle />
+                        <Nav>
+                            <LoginContainer />
+                        </Nav>
                     </Navbar.Header>
-                    <Nav>
-                        <LoginContainer />
-                    </Nav>
                 </Navbar>
             </div>
         )

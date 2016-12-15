@@ -10,7 +10,6 @@ export class Day extends React.Component {
     }
 
     render() {
-        // Add appropriate classes
         let today = new Date();
         let classes = "col-md-1 day ";
         if (this.props.offMonthDay === true) {
@@ -20,8 +19,8 @@ export class Day extends React.Component {
         if (this.props.date.getFullYear() === today.getFullYear() && this.props.date.getMonth() === today.getMonth() && this.props.date.getDate() === today.getDate()) {
             classes += "today "
         }
-
         let weekendDayValues = {0: '', 6: ''};
+
         if (this.props.date.getDay() in weekendDayValues) {
             classes += "weekend "
         }
@@ -29,7 +28,6 @@ export class Day extends React.Component {
         if (this.props.isLoggedIn) {
             classes += "is-logged-in "
         }
-
         let bookingsOfTheDay = getBookingsOfDate(this.props.bookings, this.props.date);
 
         // Turn into nice html
@@ -46,12 +44,16 @@ export class Day extends React.Component {
             )
         });
 
+        // Add appropriate classes
+        let id = `day-${this.props.date.getFullYear()}-${this.props.date.getMonth()}-${this.props.date.getDate()}`;
+
         return (
-            <div onClick={this.handleOnDayClick} className={classes}>
+            <div id={id} onClick={this.handleOnDayClick} className={classes}>
                 {this.props.children}
                 {bookingsAsNodes}
             </div>
         )
+
     }
 
     handleBookingClick(event, booking) {

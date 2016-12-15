@@ -80,7 +80,6 @@ export function createUser(username, password, name, apartment, selectedYear, se
     };
 }
 
-// I hate shit like this
 export function login(username, password, selectedYear, selectedMonth) {
     return (dispatch) => {
         dispatch(loginInProgress());

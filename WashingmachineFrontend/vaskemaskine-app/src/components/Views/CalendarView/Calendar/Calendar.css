@@ -1,26 +1,9 @@
-@media (min-width: 992px) {
+@media (min-width: 768px) {
+    .seven-cols > .col-md-1 {
+         width: 14.5% !important;
+    }
+
     .row-eq-height {
         display: flex;
-    }
-}
-
-
-
-
-@media (min-width: 768px){
-    .seven-cols > .col-md-1,
-    .seven-cols > .col-sm-1,
-    .seven-cols > .col-lg-1  {
-        width: 100%;
-        *width: 100%;
-    }
-}
-
-@media (min-width: 992px) {
-    .seven-cols > .col-md-1,
-    .seven-cols > .col-sm-1,
-    .seven-cols > .col-lg-1 {
-         width: 14.2857142857142% !important;
-        *width: 14.2857142857142% !important;
     }
 }

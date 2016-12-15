@@ -15,7 +15,6 @@ class App extends React.Component {
     }
 }
 
-
 export default App;
 
 
@@ -24,19 +23,22 @@ export default App;
 // TODO nuværende release
 // width of calendar? (for some reason seven equal rows whatever is not working)
 // new icon
-// gå ned til nuværende dag hvis i mobilview
-
+// gå ned til nuværende dag hvis i mobilview if logged in
+// to the top button if mobile
+// optimize tablet view logged out
 
 // TODO når domæne
 // https + safe cookie
 
 // TODO EVT:
+// websockets til at hente ting live ?
+
 // reminder - spørg om de vil have når man booker, evt. default vlrdu i profil
 // find ud af hvornår der skal slettes og kunne redigeres
 // IMPORTANT: may have problems with milliseconds if different timezone - kan måske bare bruge UTC til alting...
 // update password and that kind of shit
 // avoid spam and probably better password creation (more restrict than just nonempty passwords)
-// websockets til at hente ting live ?
+
 
 
 // HOW TO BUILD SHOULD BE AUTOMATED

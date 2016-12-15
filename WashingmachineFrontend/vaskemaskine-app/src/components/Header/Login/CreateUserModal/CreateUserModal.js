@@ -34,15 +34,15 @@ class CreateUserModal extends React.Component {
         const name = this.state.name;
         const apartment = this.state.apartment;
 
-        if (!username) {
+        if (! username) {
             errorMessages.push(strings.login.createUserModal.errorsMessages.usernameCantBeEmpty);
         }
 
-        if (!password) {
+        if (! password) {
             errorMessages.push(strings.login.createUserModal.errorsMessages.passwordCantBeEmpty);
         }
 
-        if (!name) {
+        if (! name) {
             errorMessages.push(strings.login.createUserModal.errorsMessages.nameCantBeEmpty);
         }
 

@@ -1,13 +1,13 @@
 .topbar {
     background: #eaeaea;
     text-align: left !important;
-    padding: 15px 5px 5px 0;
-    height: 55px;
+    padding: 10px 10px 10px 0;
+    overflow: auto;
 }
 
-@media (max-width: 992px) {
+@media (max-width: 768px) {
     .topbar {
-        padding: 5px;
+        padding: 10px;
     }
 }
 

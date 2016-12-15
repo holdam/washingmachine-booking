@@ -27,11 +27,11 @@ class LoginLogout extends React.Component {
                 onLoginFailed={this.props.onLoginFailed}
                 selectedMonthAsDate={this.props.selectedMonthAsDate}
                 loginInProgress={this.props.loginInProgress}
-                    />;
+            />;
         }
 
         return (
-            <div className="loginLogout">
+            <div>
                 {panel}
             </div>
         )

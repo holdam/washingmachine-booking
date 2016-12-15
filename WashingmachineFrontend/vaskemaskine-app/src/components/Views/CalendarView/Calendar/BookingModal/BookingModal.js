@@ -140,7 +140,7 @@ class BookingModal extends React.Component {
             }
         }
 
-        if (!this.props.isLoggedIn) {
+        if (! this.props.isLoggedIn) {
             errorMessages.push(strings.bookingModal.errorsMessages.mustBeLoggedIn);
         }
 
