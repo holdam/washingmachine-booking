@@ -7,7 +7,7 @@
     float: left;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
     .login-button {
         float: left;
         margin-right: 5px;
@@ -21,7 +21,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (max-width: 760px) {
     .login {
         clear: left;
         padding: 10px;

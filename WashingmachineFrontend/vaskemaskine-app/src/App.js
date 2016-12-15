@@ -25,7 +25,6 @@ export default App;
 // new icon
 // gå ned til nuværende dag hvis i mobilview if logged in
 // to the top button if mobile
-// optimize tablet view logged out
 
 // TODO når domæne
 // https + safe cookie

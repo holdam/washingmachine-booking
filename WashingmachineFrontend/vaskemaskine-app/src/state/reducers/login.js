@@ -2,7 +2,7 @@ import {LOGIN_FAILURE, LOGIN_SUCCESS, LOGIN_IN_PROGRESS, LOGOUT} from '../action
 
 const initialState = {
     username: '',
-    asLoginFailed: false,
+    hasLoginFailed: false,
     loginInProgress: false,
     role: -1,
     realName: '',

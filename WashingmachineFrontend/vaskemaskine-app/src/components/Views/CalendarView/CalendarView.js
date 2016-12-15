@@ -15,7 +15,9 @@ class CalendarView extends React.Component {
         this.props.changeMonth(new Date());
 
         // If on mobile device, we scroll down to the current day
-
+        if (window.matchMedia("(max-width: 760px").matches && this.props.isLoggedIn) {
+            console.log("i'm mobile")
+        }
     }
 
 

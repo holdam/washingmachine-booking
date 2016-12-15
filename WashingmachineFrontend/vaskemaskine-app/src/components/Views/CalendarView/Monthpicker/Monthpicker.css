@@ -5,19 +5,25 @@
     overflow: auto;
 }
 
+.month-picker {
+    float: left;
+    margin-right: 17px;
+}
+
+
+@media (max-width: 425px) {
+    .month-picker {
+        float: none;
+    }
+}
+
 @media (max-width: 768px) {
     .topbar {
         padding: 10px;
     }
 }
 
-.month-picker {
-    float: left;
-    margin-right: 17px;
-}
-
 .date-range {
-    float: left;
     line-height: 34px;
 }
 
