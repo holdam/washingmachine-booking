@@ -6,7 +6,6 @@ import api.UserDTO;
 import core.Util;
 import db.BookingDAO;
 import db.UserTokenDAO;
-import exceptions.ValidationErrorException;
 import io.dropwizard.auth.Auth;
 
 import javax.validation.constraints.Min;
@@ -32,20 +31,13 @@ public class BookingResource {
 
     @POST
     public BookingDTO createBooking(@Auth UserDTO userDTO,
-                                    @FormParam("startTime") @NotNull @Min(0) Long startTime,
-                                    @FormParam("endTime") @NotNull @Min(0) Long endTime,
+                                    @FormParam("startTime") @NotNull @Min(0) long startTime,
+                                    @FormParam("endTime") @NotNull @Min(0) long endTime,
                                     @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
                                     @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
-        if (! bookingService.validateCreateBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses)) {
-            throw new ValidationErrorException("Input parameters were not valid for the chosen period");
-        }
         Date startDate = Util.convertMillisToDateAndFloorToNearest5Minutes(startTime);
         Date endDate = Util.convertMillisToDateAndFloorToNearest5Minutes(endTime);
-
-        BookingDTO bookingDTOForInsertion = new BookingDTO(startDate, endDate,
-                userDTO.getName(), numberOfTumbleDryUses, numberOfWashingMachineUses);
-        bookingDAO.insertBooking(bookingDTOForInsertion);
-        return bookingDAO.getBookingFromOwnerAndDates(userDTO.getName(), startDate, endDate);
+        return bookingService.validateAndCreateBooking(startDate, endDate, numberOfWashingMachineUses, numberOfTumbleDryUses, userDTO.getName());
     }
 
     @PUT
@@ -54,23 +46,23 @@ public class BookingResource {
                                   @FormParam("endTime") @NotNull @Min(0) Long endTime,
                                   @FormParam("numberOfWashingMachineUses") @NotNull int numberOfWashingMachineUses,
                                   @FormParam("numberOfTumbleDryUses") @NotNull int numberOfTumbleDryUses) {
-        if (! bookingService.validateEditBooking(startTime, endTime, numberOfWashingMachineUses, numberOfTumbleDryUses, id)) {
-            throw new ValidationErrorException("Input parameters were not valid for the chosen period and id");
-        }
-        bookingDAO.updateBooking(userDTO.getName(), id, Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),
-                Util.convertMillisToDateAndFloorToNearest5Minutes(endTime), numberOfWashingMachineUses, numberOfTumbleDryUses);
-        return bookingDAO.getBookingFromId(userDTO.getName(), id);
+        Date startDate = Util.convertMillisToDateAndFloorToNearest5Minutes(startTime);
+        Date endDate = Util.convertMillisToDateAndFloorToNearest5Minutes(endTime);
+        return bookingService.validateAndUpdateBooking(id, startDate, endDate, numberOfWashingMachineUses, numberOfTumbleDryUses, userDTO.getName());
     }
 
     @GET
     @Path("/interval")
-    public List<BookingDTO> getBookingsInInterval(@QueryParam("startTime") @NotNull @Min(0) Long startTime,
-                                                  @QueryParam("endTime") @NotNull @Min(0) Long endTime,
+    public List<BookingDTO> getBookingsInInterval(@QueryParam("startTime") @NotNull @Min(0) long startTime,
+                                                  @QueryParam("endTime") @NotNull @Min(0) long endTime,
                                                   @CookieParam("userAccessToken") Cookie userAccessToken) {
 
         String username = (userAccessToken != null) ? userTokenDAO.getUsernameFromToken(userAccessToken.getValue()) : "";
-        return bookingDAO.getBookingsInInterval(Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),
-                Util.convertMillisToDateAndFloorToNearest5Minutes(endTime), username);
+        return bookingDAO.getBookingsInInterval(
+                Util.convertMillisToDateAndFloorToNearest5Minutes(startTime),
+                Util.convertMillisToDateAndFloorToNearest5Minutes(endTime),
+                username
+        );
     }
 
     @DELETE

@@ -26,6 +26,7 @@ public class BookingResourceTest {
     private final String USERNAME_1 = "user";
     private final String NAME_1 = "name";
     private final String APARTMENT_1 = "apartment";
+    private UserDTO user1;
 
     @Before
     public void setup() {
@@ -33,6 +34,7 @@ public class BookingResourceTest {
         userTokenDAO = mock(UserTokenDAO.class);
         bookingResource = new BookingResource(bookingDAO, userTokenDAO, new BookingServiceImpl(bookingDAO));
         calendar = Calendar.getInstance();
+        user1 = new UserDTO(USERNAME_1, RoleHelper.ROLE_DEFAULT, NAME_1, APARTMENT_1);
     }
 
     @Test(expected = ValidationErrorException.class)
@@ -42,7 +44,7 @@ public class BookingResourceTest {
         long startTime = calendar.getTime().getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 10);
         long endTime = calendar.getTime().getTime();
-        bookingResource.createBooking(null, startTime, endTime, 1, 1);
+        bookingResource.createBooking(user1, startTime, endTime, 1, 1);
     }
 
     @Test(expected = ValidationErrorException.class)
@@ -53,7 +55,7 @@ public class BookingResourceTest {
         calendar.set(Calendar.HOUR_OF_DAY, 9);
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         long endTime = calendar.getTime().getTime();
-        bookingResource.createBooking(null, startTime, endTime, 1, 1);
+        bookingResource.createBooking(user1, startTime, endTime, 1, 1);
     }
 
     @Test(expected = ValidationErrorException.class)
@@ -63,7 +65,7 @@ public class BookingResourceTest {
         calendar.set(Calendar.HOUR_OF_DAY, 22);
         calendar.set(Calendar.MINUTE, 1);
         long endTime = calendar.getTime().getTime();
-        bookingResource.createBooking(null, startTime, endTime, 1, 1);
+        bookingResource.createBooking(user1, startTime, endTime, 1, 1);
     }
 
     @Test(expected = ValidationErrorException.class)
@@ -74,7 +76,7 @@ public class BookingResourceTest {
         calendar.set(Calendar.MINUTE, 0);
         calendar.add(Calendar.DAY_OF_YEAR, 1);
         long endTime = calendar.getTime().getTime();
-        bookingResource.createBooking(null, startTime, endTime, 1, 1);
+        bookingResource.createBooking(user1, startTime, endTime, 1, 1);
     }
 
     @Test(expected = ValidationErrorException.class)
@@ -84,7 +86,7 @@ public class BookingResourceTest {
         Date startTime = calendar.getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 15);
         Date endTime = calendar.getTime();
-        bookingResource.createBooking(null, startTime.getTime(), endTime.getTime(), 1, 1);
+        bookingResource.createBooking(user1, startTime.getTime(), endTime.getTime(), 1, 1);
     }
 
     @Test(expected = ValidationErrorException.class)
@@ -93,7 +95,7 @@ public class BookingResourceTest {
         long startTime = calendar.getTime().getTime();
         calendar.add(Calendar.HOUR_OF_DAY, -1);
         long endTime = calendar.getTime().getTime();
-        bookingResource.createBooking(null, startTime, endTime, 1, 1);
+        bookingResource.createBooking(user1, startTime, endTime, 1, 1);
     }
 
     @Test(expected = ValidationErrorException.class)
@@ -103,7 +105,7 @@ public class BookingResourceTest {
         long startTime = calendar.getTime().getTime();
         calendar.add(Calendar.MINUTE, 10);
         long endTime = calendar.getTime().getTime();
-        bookingResource.createBooking(null, startTime, endTime, 1, 1);
+        bookingResource.createBooking(user1, startTime, endTime, 1, 1);
     }
 
     @Test(expected = ValidationErrorException.class)
@@ -113,7 +115,7 @@ public class BookingResourceTest {
         long startTime = calendar.getTime().getTime();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         long endTime = calendar.getTime().getTime();
-        bookingResource.createBooking(null, startTime, endTime, 0, 0);
+        bookingResource.createBooking(user1, startTime, endTime, 0, 0);
     }
 
     @Test(expected = ValidationErrorException.class)
@@ -126,9 +128,9 @@ public class BookingResourceTest {
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         Date endTime = calendar.getTime();
         List<BookingDTO> overlappingBookings = new ArrayList<>();
-        overlappingBookings.add(new BookingDTO(null, null, null, 0, 0));
+        overlappingBookings.add(BookingDTO.createBookingWithoutId(null, null, null, 0, 0));
         when(bookingDAO.getBookingsOverlappingInterval(startTime, endTime)).thenReturn(overlappingBookings);
-        bookingResource.createBooking(null, startTime.getTime(), endTime.getTime(), 1, 1);
+        bookingResource.createBooking(user1, startTime.getTime(), endTime.getTime(), 1, 1);
     }
 
     // Covers all other methods as well, we test the DAO instead.
@@ -143,8 +145,8 @@ public class BookingResourceTest {
         calendar.set(Calendar.HOUR_OF_DAY, 12);
         Date endTime = calendar.getTime();
         when(bookingDAO.getBookingFromOwnerAndDates(USERNAME_1, startTime, endTime)).
-                thenReturn(new BookingDTO(startTime, endTime, NAME_1, 1, 0));
-        BookingDTO bookingDTO = bookingResource.createBooking(new UserDTO(USERNAME_1, RoleHelper.ROLE_DEFAULT, NAME_1, APARTMENT_1), startTime.getTime(), endTime.getTime(), 1, 0);
+                thenReturn(BookingDTO.createBookingWithoutId(startTime, endTime, NAME_1, 1, 0));
+        BookingDTO bookingDTO = bookingResource.createBooking(user1, startTime.getTime(), endTime.getTime(), 1, 0);
         assert(bookingDTO.getOwner().equals(NAME_1));
         assert(bookingDTO.getEndTime().equals(endTime));
         assert(bookingDTO.getStartTime().equals(startTime));
@@ -166,11 +168,11 @@ public class BookingResourceTest {
         Date startDateNotWithinBounds = calendar.getTime();
 
         ArrayList<BookingDTO> bookingsInInterval = new ArrayList<>();
-        bookingsInInterval.add(new BookingDTO(startTime, endTime, USERNAME_1, 1, 1));
-        bookingsInInterval.add(new BookingDTO(endDateNotWithinBounds, startDateNotWithinBounds, USERNAME_1, 1, 1));
+        bookingsInInterval.add(BookingDTO.createBookingWithoutId(startTime, endTime, USERNAME_1, 1, 1));
+        bookingsInInterval.add(BookingDTO.createBookingWithoutId(endDateNotWithinBounds, startDateNotWithinBounds, USERNAME_1, 1, 1));
         when(bookingDAO.getBookingsOverlappingInterval(startTime, endTime)).thenReturn(bookingsInInterval);
-        when(bookingDAO.getBookingFromId(USERNAME_1, 1)).thenReturn(new BookingDTO(1, startTime, endTime, USERNAME_1, APARTMENT_1, NAME_1, 1, 1));
-        BookingDTO bookingDTO = bookingResource.editBooking(new UserDTO(USERNAME_1, RoleHelper.ROLE_DEFAULT, NAME_1, APARTMENT_1), 1, startTime.getTime(), endTime.getTime(),
+        when(bookingDAO.getBookingFromId(USERNAME_1, 1)).thenReturn(BookingDTO.createBookingWithId(1, startTime, endTime, USERNAME_1, APARTMENT_1, NAME_1, 1, 1));
+        BookingDTO bookingDTO = bookingResource.editBooking(user1, 1, startTime.getTime(), endTime.getTime(),
                 123, 321);
 
         Assert.assertEquals(1, bookingDTO.getId());
@@ -191,9 +193,9 @@ public class BookingResourceTest {
         Date endTime = calendar.getTime();
 
         ArrayList<BookingDTO> bookingsInInterval = new ArrayList<>();
-        bookingsInInterval.add(new BookingDTO(startTime, endTime, USERNAME_1, 1, 2));
+        bookingsInInterval.add(BookingDTO.createBookingWithoutId(startTime, endTime, USERNAME_1, 1, 2));
         when(bookingDAO.getBookingsOverlappingInterval(startTime, endTime)).thenReturn(bookingsInInterval);
-        bookingResource.editBooking(new UserDTO(USERNAME_1, RoleHelper.ROLE_DEFAULT, NAME_1, APARTMENT_1), 1, startTime.getTime(), endTime.getTime(),
+        bookingResource.editBooking(user1, 1, startTime.getTime(), endTime.getTime(),
                 123, 321);
     }
 }

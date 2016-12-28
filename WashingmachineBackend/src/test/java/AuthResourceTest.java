@@ -77,7 +77,6 @@ public class AuthResourceTest {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.HOUR_OF_DAY, 23);
         when(userTokenDAO.getUserTokenFromUsername(USERNAME)).thenReturn(new UserTokenDTO(USERNAME, TOKEN, calendar.getTime(), UserTokenDTO.Status.VALID));
-
         when(userDAO.getUser(USERNAME)).thenReturn(new UserDTO(USERNAME, RoleHelper.ROLE_DEFAULT, NAME, APARTMENT));
         when(userDAO.authenticateUser(Mockito.contains(USERNAME), Mockito.anyString())).thenReturn(true);
         Response signedInUserToken = authResource.signIn(USERNAME, PASSWORD);

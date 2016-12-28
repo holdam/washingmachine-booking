@@ -14,11 +14,7 @@ public class BookingDTO {
     private int numberOfTumbleDryUses;
     private int numberOfWashingMachineUses;
 
-    public BookingDTO(Date startTime, Date endTime, String owner, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
-        this(-1, startTime, endTime, owner, "", "", numberOfWashingMachineUses, numberOfTumbleDryUses);
-    }
-
-    public BookingDTO(int id, Date startTime, Date endTime, String owner, String apartment, String realName, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
+    private BookingDTO(int id, Date startTime, Date endTime, String owner, String apartment, String realName, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
         this.id = id;
         this.startTime = startTime;
         this.endTime = endTime;
@@ -27,6 +23,19 @@ public class BookingDTO {
         this.realName = realName;
         this.numberOfTumbleDryUses = numberOfTumbleDryUses;
         this.numberOfWashingMachineUses = numberOfWashingMachineUses;
+    }
+
+    public static BookingDTO createBookingWithoutId(Date startTime, Date endTime, String owner, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
+        return new BookingDTO(-1, startTime, endTime, owner, "", "", numberOfWashingMachineUses, numberOfTumbleDryUses);
+    }
+
+    public static BookingDTO createBookingWithId(int id, Date startTime, Date endTime, String owner, String apartment, String realName, int numberOfWashingMachineUses, int numberOfTumbleDryUses) {
+        return new BookingDTO(id, startTime, endTime, owner, apartment, realName, numberOfWashingMachineUses, numberOfTumbleDryUses);
+    }
+
+    public static BookingDTO createAnonymizedBooking(BookingDTO bookingDTO) {
+        return new BookingDTO(bookingDTO.getId(), bookingDTO.getStartTime(), bookingDTO.getEndTime(), bookingDTO.getOwner(),
+                bookingDTO.getApartment(), bookingDTO.getRealName(), 0, 0);
     }
 
     @JsonProperty

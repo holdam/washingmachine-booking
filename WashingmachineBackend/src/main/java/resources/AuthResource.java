@@ -5,6 +5,9 @@ import api.UserDTO;
 import core.Util;
 import db.UserDAO;
 import db.UserTokenDAO;
+import io.dropwizard.auth.Auth;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.naming.AuthenticationException;
 import javax.validation.constraints.NotNull;
@@ -25,6 +28,7 @@ public class AuthResource {
     private int tokenLifetime;
     private String domain;
     private final String USER_ACCESS_TOKEN = "userAccessToken";
+    private Logger log = LoggerFactory.getLogger(AuthResource.class);
 
     public AuthResource(UserTokenDAO userTokenDAO, UserDAO userDAO, int tokenLifetime, String domain) {
         this.userTokenDAO = userTokenDAO;
@@ -40,15 +44,18 @@ public class AuthResource {
         UserDTO userDTO = userDAO.getUser(username);
 
         if (userDTO == null) {
-            throw new AuthenticationException("UserDTO does not exist");
+            throw new AuthenticationException("User does not exist");
         }
 
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, userDAO.getSaltForUser(username));
         if (userDAO.authenticateUser(username, hashedAndSaltedPassword)) {
+            log.info(username + " has been authenticated.");
+
             // If token doesn't exist yet, we create one.
             UserTokenDTO userTokenDTO = userTokenDAO.getUserTokenFromUsername(username);
             if (userTokenDTO == null) {
                 userTokenDTO = createTokenForUser(username);
+                log.info("Creating new token: " + userTokenDTO.getToken() + ", for: " + username);
                 return createResponseFromToken(userTokenDTO);
             }
 
@@ -58,9 +65,11 @@ public class AuthResource {
             if (calendar.getTime().after(userTokenDTO.getLifetimeEnds())) {
                 userTokenDAO.deleteUserTokenFromUsername(username);
                 userTokenDTO = createTokenForUser(username);
+                log.info("Old token about to run out, creating new token: " + userTokenDTO.getToken() + ", for: " + username);
                 return createResponseFromToken(userTokenDTO);
             } else {
                 // We return the current token
+                log.info("Returning old token: " + userTokenDTO.getToken() + ", for: " + username);
                 return createResponseFromToken(userTokenDTO);
             }
         }

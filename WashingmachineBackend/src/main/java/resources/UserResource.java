@@ -13,14 +13,12 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @Path("/user")
 @Produces(MediaType.APPLICATION_JSON)
 public class UserResource {
-    private final List<String> allowedApartments = new ArrayList<>(
+    private final List<String> allowedApartments = Collections.unmodifiableList(
             Arrays.asList("st.v.", "st.h.", "1.tv.", "1.th.", "2.", "3.tv.", "3.th.", "4.")
     );
     private UserDAO userDAO;
@@ -38,13 +36,11 @@ public class UserResource {
                               @FormParam("name") @NotNull String name,
                               @FormParam("apartment") @NotNull String apartment) throws AuthenticationException {
         // Validations
-        if (username.isEmpty() || password.isEmpty() || name.isEmpty() || !allowedApartments.contains(apartment)) {
+        if (username.isEmpty() || password.isEmpty() || name.isEmpty() || ! allowedApartments.contains(apartment)) {
             throw new AuthenticationException();
         }
-
         String salt = RandomStringUtils.randomAlphanumeric(50);
         String hashedAndSaltedPassword = Util.getHashedAndSaltedPassword(password, salt);
-
         userDAO.insertUser(username, hashedAndSaltedPassword, salt, name, apartment, RoleHelper.ROLE_DEFAULT);
         return new UserDTO(username, RoleHelper.ROLE_DEFAULT, name, apartment);
     }

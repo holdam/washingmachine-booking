@@ -13,18 +13,27 @@ import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.jdbi.DBIFactory;
+import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
+import io.dropwizard.websockets.WebsocketBundle;
+import org.eclipse.jetty.websocket.jsr356.server.BasicServerEndpointConfig;
 import org.skife.jdbi.v2.DBI;
 import resources.AuthResource;
 import resources.BookingResource;
 import resources.UsageResource;
 import resources.UserResource;
 import filters.CSRFFilter;
+import websockets.BookingWebSocket;
 
 public class MyApplication extends Application<MyConfiguration> {
 
     public static void main(String[] args) throws Exception {
         new MyApplication().run(args);
+    }
+
+    @Override
+    public void initialize(Bootstrap<MyConfiguration> bootstrap) {
+        bootstrap.addBundle(new WebsocketBundle(BookingWebSocket.class));
     }
 
     public void run(MyConfiguration config, Environment environment) throws Exception {
@@ -63,5 +72,6 @@ public class MyApplication extends Application<MyConfiguration> {
         environment.jersey().register(new UserResource(userDAO, userTokenDAO));
         environment.jersey().register(new AuthResource(userTokenDAO, userDAO, config.getTokenLifetime(), config.getDomain()));
         environment.jersey().register(new UsageResource(bookingDAO, userTokenDAO));
+
     }
 }
