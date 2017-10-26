@@ -3,20 +3,16 @@ import {connect} from 'react-redux';
 import {fetchUsage} from '../state/actions/usage';
 import {isAdmin} from '../commons/util';
 
-const mapStateToProps = (state) => {
-    return {
-        usage: state.usage.usage,
-        isAdmin: isAdmin(state.login.role)
-    }
-};
+const mapStateToProps = (state) => ({
+    usage: state.usage.usage,
+    isAdmin: isAdmin(state.login.role)
+});
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchUsage: (startDateToFetchFor, endDateToFetchFor) => {
-            dispatch(fetchUsage(startDateToFetchFor, endDateToFetchFor));
-        }
+const mapDispatchToProps = (dispatch) => ({
+    fetchUsage: (startDateToFetchFor, endDateToFetchFor) => {
+        dispatch(fetchUsage(startDateToFetchFor, endDateToFetchFor));
     }
-};
+});
 
 const SidebarContainer = connect(
     mapStateToProps,
